@@ -1,3 +1,4 @@
+import PageContainer from '@/shared/components/PageContainer';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
@@ -19,7 +20,7 @@ async function ErrorContent({ searchParams }: { searchParams: Promise<{ error: s
 
 export default function Page({ searchParams }: { searchParams: Promise<{ error: string }> }) {
   return (
-    <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
+    <PageContainer>
       <div className="w-full max-w-sm">
         <div className="flex flex-col gap-6">
           <Card>
@@ -32,6 +33,6 @@ export default function Page({ searchParams }: { searchParams: Promise<{ error: 
           </Card>
         </div>
       </div>
-    </div>
+    </PageContainer>
   );
 }

@@ -1,11 +1,12 @@
 import { ForgotPasswordForm } from '@/features/auth/ForgotPasswordForm';
+import PageContainer from '@/shared/components/PageContainer';
 
 export default function Page() {
   return (
-    <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
+    <PageContainer>
       <div className="w-full max-w-sm">
         <ForgotPasswordForm />
       </div>
-    </div>
+    </PageContainer>
   );
 }

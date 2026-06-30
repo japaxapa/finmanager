@@ -8,7 +8,7 @@ export default function PageContainer({
 }: ComponentPropsWithRef<'div'>) {
   return (
     <div
-      className={cn('flex min-h-svh w-full items-center justify-center p-6 md:p-10', className)}
+      className={cn('flex min-h-svh w-full items-center justify-center sm:p-6 md:p-10', className)}
       {...props}
     >
       {children}

@@ -1,6 +1,6 @@
 'use client';
 
-import { createSupabaseClient } from '@/shared/lib/supabase/client';
+import { createClient } from '@/shared/lib/supabase/client';
 import { cn } from '@/shared/lib/utils';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
@@ -22,7 +22,7 @@ export function SignUpForm({ className, ...props }: React.ComponentPropsWithoutR
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
-    const supabase = createSupabaseClient();
+    const supabase = createClient();
     setIsLoading(true);
     setError(null);
 

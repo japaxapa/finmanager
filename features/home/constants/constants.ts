@@ -46,7 +46,7 @@ export const TECH_STACK_LIST: ITechStack[] = [
   {
     title: 'React Query',
     subtitle:
-      'A financial application deals with constantly changing data.A financial application deals with constantly changing data.',
+      'A financial application deals with constantly changing data. A financial application deals with constantly changing data.',
     reasons: [
       'Caching',
       'Background updates',

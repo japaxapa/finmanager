@@ -1,6 +1,6 @@
 'use client';
 
-import { createSupabaseClient } from '@/shared/lib/supabase/client';
+import { createClient } from '@/shared/lib/supabase/client';
 import { cn } from '@/shared/lib/utils';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
@@ -21,7 +21,7 @@ export default function LoginForm({ className, ...props }: React.ComponentPropsW
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    const supabase = createSupabaseClient();
+    const supabase = createClient();
     setIsLoading(true);
     setError(null);
 
@@ -33,7 +33,7 @@ export default function LoginForm({ className, ...props }: React.ComponentPropsW
       if (error) throw error;
       // Update this route to redirect to an authenticated route. The user already has an active session.
       // TODO
-      router.push('/albums');
+      router.push('/dashboard');
     } catch (error: unknown) {
       setError(error instanceof Error ? error.message : 'An error occurred');
     } finally {

@@ -10,9 +10,12 @@ import Typography from '@mui/material/Typography';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { useState } from 'react';
+import { createClient } from '../lib/supabase/client';
+import { useRouter } from 'next/navigation';
 
 export default function AppNavBar() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const router = useRouter();
 
   // const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
   //   setAuth(event.target.checked);
@@ -24,6 +27,13 @@ export default function AppNavBar() {
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleLogout = async () => {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    setAnchorEl(null);
+    router.push('/auth/login');
   };
 
   return (
@@ -73,7 +83,7 @@ export default function AppNavBar() {
               onClose={handleClose}
             >
               <MenuItem onClick={handleClose}>Profile</MenuItem>
-              <MenuItem onClick={handleClose}>My account</MenuItem>
+              <MenuItem onClick={handleLogout}>Logout</MenuItem>
             </Menu>
           </div>
         </Toolbar>

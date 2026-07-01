@@ -1,4 +1,4 @@
-import { createSupabaseClient } from '@/shared/lib/supabase/client';
+import { createClient } from '@/shared/lib/supabase/client';
 import { type EmailOtpType } from '@supabase/supabase-js';
 import { redirect } from 'next/navigation';
 import { type NextRequest } from 'next/server';
@@ -10,7 +10,7 @@ export async function GET(request: NextRequest) {
   const next = searchParams.get('next') ?? '/';
 
   if (token_hash && type) {
-    const supabase = await createSupabaseClient();
+    const supabase = await createClient();
 
     const { error } = await supabase.auth.verifyOtp({
       type,
@@ -21,10 +21,10 @@ export async function GET(request: NextRequest) {
       redirect(next);
     } else {
       // redirect the user to an error page with some instructions
-      redirect(`/auth/error?error=${error?.message}`);
+      redirect(`/error?error=${error?.message}`);
     }
   }
 
   // redirect the user to an error page with some instructions
-  redirect(`/auth/error?error=No token hash or type`);
+  redirect(`/error?error=No token hash or type`);
 }

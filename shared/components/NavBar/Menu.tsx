@@ -13,6 +13,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import Divider from '@mui/material/Divider';
 import LogoutIcon from '@mui/icons-material/Logout';
 import DashboardIcon from '@mui/icons-material/Dashboard';
+import CategoryIcon from '@mui/icons-material/Category';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/shared/lib/supabase/client';
 
@@ -53,6 +54,15 @@ export default function Menu({ isMenuOpen, toggleDrawer }: IMenu) {
               <DashboardIcon />
             </ListItemIcon>
             <ListItemText primary={'Dashboard'} />
+          </ListItemButton>
+        </ListItem>
+
+        <ListItem>
+          <ListItemButton onClick={handleNavigate('/categories')}>
+            <ListItemIcon>
+              <CategoryIcon />
+            </ListItemIcon>
+            <ListItemText primary={'Categories'} />
           </ListItemButton>
         </ListItem>
 

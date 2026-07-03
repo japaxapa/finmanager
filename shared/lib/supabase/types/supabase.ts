@@ -310,6 +310,7 @@ export type Database = {
       [_ in never]: never;
     };
     Enums: {
+      category_type: 'income' | 'expense';
       transaction_type: 'income' | 'expense' | 'transfer';
     };
     CompositeTypes: {
@@ -439,6 +440,7 @@ export const Constants = {
   },
   public: {
     Enums: {
+      category_type: ['income', 'expense'],
       transaction_type: ['income', 'expense', 'transfer'],
     },
   },

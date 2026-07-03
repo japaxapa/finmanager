@@ -26,14 +26,21 @@ export default function LoginForm({ className, ...props }: React.ComponentPropsW
     setError(null);
 
     try {
-      const { error } = await supabase.auth.signInWithPassword({
+      const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
       if (error) throw error;
       // Update this route to redirect to an authenticated route. The user already has an active session.
       // TODO
-      router.push('/dashboard');
+
+      const { data: profiles } = await supabase.from('profiles').select('*').eq('id', data.user.id);
+
+      if (profiles?.length) {
+        router.push('/dashboard');
+      } else {
+        router.push('/auth/create-profile');
+      }
     } catch (error: unknown) {
       setError(error instanceof Error ? error.message : 'An error occurred');
     } finally {

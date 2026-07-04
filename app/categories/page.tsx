@@ -1,8 +1,6 @@
 'use client';
 
-import Fab from '@mui/material/Fab';
 import Paper from '@mui/material/Paper';
-import AddIcon from '@mui/icons-material/Add';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import PageContainer from '@/shared/components/PageContainer';
@@ -15,20 +13,25 @@ import Backdrop from '@mui/material/Backdrop';
 import { useState } from 'react';
 import { CreateCategoryForm } from '@/features/categories/CreateCategoryForm';
 import Grid from '@mui/material/Grid';
-
-// TODO create a getter for the Categories based on type
-// TODO create create for the Categories
+import CategorySpeedDial from '@/features/categories/CategorySpeedDial';
 
 export default function Categories() {
   const [open, setOpen] = useState(false);
+  const [deleteMode, setDeleteMode] = useState(false);
   const handleClose = () => {
     setOpen(false);
   };
   const handleOpen = () => {
     setOpen(true);
+    setDeleteMode(false);
+  };
+  const ToggleDeleteMode = () => {
+    setDeleteMode((prev) => !prev);
   };
 
   const { data: incomeCategories, isLoading: isLoadingIncome } = useCategories('income');
+
+  const { data: expenseCategories, isLoading: isLoadingExpense } = useCategories('expense');
 
   return (
     <PageContainer className="flex, flex-col justify-start">
@@ -45,7 +48,7 @@ export default function Categories() {
                 <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 3, sm: 6, md: 9 }}>
                   {incomeCategories?.data?.map((cat) => (
                     <Grid key={cat.id}>
-                      <CategoryChip title={cat.name} />
+                      <CategoryChip category={cat} enableDelete={deleteMode} />
                     </Grid>
                   ))}
                 </Grid>
@@ -58,7 +61,21 @@ export default function Categories() {
 
           <Card sx={{ px: 2 }} variant="outlined">
             <CardHeader title={'Expense'} />
-            <CardContent sx={{ minHeight: '20vh' }}></CardContent>
+            <CardContent sx={{ minHeight: '20vh' }}>
+              {isLoadingExpense && <Skeleton variant="rectangular" height={100} />}
+              {expenseCategories && (
+                <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 3, sm: 6, md: 9 }}>
+                  {expenseCategories?.data?.map((cat) => (
+                    <Grid key={cat.id}>
+                      <CategoryChip category={cat} enableDelete={deleteMode} />
+                    </Grid>
+                  ))}
+                </Grid>
+              )}
+              {!expenseCategories?.data?.length && !isLoadingExpense && (
+                <Typography>No expense categories</Typography>
+              )}
+            </CardContent>
           </Card>
         </Paper>
 
@@ -72,13 +89,7 @@ export default function Categories() {
           </Paper>
         </Backdrop>
       </Paper>
-      <Fab
-        sx={{ position: 'fixed', bottom: 16, right: 16 }}
-        aria-label="create category"
-        onClick={handleOpen}
-      >
-        <AddIcon />
-      </Fab>
+      <CategorySpeedDial handleOpenModal={handleOpen} toggleDelete={ToggleDeleteMode} />
     </PageContainer>
   );
 }

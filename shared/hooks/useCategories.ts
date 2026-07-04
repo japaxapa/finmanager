@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { Enums } from '../lib/supabase/types/supabase';
-import { createCategory, getCategories } from '../services/categoriesService';
+import { createCategory, deleteCategory, getCategories } from '../services/categoriesService';
 import { queryClient } from '../lib/tsquery';
 
 export function useCategories(type?: Enums<'category_type'>) {
@@ -11,6 +11,15 @@ export function useCreateCategory() {
   return useMutation({
     mutationFn: async (newCategory: { name: string; type: Enums<'category_type'> }) =>
       createCategory(newCategory.name, newCategory.type),
+    onSuccess: (_, variables) =>
+      queryClient.invalidateQueries({ queryKey: ['categories', variables.type] }),
+  });
+}
+
+export function useDeleteCategory() {
+  return useMutation({
+    mutationFn: async (category: { name: string; type: Enums<'category_type'> }) =>
+      deleteCategory(category.name, category.type),
     onSuccess: (_, variables) =>
       queryClient.invalidateQueries({ queryKey: ['categories', variables.type] }),
   });

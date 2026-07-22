@@ -91,12 +91,11 @@ export const AccountCard: React.FC<AccountCardProps> = ({
           </Stack>
 
           {/* Balance Display Section */}
-          <Box pt={0.5}>
+          <Box sx={{ pt: 0.5 }}>
             <Typography
               variant="caption"
               color="text.secondary"
-              display="block"
-              sx={{ fontweight: 500 }}
+              sx={{ fontWeight: 500, display: 'block' }}
             >
               Current Balance
             </Typography>

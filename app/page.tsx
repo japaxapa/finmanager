@@ -1,4 +1,3 @@
-import PageContainer from '@/shared/components/PageContainer';
 import Paper from '@mui/material/Paper';
 import HomeHeroCard from '@/features/home/HeroCard';
 import HomeScreenshotSection from '@/features/home/Screenshot';
@@ -7,10 +6,11 @@ import HomeArchitecture from '@/features/home/Architecture';
 import HomeStack from '@/features/home/stack/Stack';
 import HomeCapacities from '@/features/home/Capacities';
 import Footer from '@/shared/components/Footer';
+import { Box } from '@mui/material';
 
 export default function Home() {
   return (
-    <PageContainer className="items-start flex flex-col">
+    <Box sx={{ backgroundColor: 'background.default', color: 'text.primary', mt: 0 }}>
       <Paper
         elevation={4}
         sx={{
@@ -20,6 +20,7 @@ export default function Home() {
           flexDirection: 'column',
           gap: 2,
         }}
+        square
       >
         <HomeHeroCard />
 
@@ -35,6 +36,6 @@ export default function Home() {
       </Paper>
 
       <Footer />
-    </PageContainer>
+    </Box>
   );
 }

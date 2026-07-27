@@ -57,6 +57,8 @@ export default function LayoutContainer({ children }: { children: React.ReactNod
         onNavigate={onNavigate}
       />
       <Stack sx={{ flexGrow: 1, minHeight: '100%' }} spacing={2}>
+        {/* TODO pass breadcrumbs */}
+        {/* TODO search bar logic */}
         <SearchBar onMobileMenuOpen={onMobileMenuOpen} mode={mode} onToggleTheme={onToggleTheme} />
 
         {children}

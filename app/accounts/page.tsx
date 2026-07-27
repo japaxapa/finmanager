@@ -1,6 +1,5 @@
 'use client';
 
-import PageContainer from '@/shared/components/PageContainer';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Tab from '@mui/material/Tab';
@@ -44,7 +43,7 @@ export default function Accounts() {
   };
 
   return (
-    <PageContainer className="flex, flex-col justify-start">
+    <Box sx={{ backgroundColor: 'background.default', color: 'text.primary', mt: 0 }}>
       <Paper elevation={4} sx={{ display: 'flex', flexDirection: 'column', gap: 4, py: 4, px: 2 }}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
@@ -63,6 +62,6 @@ export default function Accounts() {
           Item Three
         </CustomTabPanel>
       </Paper>
-    </PageContainer>
+    </Box>
   );
 }

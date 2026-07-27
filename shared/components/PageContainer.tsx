@@ -1,17 +1,19 @@
 import { ComponentPropsWithRef } from 'react';
-import { cn } from '../lib/utils';
+import { Box } from '@mui/material';
 
-export default function PageContainer({
-  className,
-  children,
-  ...props
-}: ComponentPropsWithRef<'div'>) {
+export default function PageContainer({ children }: ComponentPropsWithRef<'div'>) {
   return (
-    <div
-      className={cn('flex min-h-svh w-full items-center justify-center sm:p-6 md:p-10', className)}
-      {...props}
+    <Box
+      sx={{
+        backgroundColor: 'background.default',
+        color: 'text.primary',
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
     >
       {children}
-    </div>
+    </Box>
   );
 }

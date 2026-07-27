@@ -1,3 +1,4 @@
+'use client';
 import React from 'react';
 import { Card, CardContent, Typography, Box, Stack } from '@mui/material';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
@@ -64,7 +65,11 @@ export const MetricCard: React.FC<MetricCardProps> = ({
           spacing={1}
           sx={{ justifyContent: 'space-between', alignItems: 'center' }}
         >
-          <Typography variant="h4" component="div" sx={{ fontWeight: 700 }}>
+          <Typography
+            variant="h4"
+            component="div"
+            sx={{ fontWeight: 700, fontSize: { xs: '1.5rem', sm: '1.75rem', lg: '1.25rem' } }}
+          >
             {amount}
           </Typography>
 

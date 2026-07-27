@@ -1,13 +1,21 @@
-import PageContainer from '@/shared/components/PageContainer';
-import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
+import React from 'react';
+import { Box } from '@mui/material';
 
-export default function DashboardPage() {
+import DashboardHeader from '@/features/dashboard/DashboardHeader';
+import DashboardMetrics from '@/features/dashboard/DashboardMetrics';
+import DashboardGraphs from '@/features/dashboard/DashboardGraphs';
+import DashboardTransactions from '@/features/dashboard/DashboardTransactions';
+
+export default function DashboardPage(): React.ReactNode {
   return (
-    <PageContainer>
-      <Paper>
-        <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}></Grid>
-      </Paper>
-    </PageContainer>
+    <Box sx={{ p: { xs: 2, md: 4 }, bgcolor: 'background.default', minHeight: '100vh' }}>
+      <DashboardHeader />
+
+      <DashboardMetrics />
+
+      <DashboardGraphs />
+
+      <DashboardTransactions />
+    </Box>
   );
 }

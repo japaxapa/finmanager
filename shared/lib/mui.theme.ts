@@ -14,6 +14,10 @@ export const globalTheme = createTheme({
       paper: '#121826',
     },
     divider: '#1E293B',
+    text: {
+      primary: '#FFFFFF',
+      secondary: '#94A3B8',
+    },
   },
   components: {
     // Remove shadow and add sleek dark border to Cards
@@ -56,6 +60,16 @@ export const globalTheme = createTheme({
       styleOverrides: {
         root: {
           borderBottom: '1px solid #1E293B',
+        },
+      },
+    },
+    MuiStack: {
+      styleOverrides: {
+        root: {
+          // Replicates the target selector globally
+          '& > :not(style) ~ :not(style)': {
+            marginTop: '0px',
+          },
         },
       },
     },

@@ -25,3 +25,7 @@ export function debounce<T extends (...args: any[]) => any>(
   };
 }
 /* eslint-enable */
+
+export function formatCurrency(value: number, currency: string = 'BRL'): string {
+  return new Intl.NumberFormat('pt-BR', { style: 'currency', currency }).format(value);
+}

@@ -29,10 +29,10 @@ export interface NavItem {
 
 const mainNavItems: NavItem[] = [
   { title: 'Dashboard', path: '/dashboard', icon: <GridViewIcon /> },
-  { title: 'Contas', path: '/contas', icon: <AccountBalanceWalletOutlinedIcon /> },
-  { title: 'Categorias', path: '/categorias', icon: <SellOutlinedIcon /> },
-  { title: 'Transações', path: '/transacoes', icon: <SwapHorizOutlinedIcon /> },
-  { title: 'Relatórios', path: '/relatorios', icon: <BarChartOutlinedIcon /> },
+  { title: 'Contas', path: '/accounts', icon: <AccountBalanceWalletOutlinedIcon /> },
+  { title: 'Categorias', path: '/categories', icon: <SellOutlinedIcon /> },
+  { title: 'Transações', path: '/transactions', icon: <SwapHorizOutlinedIcon /> },
+  { title: 'Relatórios', path: '/reports', icon: <BarChartOutlinedIcon /> },
 ];
 
 export interface MenuContentProps {
@@ -156,14 +156,14 @@ export const MenuContent: React.FC<MenuContentProps> = ({
       <Box sx={{ p: 2 }}>
         {/* Settings Button */}
         <ListItemButton
-          onClick={() => handleItemClick('/configuracoes')}
+          onClick={() => handleItemClick('/config')}
           sx={{
             borderRadius: 2,
             py: 1,
             px: 1.5,
             mb: 2,
-            color: currentPath === '/configuracoes' ? '#FFFFFF' : '#94A3B8',
-            bgcolor: currentPath === '/configuracoes' ? 'rgba(37, 99, 235, 0.2)' : 'transparent',
+            color: currentPath === '/config' ? '#FFFFFF' : '#94A3B8',
+            bgcolor: currentPath === '/config' ? 'rgba(37, 99, 235, 0.2)' : 'transparent',
             '&:hover': {
               bgcolor: 'rgba(255, 255, 255, 0.04)',
               color: '#FFFFFF',

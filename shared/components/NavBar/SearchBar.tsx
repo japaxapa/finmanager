@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useRef, useEffect } from 'react';
 import {
   Box,
@@ -22,7 +24,7 @@ export interface AppNavBarProps {
   /** Array of breadcrumb path items (e.g., ['finmanager', 'accounts']) */
   breadcrumbs?: string[];
   /** Current theme mode */
-  mode?: 'light' | 'dark';
+  mode?: 'light' | 'dark' | 'system';
   /** Callback when theme toggle is clicked */
   onToggleTheme?: () => void;
   /** Number of unread notifications */
@@ -35,7 +37,8 @@ export interface AppNavBarProps {
   onMobileMenuOpen?: () => void;
 }
 
-export const AppNavBar: React.FC<AppNavBarProps> = ({
+export const SearchBar: React.FC<AppNavBarProps> = ({
+  // TODO cheange this later
   breadcrumbs = ['finmanager', 'dashboard'],
   mode = 'dark',
   onToggleTheme,
@@ -45,6 +48,12 @@ export const AppNavBar: React.FC<AppNavBarProps> = ({
   onMobileMenuOpen,
 }) => {
   const searchInputRef = useRef<HTMLInputElement>(null);
+
+  const handleClick = () => {
+    if (onMobileMenuOpen) {
+      onMobileMenuOpen();
+    }
+  };
 
   // Keyboard shortcut listener for Cmd+K / Ctrl+K
   useEffect(() => {
@@ -70,48 +79,27 @@ export const AppNavBar: React.FC<AppNavBarProps> = ({
         borderBottom: '1px solid',
         borderColor: 'divider',
         display: 'flex',
-        alignItems: 'center',
+        flexDirection: { xs: 'column', md: 'row' },
         justifyContent: 'space-between',
         gap: 2,
       }}
     >
-      {/* Left Side: Mobile Menu Button & Breadcrumbs */}
-      <Stack direction="row" spacing={1.5} sx={{ alignItems: 'center' }}>
-        {/* Mobile Menu Icon (Hidden on Desktop) */}
-        {onMobileMenuOpen && (
-          <IconButton
-            onClick={onMobileMenuOpen}
-            edge="start"
-            aria-label="open drawer"
-            sx={{ display: { md: 'none' }, color: 'text.secondary' }}
-          >
-            <MenuIcon />
-          </IconButton>
-        )}
-
-        {/* Breadcrumbs Navigation */}
-        <Breadcrumbs separator="/" aria-label="breadcrumb" sx={{ color: 'text.secondary' }}>
-          {breadcrumbs.map((item, index) => {
-            const isLast = index === breadcrumbs.length - 1;
-            return (
-              <Typography
-                key={item}
-                variant="body2"
-                sx={{
-                  color: isLast ? 'text.primary' : 'text.secondary',
-                  fontWeight: isLast ? 600 : 400,
-                  fontSize: '0.875rem',
-                }}
-              >
-                {item}
-              </Typography>
-            );
-          })}
-        </Breadcrumbs>
-      </Stack>
+      <LeftItems
+        breadcrumbs={breadcrumbs}
+        onMobileMenuOpen={onMobileMenuOpen}
+        handleClick={handleClick}
+      />
 
       {/* Right Side: Search Input & Action Icons */}
-      <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
+      <Stack
+        direction="row"
+        spacing={2}
+        sx={{
+          alignItems: 'center',
+          flexGrow: 1,
+          justifyContent: { xs: 'space-between', md: 'flex-end' },
+        }}
+      >
         {/* Quick Search Input */}
         <Box
           sx={{
@@ -123,7 +111,7 @@ export const AppNavBar: React.FC<AppNavBarProps> = ({
             borderRadius: 2,
             px: 1.5,
             py: 0.5,
-            width: { xs: 160, sm: 220, md: 260 },
+            width: { xs: '80%', md: 260 },
             transition: 'all 0.2s ease',
             '&:focus-within': {
               borderColor: 'primary.main',
@@ -189,4 +177,53 @@ export const AppNavBar: React.FC<AppNavBarProps> = ({
   );
 };
 
-export default AppNavBar;
+function LeftItems({
+  breadcrumbs,
+  onMobileMenuOpen,
+  handleClick,
+}: {
+  breadcrumbs: string[];
+  onMobileMenuOpen?: () => void;
+  handleClick: () => void;
+}) {
+  {
+    /* Left Side: Mobile Menu Button & Breadcrumbs */
+  }
+  return (
+    <Stack direction="row" spacing={1.5} sx={{ alignItems: 'center' }}>
+      {/* Mobile Menu Icon (Hidden on Desktop) */}
+      {onMobileMenuOpen && (
+        <IconButton
+          onClick={handleClick}
+          edge="start"
+          aria-label="open drawer"
+          sx={{ display: { md: 'none' }, color: 'text.secondary' }}
+        >
+          <MenuIcon />
+        </IconButton>
+      )}
+
+      {/* Breadcrumbs Navigation */}
+      <Breadcrumbs separator="/" aria-label="breadcrumb" sx={{ color: 'text.secondary' }}>
+        {breadcrumbs.map((item, index) => {
+          const isLast = index === breadcrumbs.length - 1;
+          return (
+            <Typography
+              key={item}
+              variant="body2"
+              sx={{
+                color: isLast ? 'text.primary' : 'text.secondary',
+                fontWeight: isLast ? 600 : 400,
+                fontSize: '0.875rem',
+              }}
+            >
+              {item}
+            </Typography>
+          );
+        })}
+      </Breadcrumbs>
+    </Stack>
+  );
+}
+
+export default SearchBar;

@@ -1,10 +1,11 @@
 import React from 'react';
-import { Drawer, Box, useMediaQuery, useTheme } from '@mui/material';
+import { Drawer, Box } from '@mui/material';
 import { MenuContent } from './MenuContent';
 
 export interface MenuProps {
   currentPath?: string;
-  onNavigate?: (path: string) => void;
+  onNavigate?: (path: string, replace?: boolean) => void;
+  isMobile?: boolean;
   mobileOpen?: boolean;
   onMobileClose?: () => void;
 }
@@ -14,12 +15,10 @@ const DRAWER_WIDTH = 260;
 export const ResponsiveMenu: React.FC<MenuProps> = ({
   currentPath = '/dashboard',
   onNavigate,
+  isMobile = false,
   mobileOpen = false,
   onMobileClose,
 }) => {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-
   if (isMobile) {
     return (
       <Drawer

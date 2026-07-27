@@ -3,6 +3,7 @@ import './globals.css';
 import { AppProviders } from '@/providers/AppProvider';
 // Supports weights 100-900
 import '@fontsource-variable/dm-sans/opsz-italic.css';
+import LayoutContainer from '@/shared/components/Layout/LayoutContainer';
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -17,7 +18,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={`h-full antialiased`}>
       <body className="min-h-full flex flex-col">
-        <AppProviders>{children}</AppProviders>
+        <AppProviders>
+          <LayoutContainer>{children}</LayoutContainer>
+        </AppProviders>
       </body>
     </html>
   );

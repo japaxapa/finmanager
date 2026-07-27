@@ -1,6 +1,9 @@
 import { createTheme } from '@mui/material/styles';
 
 export const globalTheme = createTheme({
+  colorSchemes: {
+    dark: true,
+  },
   typography: {
     fontFamily: "'DM Sans Variable', sans-serif",
   },

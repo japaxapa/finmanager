@@ -1,8 +1,3 @@
-import AccountBalanceWalletOutlinedIcon from '@mui/icons-material/AccountBalanceWalletOutlined';
-import TrendingUpOutlinedIcon from '@mui/icons-material/TrendingUpOutlined';
-import TrendingDownOutlinedIcon from '@mui/icons-material/TrendingDownOutlined';
-import SavingsOutlinedIcon from '@mui/icons-material/SavingsOutlined';
-
 // --- Mock Data ---
 export const METRIC_DATA = [
   {
@@ -10,28 +5,28 @@ export const METRIC_DATA = [
     amount: 'R$ 42.980,00',
     trendPercentage: 12.4,
     trendType: 'up' as const,
-    icon: <AccountBalanceWalletOutlinedIcon fontSize="small" />,
+    icon: 'wallet',
   },
   {
     title: 'RECEITAS (MÊS)',
     amount: 'R$ 18.400,00',
     trendPercentage: 8.1,
     trendType: 'up' as const,
-    icon: <TrendingUpOutlinedIcon fontSize="small" />,
+    icon: 'income',
   },
   {
     title: 'DESPESAS (MÊS)',
     amount: 'R$ 9.120,00',
     trendPercentage: -3.2,
     trendType: 'down' as const,
-    icon: <TrendingDownOutlinedIcon fontSize="small" />,
+    icon: 'expense',
   },
   {
     title: 'ECONOMIA',
     amount: 'R$ 9.280,00',
     trendPercentage: 21.0,
     trendType: 'up' as const,
-    icon: <SavingsOutlinedIcon fontSize="small" />,
+    icon: 'savings',
   },
 ];
 

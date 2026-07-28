@@ -1,95 +1,16 @@
-'use client';
+import React from 'react';
+import PageBackground from '@/shared/components/PageBackground';
+import CategoryHeader from '@/features/categories/CategoryHeader';
+import CategoriesContent from '@/features/categories/CategoriesContent';
 
-import Paper from '@mui/material/Paper';
-import Card from '@mui/material/Card';
-import CardHeader from '@mui/material/CardHeader';
-import PageContainer from '@/shared/components/PageContainer';
-import CardContent from '@mui/material/CardContent';
-import { useCategories } from '@/shared/hooks/useCategories';
-import CategoryChip from '@/features/categories/CategoryChip';
-import Typography from '@mui/material/Typography';
-import Skeleton from '@mui/material/Skeleton';
-import Backdrop from '@mui/material/Backdrop';
-import { useState } from 'react';
-import { CreateCategoryForm } from '@/features/categories/CreateCategoryForm';
-import Grid from '@mui/material/Grid';
-import CategorySpeedDial from '@/features/categories/CategorySpeedDial';
-
-export default function Categories() {
-  const [open, setOpen] = useState(false);
-  const [deleteMode, setDeleteMode] = useState(false);
-  const handleClose = () => {
-    setOpen(false);
-  };
-  const handleOpen = () => {
-    setOpen(true);
-    setDeleteMode(false);
-  };
-  const ToggleDeleteMode = () => {
-    setDeleteMode((prev) => !prev);
-  };
-
-  const { data: incomeCategories, isLoading: isLoadingIncome } = useCategories('income');
-
-  const { data: expenseCategories, isLoading: isLoadingExpense } = useCategories('expense');
-
+// 3. The Page Implementation Component
+export const CategoriesPage: React.FC = () => {
   return (
-    <PageContainer className="flex, flex-col justify-start">
-      <Paper sx={{ width: '100%', minHeight: '100vh' }}>
-        <Paper
-          elevation={4}
-          sx={{ display: 'flex', flexDirection: 'column', gap: 4, py: 4, px: 2 }}
-        >
-          <Card sx={{ px: 2 }} variant="outlined">
-            <CardHeader title={'Income'} />
-            <CardContent sx={{ minHeight: '20vh' }}>
-              {isLoadingIncome && <Skeleton variant="rectangular" height={100} />}
-              {incomeCategories && (
-                <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 3, sm: 6, md: 9 }}>
-                  {incomeCategories?.data?.map((cat) => (
-                    <Grid key={cat.id}>
-                      <CategoryChip category={cat} enableDelete={deleteMode} />
-                    </Grid>
-                  ))}
-                </Grid>
-              )}
-              {!incomeCategories?.data?.length && !isLoadingIncome && (
-                <Typography>No income categories</Typography>
-              )}
-            </CardContent>
-          </Card>
-
-          <Card sx={{ px: 2 }} variant="outlined">
-            <CardHeader title={'Expense'} />
-            <CardContent sx={{ minHeight: '20vh' }}>
-              {isLoadingExpense && <Skeleton variant="rectangular" height={100} />}
-              {expenseCategories && (
-                <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 3, sm: 6, md: 9 }}>
-                  {expenseCategories?.data?.map((cat) => (
-                    <Grid key={cat.id}>
-                      <CategoryChip category={cat} enableDelete={deleteMode} />
-                    </Grid>
-                  ))}
-                </Grid>
-              )}
-              {!expenseCategories?.data?.length && !isLoadingExpense && (
-                <Typography>No expense categories</Typography>
-              )}
-            </CardContent>
-          </Card>
-        </Paper>
-
-        <Backdrop
-          sx={(theme) => ({ color: '#fff', zIndex: theme.zIndex.drawer + 1 })}
-          open={open}
-          onClick={handleClose}
-        >
-          <Paper elevation={8} sx={{ position: 'relative' }}>
-            <CreateCategoryForm handleClose={handleClose} onClick={(e) => e.stopPropagation()} />
-          </Paper>
-        </Backdrop>
-      </Paper>
-      <CategorySpeedDial handleOpenModal={handleOpen} toggleDelete={ToggleDeleteMode} />
-    </PageContainer>
+    <PageBackground sx={{ px: 4, py: 5 }}>
+      <CategoryHeader />
+      <CategoriesContent />
+    </PageBackground>
   );
-}
+};
+
+export default CategoriesPage;

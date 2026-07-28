@@ -1,0 +1,60 @@
+import { TransactionRowProps } from '@/shared/components/TransactionRow';
+
+export const MOCK_TRANSACTIONS: (TransactionRowProps & { id: string })[] = [
+  {
+    id: '1',
+    title: 'Salário — Acme Inc.',
+    date: '02 dez 2026',
+    category: 'Receita',
+    amount: 12000,
+    type: 'income',
+  },
+  {
+    id: '2',
+    title: 'Aluguel',
+    date: '05 dez 2026',
+    category: 'Moradia',
+    amount: 2400,
+    type: 'expense',
+  },
+  {
+    id: '3',
+    title: 'Supermercado Pão de Açúcar',
+    date: '06 dez 2026',
+    category: 'Alimentação',
+    amount: 486.2,
+    type: 'expense',
+  },
+  {
+    id: '4',
+    title: 'Freelance — Landing page',
+    date: '08 dez 2026',
+    category: 'Receita',
+    amount: 3200,
+    type: 'income',
+  },
+  {
+    id: '5',
+    title: 'Assinatura Vercel',
+    date: '10 dez 2026',
+    category: 'Software',
+    amount: 120,
+    type: 'expense',
+  },
+  {
+    id: '6',
+    title: 'Gasolina — Posto Shell',
+    date: '12 dez 2026',
+    category: 'Transporte',
+    amount: 210,
+    type: 'expense',
+  },
+  {
+    id: '7',
+    title: 'Cinema & Jantar',
+    date: '15 dez 2026',
+    category: 'Lazer',
+    amount: 180.5,
+    type: 'expense',
+  },
+];

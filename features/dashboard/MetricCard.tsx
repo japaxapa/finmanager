@@ -3,6 +3,7 @@ import React from 'react';
 import { Card, CardContent, Typography, Box, Stack } from '@mui/material';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import TrendingDownIcon from '@mui/icons-material/TrendingDown';
+import AccountIcon from '@/shared/components/AccountIcons';
 
 export interface MetricCardProps {
   /** Label/title for the metric (e.g., "Total Revenue") */
@@ -14,7 +15,7 @@ export interface MetricCardProps {
   /** Direction of the trend */
   trendType: 'up' | 'down';
   /** Optional icon element to show in the header */
-  icon?: React.ReactNode;
+  icon?: string;
 }
 
 export const MetricCard: React.FC<MetricCardProps> = ({
@@ -42,21 +43,7 @@ export const MetricCard: React.FC<MetricCardProps> = ({
           <Typography variant="subtitle2" color="text.secondary" sx={{ fontWeight: 600 }}>
             {title}
           </Typography>
-          {icon && (
-            <Box
-              sx={{
-                color: 'text.secondary',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                bgcolor: 'action.hover',
-                p: 1,
-                borderRadius: '50%',
-              }}
-            >
-              {icon}
-            </Box>
-          )}
+          {icon && <AccountIcon iconName={icon} />}
         </Stack>
 
         {/* Main Content: Amount & Trend Badge */}

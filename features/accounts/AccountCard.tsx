@@ -1,6 +1,7 @@
 import React from 'react';
-import { Card, CardContent, Typography, Box, Stack, Chip, Avatar } from '@mui/material';
-import { formatCurrency } from '../lib/utils';
+import { Card, CardContent, Typography, Box, Stack, Chip } from '@mui/material';
+import { formatCurrency } from '../../shared/lib/utils';
+import AccountIcon from '@/shared/components/AccountIcons';
 
 export interface AccountCardProps {
   /** Name of the bank or institution (e.g., "Nubank", "Banco Inter", "C6 Bank") */
@@ -10,7 +11,7 @@ export interface AccountCardProps {
   /** Main balance amount. If passed as a number, it formats as BRL currency by default. */
   balance: number | string;
   /** URL to the bank logo OR a React icon node */
-  logo?: string | React.ReactNode;
+  logo?: string;
   /** Optional background or theme color associated with the bank (e.g., "#8A05BE" for Nubank) */
   brandColor?: string;
   /** Optional click handler for selecting/opening the account */
@@ -55,8 +56,6 @@ export const AccountCard: React.FC<AccountCardProps> = ({
               accountName={accountName}
             />
 
-            <InstitutionTag institutionName={institutionName} brandColor={brandColor} />
-
             <BalanceDisplay formattedBalance={formattedBalance} />
           </Stack>
         </Stack>
@@ -71,7 +70,7 @@ function AccountInformation({
   institutionName,
   accountName,
 }: {
-  logo?: string | React.ReactNode;
+  logo?: string;
   brandColor?: string;
   institutionName: string;
   accountName: string;
@@ -81,24 +80,14 @@ function AccountInformation({
   }
   return (
     <Stack direction="row" spacing={1.5} sx={{ alignItems: 'center' }}>
-      <Avatar
-        src={typeof logo === 'string' ? logo : undefined}
-        sx={{
-          width: 40,
-          height: 40,
-          bgcolor: brandColor || 'action.hover',
-          color: brandColor ? '#ffffff' : 'text.primary',
-          fontWeight: 700,
-          fontSize: '0.9rem',
-        }}
-      >
-        {/* Fallback to first letter of institution if no image/icon */}
-        {typeof logo !== 'string' && logo ? logo : institutionName.charAt(0).toUpperCase()}
-      </Avatar>
+      <AccountIcon iconName={logo as string} />
 
-      <Typography variant="subtitle2" color="text.secondary" sx={{ fontWeight: 600 }}>
-        {accountName}
-      </Typography>
+      <Stack sx={{ gap: 0.5 }}>
+        <Typography variant="subtitle2" color="text.secondary" sx={{ fontWeight: 600 }}>
+          {accountName}
+        </Typography>
+        <InstitutionTag institutionName={institutionName} brandColor={brandColor} />
+      </Stack>
     </Stack>
   );
 }
@@ -143,6 +132,7 @@ function InstitutionTag({
         bgcolor: brandColor ? `${brandColor}15` : 'action.selected',
         color: brandColor || 'text.primary',
         border: brandColor ? `1px solid ${brandColor}33` : 'none',
+        width: '8rem',
       }}
     />
   );

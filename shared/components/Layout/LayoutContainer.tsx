@@ -10,6 +10,7 @@ export default function LayoutContainer({ children }: { children: React.ReactNod
   const theme = useTheme();
   const router = useRouter();
   const pathName = usePathname();
+  const breadcrumbs = ['finmanager', ...pathName.split('/').filter(Boolean)];
 
   const { mode, setMode } = useColorScheme();
 
@@ -61,7 +62,12 @@ export default function LayoutContainer({ children }: { children: React.ReactNod
       <Stack sx={{ flexGrow: 1, minHeight: '100%' }} spacing={2}>
         {/* TODO pass breadcrumbs */}
         {/* TODO search bar logic */}
-        <SearchBar onMobileMenuOpen={onMobileMenuOpen} mode={mode} onToggleTheme={onToggleTheme} />
+        <SearchBar
+          onMobileMenuOpen={onMobileMenuOpen}
+          mode={mode}
+          onToggleTheme={onToggleTheme}
+          breadcrumbs={breadcrumbs}
+        />
 
         {children}
       </Stack>

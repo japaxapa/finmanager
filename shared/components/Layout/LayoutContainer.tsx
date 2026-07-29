@@ -4,11 +4,12 @@ import { Container, Stack, useColorScheme, useMediaQuery, useTheme } from '@mui/
 import ResponsiveMenu from '../NavBar/ResponsiveMenu';
 import SearchBar from '../NavBar/SearchBar';
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 export default function LayoutContainer({ children }: { children: React.ReactNode }) {
   const theme = useTheme();
   const router = useRouter();
+  const pathName = usePathname();
 
   const { mode, setMode } = useColorScheme();
 
@@ -51,6 +52,7 @@ export default function LayoutContainer({ children }: { children: React.ReactNod
       disableGutters
     >
       <ResponsiveMenu
+        currentPath={pathName}
         isMobile={isMobile}
         mobileOpen={isMenuOpen}
         onMobileClose={onMobileClose}

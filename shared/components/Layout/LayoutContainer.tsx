@@ -1,8 +1,8 @@
 'use client';
 
 import { Container, Stack, useColorScheme, useMediaQuery, useTheme } from '@mui/material';
-import ResponsiveMenu from '../NavBar/ResponsiveMenu';
-import SearchBar from '../NavBar/SearchBar';
+import ResponsiveMenu from './Menu/ResponsiveMenu';
+import SearchBar from './Searchbar/SearchBar';
 import { useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 

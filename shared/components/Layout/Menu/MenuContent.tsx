@@ -9,7 +9,6 @@ import {
   Typography,
   Avatar,
   Divider,
-  Stack,
 } from '@mui/material';
 
 // MUI Icons matching the reference design
@@ -20,6 +19,7 @@ import SwapHorizOutlinedIcon from '@mui/icons-material/SwapHorizOutlined'; // Tr
 // import BarChartOutlinedIcon from '@mui/icons-material/BarChartOutlined'; // Relatórios
 // import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined'; // Configurações
 import PaidIcon from '@mui/icons-material/Paid'; // Brand Logo Icon
+import { UserProfileCard } from './MenuProfileButton';
 
 export interface NavItem {
   title: string;
@@ -38,20 +38,11 @@ const mainNavItems: NavItem[] = [
 export interface MenuContentProps {
   currentPath?: string;
   onNavigate?: (path: string) => void;
-  user?: {
-    name: string;
-    email: string;
-    avatarUrl?: string;
-  };
 }
 
 export const MenuContent: React.FC<MenuContentProps> = ({
   currentPath = '/dashboard',
   onNavigate,
-  user = {
-    name: 'Lucas Martins',
-    email: 'lucas@finmanager.dev',
-  },
 }) => {
   const handleItemClick = (path: string) => {
     if (onNavigate) {
@@ -178,42 +169,7 @@ export const MenuContent: React.FC<MenuContentProps> = ({
 
         <Divider sx={{ borderColor: 'rgba(255, 255, 255, 0.08)', mb: 2 }} />
 
-        {/* User Profile Card */}
-        <Stack direction="row" spacing={1.5} sx={{ px: 0.5, alignItems: 'center' }}>
-          <Avatar
-            src={user.avatarUrl}
-            sx={{
-              width: 38,
-              height: 38,
-              bgcolor: '#1E293B',
-              color: '#3B82F6',
-              fontWeight: 700,
-              fontSize: '0.85rem',
-            }}
-          >
-            {user.name
-              .split(' ')
-              .map((n) => n[0])
-              .join('')
-              .toUpperCase()}
-          </Avatar>
-          <Box sx={{ minWidth: 0, flexGrow: 1 }}>
-            <Typography
-              variant="subtitle2"
-              noWrap
-              sx={{ color: '#FFFFFF', fontWeight: 600, fontSize: '0.875rem' }}
-            >
-              {user.name}
-            </Typography>
-            <Typography
-              variant="caption"
-              noWrap
-              sx={{ color: '#64748B', display: 'block', fontSize: '0.75rem' }}
-            >
-              {user.email}
-            </Typography>
-          </Box>
-        </Stack>
+        <UserProfileCard />
       </Box>
     </Box>
   );

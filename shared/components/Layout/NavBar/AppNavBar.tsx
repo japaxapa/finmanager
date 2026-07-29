@@ -5,10 +5,10 @@ import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { useState } from 'react';
-import { createClient } from '../../lib/supabase/client';
+import { createClient } from '../../../lib/supabase/client';
 import { useRouter } from 'next/navigation';
 import ProfileButton from './ProfileButton';
-import Menu from './Menu';
+import Menu from '../Menu/Menu';
 
 export default function AppNavBar() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);

@@ -7,7 +7,6 @@ import {
   ListItemIcon,
   ListItemText,
   Typography,
-  Avatar,
   Divider,
 } from '@mui/material';
 
@@ -18,8 +17,8 @@ import SellOutlinedIcon from '@mui/icons-material/SellOutlined'; // Categorias
 import SwapHorizOutlinedIcon from '@mui/icons-material/SwapHorizOutlined'; // Transações
 // import BarChartOutlinedIcon from '@mui/icons-material/BarChartOutlined'; // Relatórios
 // import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined'; // Configurações
-import PaidIcon from '@mui/icons-material/Paid'; // Brand Logo Icon
 import { UserProfileCard } from './MenuProfileButton';
+import LogoButton from './LogoBtn';
 
 export interface NavItem {
   title: string;
@@ -63,25 +62,7 @@ export const MenuContent: React.FC<MenuContentProps> = ({
         borderColor: 'rgba(255, 255, 255, 0.08)',
       }}
     >
-      {/* App Branding Logo Header */}
-      <Box sx={{ p: 3, display: 'flex', alignItems: 'center', gap: 1.5 }}>
-        <Avatar
-          sx={{
-            bgcolor: '#2563EB',
-            width: 32,
-            height: 32,
-            borderRadius: 1.5,
-          }}
-        >
-          <PaidIcon sx={{ fontSize: 20, color: '#FFFFFF' }} />
-        </Avatar>
-        <Typography
-          variant="h6"
-          sx={{ color: '#FFFFFF', letterSpacing: '-0.5px', fontWeight: 700 }}
-        >
-          fin<span style={{ color: '#3B82F6' }}>manager</span>
-        </Typography>
-      </Box>
+      <LogoButton />
 
       {/* Main Navigation Menu Section */}
       <Box sx={{ flexGrow: 1, px: 2 }}>

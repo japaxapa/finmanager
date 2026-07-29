@@ -17,8 +17,8 @@ import GridViewIcon from '@mui/icons-material/GridView'; // Dashboard
 import AccountBalanceWalletOutlinedIcon from '@mui/icons-material/AccountBalanceWalletOutlined'; // Contas
 import SellOutlinedIcon from '@mui/icons-material/SellOutlined'; // Categorias
 import SwapHorizOutlinedIcon from '@mui/icons-material/SwapHorizOutlined'; // Transações
-import BarChartOutlinedIcon from '@mui/icons-material/BarChartOutlined'; // Relatórios
-import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined'; // Configurações
+// import BarChartOutlinedIcon from '@mui/icons-material/BarChartOutlined'; // Relatórios
+// import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined'; // Configurações
 import PaidIcon from '@mui/icons-material/Paid'; // Brand Logo Icon
 
 export interface NavItem {
@@ -32,7 +32,7 @@ const mainNavItems: NavItem[] = [
   { title: 'Contas', path: '/accounts', icon: <AccountBalanceWalletOutlinedIcon /> },
   { title: 'Categorias', path: '/categories', icon: <SellOutlinedIcon /> },
   { title: 'Transações', path: '/transactions', icon: <SwapHorizOutlinedIcon /> },
-  { title: 'Relatórios', path: '/reports', icon: <BarChartOutlinedIcon /> },
+  // { title: 'Relatórios', path: '/reports', icon: <BarChartOutlinedIcon /> },
 ];
 
 export interface MenuContentProps {
@@ -155,7 +155,7 @@ export const MenuContent: React.FC<MenuContentProps> = ({
       {/* Bottom Actions & User Profile Footer */}
       <Box sx={{ p: 2 }}>
         {/* Settings Button */}
-        <ListItemButton
+        {/* <ListItemButton
           onClick={() => handleItemClick('/config')}
           sx={{
             borderRadius: 2,
@@ -174,7 +174,7 @@ export const MenuContent: React.FC<MenuContentProps> = ({
             <SettingsOutlinedIcon />
           </ListItemIcon>
           <ListItemText primary="Configurações" sx={{ fontSize: '0.9rem', fontWeight: 500 }} />
-        </ListItemButton>
+        </ListItemButton> */}
 
         <Divider sx={{ borderColor: 'rgba(255, 255, 255, 0.08)', mb: 2 }} />
 

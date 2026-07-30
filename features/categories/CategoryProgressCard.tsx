@@ -10,6 +10,8 @@ import {
   Chip,
 } from '@mui/material';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz'; // Ícone de opções
+import { formatCurrency } from '@/shared/lib/utils';
+import FinIcon from '@/shared/components/UI/FinIcons';
 
 export interface CategoryProgressCardProps {
   /** Nome da categoria (ex: "Alimentação") */
@@ -21,7 +23,7 @@ export interface CategoryProgressCardProps {
   /** Valor total do orçamento definido (em Reais) */
   budgetGoal: number;
   /** Ícone da categoria (componente React, ex: <RestaurantIcon />) */
-  icon: React.ReactNode;
+  icon: string;
   /** Cor base da categoria (para o ícone e barra de progresso) */
   color: string;
 }
@@ -36,6 +38,7 @@ export const CategoryProgressCard: React.FC<CategoryProgressCardProps> = ({
 }) => {
   // Verificação de estouro de orçamento
   const isOverBudget = currentSpending > budgetGoal;
+  // const isOverBudget = true;
 
   // Cálculo do progresso (limitado a 100% para a barra visual)
   const progressPercentage = Math.min((currentSpending / budgetGoal) * 100, 100);
@@ -44,18 +47,11 @@ export const CategoryProgressCard: React.FC<CategoryProgressCardProps> = ({
   const effectiveColor = isOverBudget ? 'error.main' : color;
   // const progressColor = isOverBudget ? 'error' : 'primary'; // Usamos o color prop do LinearProgress ou customizamos
 
-  // Formatação de moeda para o padrão brasileiro (R$)
-  const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' })
-      .format(value)
-      .replace(/^R\$\s?/, 'R$ '); // Garante o espaço padrão visto no print
-  };
-
   return (
     <Card
       variant="outlined"
       sx={{
-        bgcolor: 'background.paper', // Garanta que seu tema dark esteja configurado
+        bgcolor: 'background.paper',
         borderRadius: 3,
         borderColor: isOverBudget ? 'error.main' : 'divider',
         position: 'relative',
@@ -66,21 +62,21 @@ export const CategoryProgressCard: React.FC<CategoryProgressCardProps> = ({
       }}
     >
       <CardContent sx={{ p: 3, '&:last-child': { pb: 3 } }}>
-        <Stack spacing={3}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
           {/* Cabeçalho: Ícone, Nomes e Menu */}
           <Stack direction="row" sx={{ alignItems: 'start', justifyContent: 'space-between' }}>
             <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
               {/* Avatar com ícone e cor de fundo suave */}
               <Avatar
                 sx={{
-                  bgcolor: isOverBudget ? 'error.lighter' : `${color}15`, // Opacidade de ~8% da cor base
+                  bgcolor: isOverBudget ? 'error.lighter' : `${color}15`,
                   color: effectiveColor,
                   width: 48,
                   height: 48,
                   borderRadius: 2,
                 }}
               >
-                {icon}
+                {FinIcon(icon)}
               </Avatar>
               <Box>
                 <Typography variant="subtitle1" color="text.primary" sx={{ fontWeight: 600 }}>
@@ -133,23 +129,22 @@ export const CategoryProgressCard: React.FC<CategoryProgressCardProps> = ({
           </Box>
 
           {/* Tag de Aviso (Exibida apenas se estiver acima do orçamento) */}
-          {isOverBudget && (
-            <Box sx={{ mt: 1 }}>
-              <Chip
-                label="Acima do orçamento"
-                variant="outlined"
-                size="small"
-                sx={{
-                  color: 'error.main',
-                  borderColor: 'error.main',
-                  fontWeight: 500,
-                  fontSize: '0.75rem',
-                  borderRadius: 1,
-                }}
-              />
-            </Box>
-          )}
-        </Stack>
+          <Box>
+            <Chip
+              label="Acima do orçamento"
+              variant="outlined"
+              size="small"
+              sx={{
+                visibility: isOverBudget ? 'visible' : 'hidden',
+                color: 'error.main',
+                borderColor: 'error.main',
+                fontWeight: 500,
+                fontSize: '0.75rem',
+                borderRadius: 1,
+              }}
+            />
+          </Box>
+        </Box>
       </CardContent>
     </Card>
   );

@@ -9,6 +9,7 @@ export async function getCategories(type?: Enums<'category_type'>) {
   if (!data.user?.id) {
     throw new Error('Erro ao carregar informações do usuário para requerir categorias');
   }
+
   let query = supabase.from('categories').select('*').eq('user_id', data.user?.id);
 
   if (type) {
@@ -21,9 +22,15 @@ export async function getCategories(type?: Enums<'category_type'>) {
 export async function createCategory(name: string, type: Enums<'category_type'>) {
   const { data } = await supabase.auth.getUser();
 
+  const userId = data.user?.id;
+
+  if (!userId) {
+    throw new Error('User is not authenticated');
+  }
+
   return supabase
     .from('categories')
-    .insert([{ name: name, type: type, user_id: data.user?.id }])
+    .insert([{ name: name, type: type, user_id: userId }])
     .select();
 }
 

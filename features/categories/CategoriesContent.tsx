@@ -1,7 +1,7 @@
 'use client';
 
 import { Box, ButtonGroup, Grid } from '@mui/material';
-import CategoryProgressCard from './CategoryProgressCard';
+import CategoryProgressCard from './CategoryCard/CategoryProgressCard';
 import { useCategories } from '@/shared/hooks/useCategories';
 import { useState } from 'react';
 import { Enums } from '@/shared/lib/supabase/types/supabase';

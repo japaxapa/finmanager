@@ -10,10 +10,11 @@ import { ReactNode } from 'react';
 interface IFormModal {
   children: ReactNode;
   open: boolean;
+  title: string;
   handleClose: () => void;
 }
 
-export function FormModal({ children, open, handleClose }: IFormModal) {
+export function FormModal({ children, open, title, handleClose }: IFormModal) {
   return (
     <Dialog
       open={open}
@@ -36,7 +37,7 @@ export function FormModal({ children, open, handleClose }: IFormModal) {
           alignItems: 'center',
         }}
       >
-        Nova Categoria
+        {title}
         <IconButton
           aria-label="close"
           onClick={handleClose}

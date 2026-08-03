@@ -14,6 +14,7 @@ import FormHelperText from '@mui/material/FormHelperText';
 import InputAdornment from '@mui/material/InputAdornment';
 import { useEffect } from 'react';
 import { FinIconType, finIcons } from '@/shared/components/UI/FinIcons.data';
+import { CategoryUpdate } from '@/shared/lib/supabase/types/types';
 
 type Inputs = {
   name: string;
@@ -25,14 +26,7 @@ type Inputs = {
 
 interface ICategoryFormProps {
   handleClose: () => void;
-  categoryToEdit?: {
-    id: string;
-    name: string;
-    type: Enums<'category_type'>;
-    icon: FinIconType;
-    color: string;
-    budget_goal: number;
-  };
+  categoryToEdit?: CategoryUpdate | undefined;
 }
 
 const types = [
@@ -72,13 +66,21 @@ export function CategoryForm({ handleClose, categoryToEdit, ...props }: ICategor
     watch,
     formState: { errors },
   } = useForm<Inputs>({
-    defaultValues: categoryToEdit || {
-      name: '',
-      type: 'expense',
-      icon: 'category',
-      color: '#0088FE',
-      budget_goal: 0,
-    },
+    defaultValues: categoryToEdit
+      ? {
+          ...categoryToEdit,
+          type: categoryToEdit?.type as Enums<'category_type'>,
+          icon: categoryToEdit?.icon as FinIconType,
+          color: categoryToEdit?.color || '#0088FE',
+          budget_goal: categoryToEdit?.budget_goal || 0,
+        }
+      : {
+          name: '',
+          type: 'expense',
+          icon: 'category',
+          color: '#0088FE',
+          budget_goal: 0,
+        },
   });
 
   const selectedColor = watch('color');

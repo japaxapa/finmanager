@@ -3,39 +3,36 @@ import { Card, CardContent, Box } from '@mui/material';
 import ErrorChip from './ErrorChip';
 import CategoryCardContent from './CategoryCardContent';
 import CategoryCardHeader from './CategoryCardHeader';
+import { Category, CategoryUpdate } from '@/shared/lib/supabase/types/types';
 
 export interface CategoryProgressCardProps {
-  /** Nome da categoria (ex: "Alimentação") */
-  categoryName: string;
-  /** Quantidade de transações */
+  category: Category;
   transactionCount: number;
-  /** Valor total gasto atualmente (em Reais) */
   currentSpending: number;
-  /** Valor total do orçamento definido (em Reais) */
-  budgetGoal: number;
-  /** Ícone da categoria (componente React, ex: <RestaurantIcon />) */
-  icon: string;
-  /** Cor base da categoria (para o ícone e barra de progresso) */
-  color: string;
+  onEdit: (category: CategoryUpdate) => void;
 }
 
 export const CategoryProgressCard: React.FC<CategoryProgressCardProps> = ({
-  categoryName,
+  category,
   transactionCount,
   currentSpending,
-  budgetGoal,
-  icon,
-  color,
+  onEdit,
 }) => {
   // Verificação de estouro de orçamento
-  const isOverBudget = currentSpending > budgetGoal;
+  const isOverBudget = category.budget_goal ? currentSpending > category.budget_goal : false;
 
   // Cálculo do progresso (limitado a 100% para a barra visual)
-  const progressPercentage = Math.min((currentSpending / budgetGoal) * 100, 100);
+  const progressPercentage = category.budget_goal
+    ? Math.min((currentSpending / category.budget_goal) * 100, 100)
+    : 0;
 
   // Definição das cores dinâmicas
-  const effectiveColor = isOverBudget ? 'error.main' : color;
+  const effectiveColor = isOverBudget ? 'error.main' : category.color;
   // const progressColor = isOverBudget ? 'error' : 'primary'; // Usamos o color prop do LinearProgress ou customizamos
+
+  const handleEdit = () => {
+    onEdit(category);
+  };
 
   return (
     <Card
@@ -54,18 +51,19 @@ export const CategoryProgressCard: React.FC<CategoryProgressCardProps> = ({
       <CardContent sx={{ p: 3, '&:last-child': { pb: 3 } }}>
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
           <CategoryCardHeader
-            categoryName={categoryName}
-            color={color}
-            effectiveColor={effectiveColor}
-            icon={icon}
+            categoryName={category.name}
+            color={category.color || '#FFF'}
+            effectiveColor={effectiveColor || 'error.main'}
+            icon={category.icon || ''}
             isOverBudget={isOverBudget}
             transactionCount={transactionCount}
+            onEdit={handleEdit}
           />
 
           <CategoryCardContent
-            budgetGoal={budgetGoal}
+            budgetGoal={category.budget_goal || 0}
             currentSpending={currentSpending}
-            effectiveColor={effectiveColor}
+            effectiveColor={effectiveColor || '#FFF'}
             isOverBudget={isOverBudget}
             progressPercentage={progressPercentage}
           />

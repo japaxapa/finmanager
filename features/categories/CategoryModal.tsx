@@ -16,7 +16,7 @@ export default function CategoryModal() {
     <>
       <CreateButton title="Nova Categoria" handleClick={() => setModalOpen(true)} />
 
-      <FormModal open={modalOpen} handleClose={handleClose}>
+      <FormModal open={modalOpen} handleClose={handleClose} title={'Nova Categoria'}>
         <CategoryForm handleClose={handleClose} />
       </FormModal>
     </>

@@ -10,6 +10,7 @@ export interface CategoryProgressCardProps {
   transactionCount: number;
   currentSpending: number;
   onEdit: (category: CategoryUpdate) => void;
+  onDelete: (category: Category) => void;
 }
 
 export const CategoryProgressCard: React.FC<CategoryProgressCardProps> = ({
@@ -17,6 +18,7 @@ export const CategoryProgressCard: React.FC<CategoryProgressCardProps> = ({
   transactionCount,
   currentSpending,
   onEdit,
+  onDelete,
 }) => {
   // Verificação de estouro de orçamento
   const isOverBudget = category.budget_goal ? currentSpending > category.budget_goal : false;
@@ -32,6 +34,10 @@ export const CategoryProgressCard: React.FC<CategoryProgressCardProps> = ({
 
   const handleEdit = () => {
     onEdit(category);
+  };
+
+  const handleDelete = () => {
+    onDelete(category);
   };
 
   return (
@@ -58,6 +64,7 @@ export const CategoryProgressCard: React.FC<CategoryProgressCardProps> = ({
             isOverBudget={isOverBudget}
             transactionCount={transactionCount}
             onEdit={handleEdit}
+            onDelete={handleDelete}
           />
 
           <CategoryCardContent

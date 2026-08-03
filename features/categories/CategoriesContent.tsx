@@ -8,7 +8,8 @@ import { Enums } from '@/shared/lib/supabase/types/supabase';
 import { FilterButton } from '@/shared/components/UI/FilterButton';
 import { FormModal } from '@/shared/components/UI/FormModal';
 import { CategoryForm } from './CategoryForm';
-import { CategoryUpdate } from '@/shared/lib/supabase/types/types';
+import { Category, CategoryUpdate } from '@/shared/lib/supabase/types/types';
+import CategoryDeleteModal from './CategoryDeleteModal';
 
 export default function CategoriesContet() {
   {
@@ -18,11 +19,14 @@ export default function CategoriesContet() {
   const [activeTab, setActiveTab] = useState<Enums<'category_type'>>('expense');
   const [modalOpen, setModalOpen] = useState(false);
   const [categoryToEdit, setCategoryToEdit] = useState<CategoryUpdate | undefined>(undefined);
+  const [categoryToDelete, setCategoryToDelete] = useState<Category | undefined>(undefined);
+
   const { data: categories } = useCategories(activeTab);
 
   const handleClose = () => {
     setModalOpen(false);
     setCategoryToEdit(undefined);
+    setCategoryToDelete(undefined);
   };
 
   const onEdit = (category: CategoryUpdate) => {
@@ -30,8 +34,9 @@ export default function CategoriesContet() {
     setCategoryToEdit(category);
   };
 
-  // TODO
-  // const onDelete = () => {};
+  const onDelete = (category: Category) => {
+    setCategoryToDelete(category);
+  };
 
   const handleClick = (type: Enums<'category_type'>) => {
     setActiveTab(type);
@@ -59,6 +64,7 @@ export default function CategoriesContet() {
                 transactionCount={0}
                 currentSpending={0}
                 onEdit={onEdit}
+                onDelete={onDelete}
               />
             </Grid>
           ))}
@@ -66,6 +72,8 @@ export default function CategoriesContet() {
       <FormModal open={modalOpen} handleClose={handleClose} title={'Editar Categoria'}>
         <CategoryForm handleClose={handleClose} categoryToEdit={categoryToEdit} />
       </FormModal>
+
+      <CategoryDeleteModal selectedCategory={categoryToDelete} handleClose={handleClose} />
     </>
   );
 }

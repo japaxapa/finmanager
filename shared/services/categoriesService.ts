@@ -1,5 +1,6 @@
 import { createClient } from '../lib/supabase/client';
 import { Enums } from '../lib/supabase/types/supabase';
+import { CategoryInsert } from '../lib/supabase/types/types';
 
 const supabase = createClient();
 
@@ -19,7 +20,7 @@ export async function getCategories(type?: Enums<'category_type'>) {
   return query;
 }
 
-export async function createCategory(name: string, type: Enums<'category_type'>) {
+export async function createCategory(category: CategoryInsert) {
   const { data } = await supabase.auth.getUser();
 
   const userId = data.user?.id;
@@ -30,7 +31,16 @@ export async function createCategory(name: string, type: Enums<'category_type'>)
 
   return supabase
     .from('categories')
-    .insert([{ name: name, type: type, user_id: userId }])
+    .insert([
+      {
+        name: category.name,
+        type: category.type,
+        user_id: userId,
+        budget_goal: category.budget_goal,
+        color: category.color,
+        icon: category.icon,
+      },
+    ])
     .select();
 }
 

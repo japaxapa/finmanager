@@ -90,6 +90,7 @@ export function CategoryForm({ handleClose, categoryToEdit, ...props }: ICategor
     const payload = {
       ...data,
       budget_goal: Number(data.budget_goal),
+      user_id: '',
     };
 
     if (isEditing && categoryToEdit) {

@@ -4,6 +4,7 @@ import { ConfirmDeleteModal } from '@/shared/components/UI/ConfirmDeleteModal';
 import { useDeleteCategory } from '@/shared/hooks/useCategories';
 import { Enums } from '@/shared/lib/supabase/types/supabase';
 import { Category } from '@/shared/lib/supabase/types/types';
+import { useEffect } from 'react';
 
 interface ICategoryDeleteModal {
   selectedCategory?: Category | undefined;
@@ -18,7 +19,7 @@ export default function CategoryDeleteModal({
   const {
     mutate: deleteCategory,
     // isPending: isDeleting,
-    // isSuccess: isDeleteSuccess,
+    isSuccess: isDeleteSuccess,
   } = useDeleteCategory();
 
   const handleDeleteConfirm = async () => {
@@ -29,6 +30,12 @@ export default function CategoryDeleteModal({
       });
     }
   };
+
+  useEffect(() => {
+    if (isDeleteSuccess) {
+      handleClose();
+    }
+  }, [isDeleteSuccess, handleClose]);
 
   return (
     <ConfirmDeleteModal

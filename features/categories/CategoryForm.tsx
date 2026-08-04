@@ -1,6 +1,6 @@
 'use client';
 
-import { useCreateCategory } from '@/shared/hooks/useCategories';
+import { useCreateCategory, useUpdateCategory } from '@/shared/hooks/useCategories';
 import { Enums } from '@/shared/lib/supabase/types/supabase';
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
@@ -12,7 +12,6 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import FormHelperText from '@mui/material/FormHelperText';
 import InputAdornment from '@mui/material/InputAdornment';
-import { useEffect } from 'react';
 import { FinIconType, finIcons } from '@/shared/components/UI/FinIcons.data';
 import { CategoryUpdate } from '@/shared/lib/supabase/types/types';
 
@@ -48,14 +47,9 @@ const PRESET_COLORS = [
 export function CategoryForm({ handleClose, categoryToEdit, ...props }: ICategoryFormProps) {
   const isEditing = Boolean(categoryToEdit);
 
-  const {
-    mutate: createCategory,
-    isPending: isCreating,
-    isSuccess: isCreateSuccess,
-  } = useCreateCategory();
+  const { mutate: createCategory, isPending: isCreating } = useCreateCategory();
 
-  // TODO: Add update mutation once implemented
-  // const { mutate: updateCategory, isPending: isUpdating, isSuccess: isUpdateSuccess } = useUpdateCategory();
+  const { mutate: updateCategory, isPending: isUpdating } = useUpdateCategory();
 
   const {
     register,
@@ -86,7 +80,6 @@ export function CategoryForm({ handleClose, categoryToEdit, ...props }: ICategor
   const selectedColor = watch('color');
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
-    // Ensure numeric transformation for budget_goal
     const payload = {
       ...data,
       budget_goal: Number(data.budget_goal),
@@ -94,9 +87,24 @@ export function CategoryForm({ handleClose, categoryToEdit, ...props }: ICategor
     };
 
     if (isEditing && categoryToEdit) {
-      // TODO: updateCategory({ id: categoryToEdit.id, ...payload });
+      updateCategory(
+        { id: categoryToEdit.id, ...payload },
+        {
+          onSuccess: () => {
+            {
+              handleReset();
+            }
+          },
+        },
+      );
     } else {
-      createCategory(payload);
+      createCategory(payload, {
+        onSuccess: () => {
+          {
+            handleReset();
+          }
+        },
+      });
     }
   };
 
@@ -105,14 +113,7 @@ export function CategoryForm({ handleClose, categoryToEdit, ...props }: ICategor
     handleClose();
   };
 
-  useEffect(() => {
-    if (isCreateSuccess) {
-      reset();
-      handleClose();
-    }
-  }, [isCreateSuccess, reset, handleClose]);
-
-  if (isCreating) {
+  if (isCreating || isUpdating) {
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center', p: 6 }}>
         <CircularProgress />

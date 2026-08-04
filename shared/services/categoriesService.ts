@@ -1,6 +1,6 @@
 import { createClient } from '../lib/supabase/client';
 import { Enums } from '../lib/supabase/types/supabase';
-import { CategoryInsert } from '../lib/supabase/types/types';
+import { CategoryInsert, CategoryUpdate } from '../lib/supabase/types/types';
 
 const supabase = createClient();
 
@@ -42,6 +42,37 @@ export async function createCategory(category: CategoryInsert) {
       },
     ])
     .select();
+}
+
+export async function updateCategory(category: CategoryUpdate) {
+  const { data } = await supabase.auth.getUser();
+
+  const userId = data.user?.id;
+
+  if (!userId) {
+    throw new Error('User is not authenticated');
+  }
+  if (!category.id) {
+    throw new Error('Category ID is required for update');
+  }
+
+  const { id } = category;
+
+  const updatePayload = { ...category, user_id: userId, updated_at: new Date().toISOString() };
+
+  const { data: updatedCategory, error } = await supabase
+    .from('categories')
+    .update(updatePayload)
+    .eq('id', id)
+    .eq('user_id', userId)
+    .select()
+    .single();
+
+  if (error) {
+    throw error;
+  }
+
+  return updatedCategory;
 }
 
 export async function deleteCategory(name: string, type: Enums<'category_type'>) {

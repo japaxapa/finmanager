@@ -70,24 +70,42 @@ export type Database = {
       };
       categories: {
         Row: {
+          budget_goal: number | null;
+          color: string | null;
           created_at: string;
+          display_order: number | null;
+          icon: string | null;
           id: string;
+          is_active: boolean;
           name: string;
           type: string;
+          updated_at: string;
           user_id: string;
         };
         Insert: {
+          budget_goal?: number | null;
+          color?: string | null;
           created_at?: string;
+          display_order?: number | null;
+          icon?: string | null;
           id?: string;
+          is_active?: boolean;
           name: string;
           type: string;
-          user_id?: string;
+          updated_at?: string;
+          user_id: string;
         };
         Update: {
+          budget_goal?: number | null;
+          color?: string | null;
           created_at?: string;
+          display_order?: number | null;
+          icon?: string | null;
           id?: string;
+          is_active?: boolean;
           name?: string;
           type?: string;
+          updated_at?: string;
           user_id?: string;
         };
         Relationships: [
@@ -117,70 +135,6 @@ export type Database = {
           id?: string;
         };
         Relationships: [];
-      };
-      recurring_transactions: {
-        Row: {
-          account_id: string;
-          active: boolean | null;
-          amount: number | null;
-          category_id: string | null;
-          created_at: string | null;
-          description: string | null;
-          frequency: string;
-          id: string;
-          next_execution: string;
-          type: string;
-          user_id: string;
-        };
-        Insert: {
-          account_id: string;
-          active?: boolean | null;
-          amount?: number | null;
-          category_id?: string | null;
-          created_at?: string | null;
-          description?: string | null;
-          frequency: string;
-          id?: string;
-          next_execution: string;
-          type: string;
-          user_id: string;
-        };
-        Update: {
-          account_id?: string;
-          active?: boolean | null;
-          amount?: number | null;
-          category_id?: string | null;
-          created_at?: string | null;
-          description?: string | null;
-          frequency?: string;
-          id?: string;
-          next_execution?: string;
-          type?: string;
-          user_id?: string;
-        };
-        Relationships: [
-          {
-            foreignKeyName: 'recurring_transactions_account_id_fkey';
-            columns: ['account_id'];
-            isOneToOne: false;
-            referencedRelation: 'accounts';
-            referencedColumns: ['id'];
-          },
-          {
-            foreignKeyName: 'recurring_transactions_category_id_fkey';
-            columns: ['category_id'];
-            isOneToOne: false;
-            referencedRelation: 'categories';
-            referencedColumns: ['id'];
-          },
-          {
-            foreignKeyName: 'recurring_transactions_user_id_fkey';
-            columns: ['user_id'];
-            isOneToOne: false;
-            referencedRelation: 'profiles';
-            referencedColumns: ['id'];
-          },
-        ];
       };
       tags: {
         Row: {
@@ -214,7 +168,37 @@ export type Database = {
           },
         ];
       };
-      transaction: {
+      transaction_tag: {
+        Row: {
+          tag_id: string;
+          transaction_id: string;
+        };
+        Insert: {
+          tag_id: string;
+          transaction_id: string;
+        };
+        Update: {
+          tag_id?: string;
+          transaction_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'transaction_tag_tag_id_fkey';
+            columns: ['tag_id'];
+            isOneToOne: false;
+            referencedRelation: 'tags';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'transaction_tag_transaction_id_fkey';
+            columns: ['transaction_id'];
+            isOneToOne: false;
+            referencedRelation: 'transactions';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      transactions: {
         Row: {
           account_id: string;
           amount: number;
@@ -222,20 +206,24 @@ export type Database = {
           created_at: string;
           description: string | null;
           id: string;
-          transation_date: string;
+          title: string;
+          transaction_date: string;
           type: string;
+          updated_at: string;
           user_id: string;
         };
         Insert: {
-          account_id?: string;
+          account_id: string;
           amount?: number;
           category_id?: string | null;
           created_at?: string;
           description?: string | null;
           id?: string;
-          transation_date: string;
-          type?: string;
-          user_id?: string;
+          title: string;
+          transaction_date: string;
+          type: string;
+          updated_at?: string;
+          user_id: string;
         };
         Update: {
           account_id?: string;
@@ -244,60 +232,32 @@ export type Database = {
           created_at?: string;
           description?: string | null;
           id?: string;
-          transation_date?: string;
+          title?: string;
+          transaction_date?: string;
           type?: string;
+          updated_at?: string;
           user_id?: string;
         };
         Relationships: [
           {
-            foreignKeyName: 'transaction_account_id_fkey';
+            foreignKeyName: 'transactions_account_id_fkey';
             columns: ['account_id'];
             isOneToOne: false;
             referencedRelation: 'accounts';
             referencedColumns: ['id'];
           },
           {
-            foreignKeyName: 'transaction_category_id_fkey';
+            foreignKeyName: 'transactions_category_id_fkey';
             columns: ['category_id'];
             isOneToOne: false;
             referencedRelation: 'categories';
             referencedColumns: ['id'];
           },
           {
-            foreignKeyName: 'transaction_user_id_fkey';
+            foreignKeyName: 'transactions_user_id_fkey';
             columns: ['user_id'];
             isOneToOne: false;
             referencedRelation: 'profiles';
-            referencedColumns: ['id'];
-          },
-        ];
-      };
-      transation_tags: {
-        Row: {
-          tag_id: string;
-          transation_id: string;
-        };
-        Insert: {
-          tag_id?: string;
-          transation_id?: string;
-        };
-        Update: {
-          tag_id?: string;
-          transation_id?: string;
-        };
-        Relationships: [
-          {
-            foreignKeyName: 'transation_tags_tag_id_fkey';
-            columns: ['tag_id'];
-            isOneToOne: false;
-            referencedRelation: 'tags';
-            referencedColumns: ['id'];
-          },
-          {
-            foreignKeyName: 'transation_tags_transation_id_fkey';
-            columns: ['transation_id'];
-            isOneToOne: false;
-            referencedRelation: 'transaction';
             referencedColumns: ['id'];
           },
         ];

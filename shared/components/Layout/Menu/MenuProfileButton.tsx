@@ -85,7 +85,8 @@ export function UserProfileCard() {
       >
         <Stack direction="row" spacing={1.5} sx={{ px: 0.5, alignItems: 'center', width: '100%' }}>
           <Avatar
-            src={user?.fullName}
+            // TODO check if there is aneed for an url
+            src={''}
             sx={{
               width: 38,
               height: 38,

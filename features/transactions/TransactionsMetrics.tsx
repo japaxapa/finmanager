@@ -4,8 +4,9 @@ import { Grid, Paper, Stack, Typography } from '@mui/material';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { MOCK_TRANSACTIONS } from './mock.data';
+import { useTransactionSummary } from '@/shared/hooks/useTransactions';
 
 // TODO check metrics cards
 // TODO make cards dynamically
@@ -14,6 +15,12 @@ export default function TransactionsMetrics() {
   {
     /* Summary KPI Cards */
   }
+
+  const { data: summaryData } = useTransactionSummary();
+
+  useEffect(() => {
+    console.log('totals', summaryData);
+  }, [summaryData]);
 
   // Totals calculated dynamically
   const { totalIncome, totalExpense, balance } = useMemo(() => {

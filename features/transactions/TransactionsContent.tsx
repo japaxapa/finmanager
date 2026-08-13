@@ -14,9 +14,10 @@ import {
   Typography,
   Pagination,
 } from '@mui/material';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { MOCK_TRANSACTIONS } from './mock.data';
 import SearchIcon from '@mui/icons-material/Search';
+import { useTransactions } from '@/shared/hooks/useTransactions';
 
 export default function TransactionsContent() {
   {
@@ -26,6 +27,12 @@ export default function TransactionsContent() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [activeTab, setActiveTab] = useState<'all' | 'income' | 'expense'>('all');
+
+  const { data } = useTransactions();
+
+  useEffect(() => {
+    console.log(data);
+  }, [data]);
 
   // Filter Logic
   const filteredTransactions = useMemo(() => {

@@ -15,7 +15,6 @@ import {
   Pagination,
 } from '@mui/material';
 import { useEffect, useMemo, useState } from 'react';
-import { MOCK_TRANSACTIONS } from './mock.data';
 import SearchIcon from '@mui/icons-material/Search';
 import { useTransactions } from '@/shared/hooks/useTransactions';
 
@@ -26,24 +25,27 @@ export default function TransactionsContent() {
 
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
-  const [activeTab, setActiveTab] = useState<'all' | 'income' | 'expense'>('all');
+  const [activeTab, setActiveTab] = useState<'ALL' | 'income' | 'expense'>('ALL');
 
-  const { data } = useTransactions();
+  const { data } = useTransactions({ type: activeTab });
 
   useEffect(() => {
     console.log(data);
   }, [data]);
 
   // Filter Logic
-  const filteredTransactions = useMemo(() => {
-    return MOCK_TRANSACTIONS.filter((item) => {
-      const matchesSearch = item.title.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesCategory = selectedCategory === 'all' || item.category === selectedCategory;
-      const matchesTab = activeTab === 'all' || item.type === activeTab;
+  // const filteredTransactions = useMemo(() => {
+  //   return MOCK_TRANSACTIONS.filter((item) => {
+  //     const matchesSearch = item.title.toLowerCase().includes(searchTerm.toLowerCase());
+  //     const matchesCategory = selectedCategory === 'all' || item.category === selectedCategory;
+  //     const matchesTab = activeTab === 'all' || item.type === activeTab;
 
-      return matchesSearch && matchesCategory && matchesTab;
-    });
-  }, [searchTerm, selectedCategory, activeTab]);
+  //     return matchesSearch && matchesCategory && matchesTab;
+  //   });
+  // }, [searchTerm, selectedCategory, activeTab]);
+  const filteredTransactions = useMemo(() => {
+    return data?.data ?? [];
+  }, [data]);
 
   return (
     <Paper
@@ -85,7 +87,7 @@ export default function TransactionsContent() {
             },
           }}
         >
-          <Tab label="Todas" value="all" />
+          <Tab label="Todas" value="ALL" />
           <Tab label="Receitas" value="income" />
           <Tab label="Despesas" value="expense" />
         </Tabs>
@@ -157,10 +159,10 @@ export default function TransactionsContent() {
             <TransactionRow
               key={tx.id}
               title={tx.title}
-              date={tx.date}
-              category={tx.category}
+              date={tx.transaction_date}
+              category={tx.categories?.name || ''}
               amount={tx.amount}
-              type={tx.type}
+              type={tx.type as 'income' | 'expense'}
               onClick={() => console.log('Clicked transaction', tx.id)}
             />
           ))

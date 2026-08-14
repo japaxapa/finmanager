@@ -17,6 +17,7 @@ import {
 import { useEffect, useMemo, useState } from 'react';
 import SearchIcon from '@mui/icons-material/Search';
 import { useTransactions } from '@/shared/hooks/useTransactions';
+import { debounce } from '@/shared/lib/utils';
 
 export default function TransactionsContent() {
   {
@@ -24,14 +25,30 @@ export default function TransactionsContent() {
   }
 
   const [searchTerm, setSearchTerm] = useState('');
+  const [search, setSearch] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [activeTab, setActiveTab] = useState<'ALL' | 'income' | 'expense'>('ALL');
 
-  const { data } = useTransactions({ type: activeTab });
+  const { data } = useTransactions({ type: activeTab, search: search });
+  const filteredTransactions = data?.data ?? [];
 
   useEffect(() => {
     console.log(data);
   }, [data]);
+
+  const debouncedSearch = useMemo(
+    () =>
+      debounce((value: string) => {
+        setSearch(value);
+      }, 700),
+    [],
+  );
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSearchTerm(value);
+    debouncedSearch(value);
+  };
 
   // Filter Logic
   // const filteredTransactions = useMemo(() => {
@@ -43,9 +60,6 @@ export default function TransactionsContent() {
   //     return matchesSearch && matchesCategory && matchesTab;
   //   });
   // }, [searchTerm, selectedCategory, activeTab]);
-  const filteredTransactions = useMemo(() => {
-    return data?.data ?? [];
-  }, [data]);
 
   return (
     <Paper
@@ -98,7 +112,7 @@ export default function TransactionsContent() {
             placeholder="Buscar transação..."
             size="small"
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={handleChange}
             slotProps={{
               input: {
                 startAdornment: (

@@ -27,6 +27,7 @@ export default function TransactionsContent() {
 
   const [searchTerm, setSearchTerm] = useState('');
   const [search, setSearch] = useState('');
+  const [page, setPage] = useState(1);
   const [selectedCategory, setSelectedCategory] = useState<string>('');
   const [activeTab, setActiveTab] = useState<'ALL' | 'income' | 'expense'>('ALL');
 
@@ -34,6 +35,7 @@ export default function TransactionsContent() {
     type: activeTab,
     search: search,
     categoryId: selectedCategory,
+    page: page,
   });
   const { data: categoriesData } = useCategories();
 
@@ -55,6 +57,11 @@ export default function TransactionsContent() {
     const value = e.target.value;
     setSearchTerm(value);
     debouncedSearch(value);
+  };
+
+  const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    console.log(value);
+    setPage(value);
   };
 
   return (
@@ -197,7 +204,9 @@ export default function TransactionsContent() {
         </Typography>
 
         <Pagination
-          count={1}
+          count={data?.totalPages || 1}
+          page={page}
+          onChange={handlePageChange}
           size="small"
           sx={{
             '& .MuiPaginationItem-root': {

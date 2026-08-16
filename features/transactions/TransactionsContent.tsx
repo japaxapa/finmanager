@@ -18,6 +18,7 @@ import { useEffect, useMemo, useState } from 'react';
 import SearchIcon from '@mui/icons-material/Search';
 import { useTransactions } from '@/shared/hooks/useTransactions';
 import { debounce } from '@/shared/lib/utils';
+import { useCategories } from '@/shared/hooks/useCategories';
 
 export default function TransactionsContent() {
   {
@@ -26,10 +27,16 @@ export default function TransactionsContent() {
 
   const [searchTerm, setSearchTerm] = useState('');
   const [search, setSearch] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [selectedCategory, setSelectedCategory] = useState<string>('');
   const [activeTab, setActiveTab] = useState<'ALL' | 'income' | 'expense'>('ALL');
 
-  const { data } = useTransactions({ type: activeTab, search: search });
+  const { data } = useTransactions({
+    type: activeTab,
+    search: search,
+    categoryId: selectedCategory,
+  });
+  const { data: categoriesData } = useCategories();
+
   const filteredTransactions = data?.data ?? [];
 
   useEffect(() => {
@@ -49,17 +56,6 @@ export default function TransactionsContent() {
     setSearchTerm(value);
     debouncedSearch(value);
   };
-
-  // Filter Logic
-  // const filteredTransactions = useMemo(() => {
-  //   return MOCK_TRANSACTIONS.filter((item) => {
-  //     const matchesSearch = item.title.toLowerCase().includes(searchTerm.toLowerCase());
-  //     const matchesCategory = selectedCategory === 'all' || item.category === selectedCategory;
-  //     const matchesTab = activeTab === 'all' || item.type === activeTab;
-
-  //     return matchesSearch && matchesCategory && matchesTab;
-  //   });
-  // }, [searchTerm, selectedCategory, activeTab]);
 
   return (
     <Paper
@@ -155,13 +151,10 @@ export default function TransactionsContent() {
               '& .MuiSvgIcon-root': { color: '#64748B' },
             }}
           >
-            <MenuItem value="all">Todas categorias</MenuItem>
-            <MenuItem value="Receita">Receita</MenuItem>
-            <MenuItem value="Moradia">Moradia</MenuItem>
-            <MenuItem value="Alimentação">Alimentação</MenuItem>
-            <MenuItem value="Software">Software</MenuItem>
-            <MenuItem value="Transporte">Transporte</MenuItem>
-            <MenuItem value="Lazer">Lazer</MenuItem>
+            <MenuItem value={''}>Todas categorias</MenuItem>
+            {categoriesData?.data?.map((cat) => (
+              <MenuItem value={cat.id}>{cat.name}</MenuItem>
+            ))}
           </Select>
         </Stack>
       </Box>

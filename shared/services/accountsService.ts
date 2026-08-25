@@ -3,11 +3,12 @@ import { createClient } from '../lib/supabase/client';
 const supabase = createClient();
 
 export async function getAccounts() {
-  const { data } = await supabase.auth.getUser();
+  const { data, error } = await supabase.auth.getUser();
 
   if (!data.user?.id) {
     throw new Error('Erro ao carregar informações do usuário para requerir contas');
   }
+  if (error) throw error;
   const query = supabase.from('accounts').select('*').eq('user_id', data.user?.id);
 
   return query;

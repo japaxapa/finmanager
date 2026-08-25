@@ -7,5 +7,7 @@ export type CategoryUpdate = Database['public']['Tables']['categories']['Update'
 
 export type Transaction = Tables<'transactions'>;
 export type TransactionInsert = TablesInsert<'transactions'>;
-export type TransationUpdate = TablesUpdate<'transactions'>;
+export type TransactionUpdate = TablesUpdate<'transactions'>;
 export type TransactionType = Enums<'transaction_type'>;
+
+export type Accounts = Tables<'accounts'>;

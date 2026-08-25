@@ -1,4 +1,4 @@
-import { TransactionInsert, TransactionType } from '../lib/supabase/types/types';
+import { TransactionInsert, TransactionUpdate, TransactionType } from '../lib/supabase/types/types';
 import { createClient } from '../lib/supabase/client';
 
 const supabase = createClient();
@@ -120,6 +120,27 @@ export async function createTransaction(
   const { data, error } = await supabase
     .from('transactions')
     .insert([{ ...payload, user_id: user.id }])
+    .select('*, categories(id, name)')
+    .single();
+
+  if (error) throw error;
+  return data;
+}
+
+/**
+ * Update an existing Transaction
+ */
+export async function updateTransaction(
+  id: string,
+  payload: Omit<TransactionUpdate, 'id' | 'created_at' | 'user_id' | 'updated_at'>,
+) {
+  const { data, error } = await supabase
+    .from('transactions')
+    .update({
+      ...payload,
+      updated_at: new Date().toISOString(),
+    })
+    .eq('id', id)
     .select('*, categories(id, name)')
     .single();
 

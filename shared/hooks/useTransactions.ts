@@ -5,7 +5,9 @@ import {
   getTransactionSummary,
   createTransaction,
   deleteTransaction,
+  updateTransaction,
 } from '../services/transationsService';
+import { TransactionUpdate } from '../lib/supabase/types/types';
 
 // Query Keys Constant Factory
 export const transactionKeys = {
@@ -48,6 +50,26 @@ export function useCreateTransaction() {
     mutationFn: createTransaction,
     onSuccess: () => {
       // Invalidate transaction lists and summaries to refetch fresh data
+      queryClient.invalidateQueries({ queryKey: transactionKeys.all });
+    },
+  });
+}
+
+// Type for the mutation payload (ID + update fields)
+export type UpdateTransactionPayload = {
+  id: string;
+} & Omit<TransactionUpdate, 'id' | 'created_at' | 'user_id' | 'updated_at'>;
+
+/**
+ * Hook to Update an Existing Transaction
+ */
+export function useUpdateTransaction() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ id, ...payload }: UpdateTransactionPayload) => updateTransaction(id, payload),
+    onSuccess: () => {
+      // Invalidate all transaction lists and summaries to trigger automatic re-fetch
       queryClient.invalidateQueries({ queryKey: transactionKeys.all });
     },
   });

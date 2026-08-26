@@ -8,6 +8,7 @@ export async function getAccounts() {
   if (!data.user?.id) {
     throw new Error('Erro ao carregar informações do usuário para requerir contas');
   }
+
   if (error) throw error;
   const query = supabase.from('accounts').select('*').eq('user_id', data.user?.id);
 

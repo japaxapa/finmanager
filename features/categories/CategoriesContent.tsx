@@ -6,10 +6,9 @@ import { useCategories } from '@/shared/hooks/useCategories';
 import { useState } from 'react';
 import { Enums } from '@/shared/lib/supabase/types/supabase';
 import { FilterButton } from '@/shared/components/UI/FilterButton';
-import { FormModal } from '@/shared/components/UI/FormModal';
-import { CategoryForm } from './CategoryForm';
 import { Category, CategoryUpdate } from '@/shared/lib/supabase/types/types';
 import CategoryDeleteModal from './CategoryDeleteModal';
+import CategoryModal from './CategoryModal';
 
 export default function CategoriesContet() {
   {
@@ -69,9 +68,12 @@ export default function CategoriesContet() {
             </Grid>
           ))}
       </Grid>
-      <FormModal open={modalOpen} handleClose={handleClose} title={'Editar Categoria'}>
-        <CategoryForm handleClose={handleClose} categoryToEdit={categoryToEdit} />
-      </FormModal>
+      <CategoryModal
+        title="Editar Categoria"
+        categoryToEdit={categoryToEdit}
+        open={modalOpen}
+        handleClose={handleClose}
+      />
 
       <CategoryDeleteModal selectedCategory={categoryToDelete} handleClose={handleClose} />
     </>

@@ -12,7 +12,7 @@ export default function CategoryHeader() {
         Categorias
       </Typography>
 
-      <CategoryModal />
+      <CategoryModal title="Nova Categoria" />
     </Stack>
   );
 }

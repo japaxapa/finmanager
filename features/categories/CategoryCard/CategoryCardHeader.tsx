@@ -1,21 +1,8 @@
 'use client';
 
-import { useState } from 'react';
 import FinIcon from '@/shared/components/UI/FinIcons';
-import {
-  Stack,
-  Avatar,
-  Box,
-  Typography,
-  IconButton,
-  Menu,
-  MenuItem,
-  ListItemIcon,
-  ListItemText,
-} from '@mui/material';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
-import DeleteIcon from '@mui/icons-material/Delete';
+import { Stack, Avatar, Box, Typography } from '@mui/material';
+import { OptionsMenu } from '@/shared/components/UI/OptionsMenu';
 
 interface ICategoryCardHeader {
   isOverBudget: boolean;
@@ -38,25 +25,11 @@ export default function CategoryCardHeader({
   onEdit,
   onDelete,
 }: ICategoryCardHeader) {
-  // Menu state management
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
-
-  const handleOpenMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleCloseMenu = () => {
-    setAnchorEl(null);
-  };
-
   const handleEdit = () => {
-    handleCloseMenu();
     if (onEdit) onEdit();
   };
 
   const handleDelete = () => {
-    handleCloseMenu();
     if (onDelete) onDelete();
   };
 
@@ -86,60 +59,7 @@ export default function CategoryCardHeader({
       </Stack>
 
       {/* Botão de opções com Menu Popover */}
-      <Box>
-        <IconButton
-          id="category-menu-button"
-          aria-controls={open ? 'category-menu' : undefined}
-          aria-haspopup="true"
-          aria-expanded={open ? 'true' : undefined}
-          onClick={handleOpenMenu}
-          size="small"
-          sx={{ color: 'text.secondary' }}
-        >
-          <MoreHorizIcon />
-        </IconButton>
-
-        <Menu
-          id="category-menu"
-          anchorEl={anchorEl}
-          open={open}
-          onClose={handleCloseMenu}
-          sx={{
-            ariaLabelledby: 'category-menu-button',
-          }}
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'right',
-          }}
-          transformOrigin={{
-            vertical: 'top',
-            horizontal: 'right',
-          }}
-          slotProps={{
-            paper: {
-              elevation: 2,
-              sx: {
-                borderRadius: 2,
-                minWidth: 140,
-              },
-            },
-          }}
-        >
-          <MenuItem onClick={handleEdit}>
-            <ListItemIcon>
-              <EditOutlinedIcon fontSize="small" />
-            </ListItemIcon>
-            <ListItemText>Editar</ListItemText>
-          </MenuItem>
-
-          <MenuItem onClick={handleDelete} sx={{ color: 'error.main' }}>
-            <ListItemIcon>
-              <DeleteIcon fontSize="small" color="error" />
-            </ListItemIcon>
-            <ListItemText>Excluir</ListItemText>
-          </MenuItem>
-        </Menu>
-      </Box>
+      <OptionsMenu name="category" onEdit={handleEdit} onDelete={handleDelete} />
     </Stack>
   );
 }

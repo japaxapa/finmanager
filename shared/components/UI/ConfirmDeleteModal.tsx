@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Dialog,
   DialogTitle,
@@ -13,6 +13,7 @@ import {
 import DeleteIcon from '@mui/icons-material/Delete';
 export interface ConfirmDeleteModalProps {
   open: boolean;
+  isLoading?: boolean;
   title?: string;
   itemName?: string;
   message?: React.ReactNode;
@@ -28,6 +29,7 @@ export interface ConfirmDeleteModalProps {
 
 export const ConfirmDeleteModal: React.FC<ConfirmDeleteModalProps> = ({
   open,
+  isLoading = false,
   title = 'Deletar item?',
   itemName,
   message,
@@ -36,17 +38,12 @@ export const ConfirmDeleteModal: React.FC<ConfirmDeleteModalProps> = ({
   onClose,
   onConfirm,
 }) => {
-  const [loading, setLoading] = useState(false);
-
   const handleConfirm = async () => {
     try {
-      setLoading(true);
       await onConfirm();
       onClose(); // Automatically close on successful execution
     } catch (error) {
       console.error('Failed to complete delete action:', error);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -61,7 +58,7 @@ export const ConfirmDeleteModal: React.FC<ConfirmDeleteModalProps> = ({
   return (
     <Dialog
       open={open}
-      onClose={loading ? undefined : onClose}
+      onClose={isLoading ? undefined : onClose}
       aria-labelledby="delete-dialog-title"
       aria-describedby="delete-dialog-description"
       maxWidth="xs"
@@ -96,18 +93,18 @@ export const ConfirmDeleteModal: React.FC<ConfirmDeleteModalProps> = ({
       </DialogContent>
 
       <DialogActions sx={{ px: 3, pb: 2 }}>
-        <Button onClick={onClose} disabled={loading} color="inherit" variant="text">
+        <Button onClick={onClose} disabled={isLoading} color="inherit" variant="text">
           {cancelLabel}
         </Button>
         <Button
           onClick={handleConfirm}
-          disabled={loading}
+          disabled={isLoading}
           color="error"
           variant="contained"
           disableElevation
-          startIcon={loading ? <CircularProgress size={16} color="inherit" /> : null}
+          startIcon={isLoading ? <CircularProgress size={16} color="inherit" /> : null}
         >
-          {loading ? 'Deleting...' : confirmLabel}
+          {isLoading ? 'Deleting...' : confirmLabel}
         </Button>
       </DialogActions>
     </Dialog>

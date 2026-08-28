@@ -4,28 +4,26 @@ import React from 'react';
 import { Box, Typography, Chip, Stack } from '@mui/material';
 import NorthEastIcon from '@mui/icons-material/NorthEast'; // Top-right arrow
 import SouthEastIcon from '@mui/icons-material/SouthEast'; // Down-right arrow
+import { OptionsMenu } from './UI/OptionsMenu';
+import { Transaction } from '../lib/supabase/types/types';
 
 export interface TransactionRowProps {
-  title: string;
-  date: string;
   category: string;
-  amount: number;
-  type: 'income' | 'expense';
+  transaction: Transaction;
   /** Optional custom currency formatter. Defaults to BRL (R$) */
   currencySymbol?: string;
   onClick?: () => void;
+  onDelete?: (transaction: Transaction) => void;
 }
 
 export const TransactionRow: React.FC<TransactionRowProps> = ({
-  title,
-  date,
   category,
-  amount,
-  type,
+  transaction,
   currencySymbol = 'R$',
   onClick,
+  onDelete,
 }) => {
-  const isIncome = type === 'income';
+  const isIncome = transaction.type === 'income';
 
   // Dynamic colors matching the screenshot palette
   const amountColor = isIncome ? '#10B981' : '#F87171'; // Neon Green vs Muted Red
@@ -33,10 +31,14 @@ export const TransactionRow: React.FC<TransactionRowProps> = ({
   const iconColor = isIncome ? '#10B981' : '#F87171';
 
   // Format amount to standard Brazilian real / currency format (e.g., 12.000,00)
-  const formattedAmount = Math.abs(amount).toLocaleString('pt-BR', {
+  const formattedAmount = Math.abs(transaction.amount).toLocaleString('pt-BR', {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   });
+
+  const handleDelete = () => {
+    if (onDelete) onDelete(transaction);
+  };
 
   return (
     <Box
@@ -89,7 +91,7 @@ export const TransactionRow: React.FC<TransactionRowProps> = ({
               lineHeight: 1.2,
             }}
           >
-            {title}
+            {transaction.title}
           </Typography>
           <Typography
             variant="caption"
@@ -99,7 +101,7 @@ export const TransactionRow: React.FC<TransactionRowProps> = ({
               fontWeight: 500,
             }}
           >
-            {date}
+            {transaction.transaction_date}
           </Typography>
         </Stack>
       </Stack>
@@ -136,6 +138,8 @@ export const TransactionRow: React.FC<TransactionRowProps> = ({
         >
           {isIncome ? `+ ${currencySymbol}` : `- ${currencySymbol}`} {formattedAmount}
         </Typography>
+
+        <OptionsMenu name="transaction" onDelete={handleDelete} />
       </Stack>
     </Box>
   );

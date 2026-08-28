@@ -3,8 +3,7 @@
 import { useEffect } from 'react';
 import { useForm, SubmitHandler, Controller, useWatch } from 'react-hook-form';
 import { Box, Button, MenuItem, TextField, InputAdornment } from '@mui/material';
-
-// import { useCreateTransaction, useUpdateTransaction } from '@/shared/hooks/useTransactions';
+import { useCreateTransaction, useUpdateTransaction } from '@/shared/hooks/useTransactions';
 import {
   Accounts,
   Category,
@@ -44,10 +43,10 @@ export function TransactionForm({
 }: ITransactionFormProps) {
   const isEditing = Boolean(transactionToEdit?.id);
 
-  // const { mutate: createTransaction, isPending: isCreating } = useCreateTransaction();
-  // const { mutate: updateTransaction, isPending: isUpdating } = useUpdateTransaction();
-  // const isSubmitting = isCreating || isUpdating;
-  const isSubmitting = false;
+  const { mutate: createTransaction, isPending: isCreating } = useCreateTransaction();
+  const { mutate: updateTransaction, isPending: isUpdating } = useUpdateTransaction();
+  const isSubmitting = isCreating || isUpdating;
+  // const isSubmitting = false;
 
   const {
     register,
@@ -121,11 +120,11 @@ export function TransactionForm({
     console.log('payload', payload);
     console.log('options', options);
 
-    // if (isEditing && transactionToEdit?.id) {
-    //   updateTransaction({ id: transactionToEdit.id, ...payload }, options);
-    // } else {
-    //   createTransaction(payload, options);
-    // }
+    if (isEditing && transactionToEdit?.id) {
+      updateTransaction({ id: transactionToEdit.id, ...payload }, options);
+    } else {
+      createTransaction(payload, options);
+    }
   };
 
   return (

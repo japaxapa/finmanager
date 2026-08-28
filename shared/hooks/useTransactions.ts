@@ -1,4 +1,4 @@
-import { useQuery, useMutation, useQueryClient, keepPreviousData } from '@tanstack/react-query';
+import { useQuery, useMutation, keepPreviousData } from '@tanstack/react-query';
 import {
   GetTransactionsQueryParams,
   getTransactions,
@@ -8,6 +8,7 @@ import {
   updateTransaction,
 } from '../services/transationsService';
 import { TransactionUpdate } from '../lib/supabase/types/types';
+import { queryClient } from '../lib/tsquery';
 
 // Query Keys Constant Factory
 export const transactionKeys = {
@@ -44,8 +45,6 @@ export function useTransactionSummary(startDate?: string, endDate?: string) {
  * Hook to Create Transaction
  */
 export function useCreateTransaction() {
-  const queryClient = useQueryClient();
-
   return useMutation({
     mutationFn: createTransaction,
     onSuccess: () => {
@@ -64,8 +63,6 @@ export type UpdateTransactionPayload = {
  * Hook to Update an Existing Transaction
  */
 export function useUpdateTransaction() {
-  const queryClient = useQueryClient();
-
   return useMutation({
     mutationFn: ({ id, ...payload }: UpdateTransactionPayload) => updateTransaction(id, payload),
     onSuccess: () => {
@@ -79,10 +76,8 @@ export function useUpdateTransaction() {
  * Hook to Delete Transaction
  */
 export function useDeleteTransaction() {
-  const queryClient = useQueryClient();
-
   return useMutation({
-    mutationFn: deleteTransaction,
+    mutationFn: async (transactionId: string) => deleteTransaction(transactionId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: transactionKeys.all });
     },

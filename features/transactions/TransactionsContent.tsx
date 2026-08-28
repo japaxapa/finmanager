@@ -14,22 +14,30 @@ import {
   Typography,
   Pagination,
 } from '@mui/material';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import SearchIcon from '@mui/icons-material/Search';
-import { useTransactions } from '@/shared/hooks/useTransactions';
+import { useDeleteTransaction, useTransactions } from '@/shared/hooks/useTransactions';
 import { debounce } from '@/shared/lib/utils';
 import { useCategories } from '@/shared/hooks/useCategories';
+import { Transaction } from '@/shared/lib/supabase/types/types';
+import GenericDeleteModal from '@/shared/components/UI/GenericDeleteModal';
 
 export default function TransactionsContent() {
   {
     /* Main Content Area */
   }
 
+  // Filter states
   const [searchTerm, setSearchTerm] = useState('');
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
   const [selectedCategory, setSelectedCategory] = useState<string>('');
   const [activeTab, setActiveTab] = useState<'ALL' | 'income' | 'expense'>('ALL');
+
+  // CRUD states
+  const [transactionToDelete, setTransactionToDelete] = useState<Transaction | undefined>(
+    undefined,
+  );
 
   const { data } = useTransactions({
     type: activeTab,
@@ -38,12 +46,9 @@ export default function TransactionsContent() {
     page: page,
   });
   const { data: categoriesData } = useCategories();
+  const { mutate: deleteTransaction, isPending: isDeleting } = useDeleteTransaction();
 
   const filteredTransactions = data?.data ?? [];
-
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
 
   const debouncedSearch = useMemo(
     () =>
@@ -60,8 +65,15 @@ export default function TransactionsContent() {
   };
 
   const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
-    console.log(value);
     setPage(value);
+  };
+
+  const handleClose = () => {
+    setTransactionToDelete(undefined);
+  };
+
+  const onDelete = (transaction: Transaction) => {
+    setTransactionToDelete(transaction);
   };
 
   return (
@@ -172,12 +184,10 @@ export default function TransactionsContent() {
           filteredTransactions.map((tx) => (
             <TransactionRow
               key={tx.id}
-              title={tx.title}
-              date={tx.transaction_date}
               category={tx.categories?.name || ''}
-              amount={tx.amount}
-              type={tx.type as 'income' | 'expense'}
-              onClick={() => console.log('Clicked transaction', tx.id)}
+              transaction={tx}
+              onDelete={onDelete}
+              // onClick={() => console.log('Clicked transaction', tx.id)}
             />
           ))
         ) : (
@@ -220,6 +230,17 @@ export default function TransactionsContent() {
           }}
         />
       </Box>
+
+      <GenericDeleteModal
+        item={transactionToDelete}
+        itemName={transactionToDelete?.title}
+        title="Deletar Transação?"
+        isLoading={isDeleting}
+        handleClose={handleClose}
+        onConfirm={async (transaction) => {
+          await deleteTransaction(transaction.id);
+        }}
+      />
     </Paper>
   );
 }

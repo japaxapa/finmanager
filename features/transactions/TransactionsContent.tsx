@@ -19,8 +19,9 @@ import SearchIcon from '@mui/icons-material/Search';
 import { useDeleteTransaction, useTransactions } from '@/shared/hooks/useTransactions';
 import { debounce } from '@/shared/lib/utils';
 import { useCategories } from '@/shared/hooks/useCategories';
-import { Transaction } from '@/shared/lib/supabase/types/types';
+import { Transaction, TransactionUpdate } from '@/shared/lib/supabase/types/types';
 import GenericDeleteModal from '@/shared/components/UI/GenericDeleteModal';
+import TransactionModal from './TransactionModal';
 
 export default function TransactionsContent() {
   {
@@ -35,6 +36,10 @@ export default function TransactionsContent() {
   const [activeTab, setActiveTab] = useState<'ALL' | 'income' | 'expense'>('ALL');
 
   // CRUD states
+  const [modalOpen, setModalOpen] = useState(false);
+  const [transactionToUpdate, setTransactionToUpdate] = useState<TransactionUpdate | undefined>(
+    undefined,
+  );
   const [transactionToDelete, setTransactionToDelete] = useState<Transaction | undefined>(
     undefined,
   );
@@ -69,7 +74,14 @@ export default function TransactionsContent() {
   };
 
   const handleClose = () => {
+    setModalOpen(false);
+    setTransactionToUpdate(undefined);
     setTransactionToDelete(undefined);
+  };
+
+  const onEdit = (transaction: TransactionUpdate) => {
+    setModalOpen(true);
+    setTransactionToUpdate(transaction);
   };
 
   const onDelete = (transaction: Transaction) => {
@@ -186,6 +198,7 @@ export default function TransactionsContent() {
               key={tx.id}
               category={tx.categories?.name || ''}
               transaction={tx}
+              onEdit={onEdit}
               onDelete={onDelete}
               // onClick={() => console.log('Clicked transaction', tx.id)}
             />
@@ -230,6 +243,13 @@ export default function TransactionsContent() {
           }}
         />
       </Box>
+
+      <TransactionModal
+        title={'Editar Transação'}
+        transactionToEdit={transactionToUpdate}
+        open={modalOpen}
+        handleClose={handleClose}
+      />
 
       <GenericDeleteModal
         item={transactionToDelete}

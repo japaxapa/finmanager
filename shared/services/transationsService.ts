@@ -134,10 +134,19 @@ export async function updateTransaction(
   id: string,
   payload: Omit<TransactionUpdate, 'id' | 'created_at' | 'user_id' | 'updated_at'>,
 ) {
+  const { data: userData } = await supabase.auth.getUser();
+
+  const userId = userData.user?.id;
+
+  if (!userId) {
+    throw new Error('User is not authenticated');
+  }
+
   const { data, error } = await supabase
     .from('transactions')
     .update({
       ...payload,
+      user_id: userData.user?.id,
       updated_at: new Date().toISOString(),
     })
     .eq('id', id)

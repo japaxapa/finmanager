@@ -5,7 +5,7 @@ import { Box, Typography, Chip, Stack } from '@mui/material';
 import NorthEastIcon from '@mui/icons-material/NorthEast'; // Top-right arrow
 import SouthEastIcon from '@mui/icons-material/SouthEast'; // Down-right arrow
 import { OptionsMenu } from './UI/OptionsMenu';
-import { Transaction } from '../lib/supabase/types/types';
+import { Transaction, TransactionUpdate } from '../lib/supabase/types/types';
 
 export interface TransactionRowProps {
   category: string;
@@ -13,6 +13,7 @@ export interface TransactionRowProps {
   /** Optional custom currency formatter. Defaults to BRL (R$) */
   currencySymbol?: string;
   onClick?: () => void;
+  onEdit?: (transaction: TransactionUpdate) => void;
   onDelete?: (transaction: Transaction) => void;
 }
 
@@ -21,6 +22,7 @@ export const TransactionRow: React.FC<TransactionRowProps> = ({
   transaction,
   currencySymbol = 'R$',
   onClick,
+  onEdit,
   onDelete,
 }) => {
   const isIncome = transaction.type === 'income';
@@ -35,6 +37,10 @@ export const TransactionRow: React.FC<TransactionRowProps> = ({
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   });
+
+  const handleEdit = () => {
+    if (onEdit) onEdit(transaction);
+  };
 
   const handleDelete = () => {
     if (onDelete) onDelete(transaction);
@@ -139,7 +145,7 @@ export const TransactionRow: React.FC<TransactionRowProps> = ({
           {isIncome ? `+ ${currencySymbol}` : `- ${currencySymbol}`} {formattedAmount}
         </Typography>
 
-        <OptionsMenu name="transaction" onDelete={handleDelete} />
+        <OptionsMenu name="transaction" onEdit={handleEdit} onDelete={handleDelete} />
       </Stack>
     </Box>
   );

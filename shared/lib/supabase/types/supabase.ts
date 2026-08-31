@@ -247,6 +247,13 @@ export type Database = {
             referencedColumns: ['id'];
           },
           {
+            foreignKeyName: 'transactions_account_id_fkey';
+            columns: ['account_id'];
+            isOneToOne: false;
+            referencedRelation: 'accounts_with_balance';
+            referencedColumns: ['id'];
+          },
+          {
             foreignKeyName: 'transactions_category_id_fkey';
             columns: ['category_id'];
             isOneToOne: false;
@@ -264,10 +271,36 @@ export type Database = {
       };
     };
     Views: {
-      [_ in never]: never;
+      accounts_with_balance: {
+        Row: {
+          created_at: string | null;
+          current_balance: number | null;
+          id: string | null;
+          initial_balance: number | null;
+          name: string | null;
+          type: string | null;
+          user_id: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'accounts_user_id_fkey';
+            columns: ['user_id'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
     };
     Functions: {
-      [_ in never]: never;
+      get_user_account_summary: {
+        Args: { p_user_id: string };
+        Returns: {
+          active_accounts: number;
+          net_worth: number;
+          open_invoice: number;
+        }[];
+      };
     };
     Enums: {
       category_type: 'income' | 'expense';

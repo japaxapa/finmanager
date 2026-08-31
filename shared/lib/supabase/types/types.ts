@@ -10,4 +10,6 @@ export type TransactionInsert = TablesInsert<'transactions'>;
 export type TransactionUpdate = TablesUpdate<'transactions'>;
 export type TransactionType = Enums<'transaction_type'>;
 
-export type Accounts = Tables<'accounts'>;
+export type Account = Tables<'accounts'>;
+export type AccountInsert = TablesInsert<'accounts'>;
+export type AccountUpdate = TablesUpdate<'accounts'>;

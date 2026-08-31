@@ -6,7 +6,7 @@ import SavingsOutlinedIcon from '@mui/icons-material/SavingsOutlined';
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import CreditCardIcon from '@mui/icons-material/CreditCard';
 
-export default function AccountIcon({ iconName }: { iconName: string }) {
+export default function AccountIcon({ iconName = 'wallet' }: { iconName: string }) {
   const icons = {
     wallet: <AccountBalanceWalletOutlinedIcon fontSize="small" />,
     income: <TrendingUpOutlinedIcon fontSize="small" />,

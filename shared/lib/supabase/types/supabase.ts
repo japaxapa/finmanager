@@ -35,7 +35,9 @@ export type Database = {
     Tables: {
       accounts: {
         Row: {
+          color: string;
           created_at: string;
+          icon: string;
           id: string;
           initial_balance: number | null;
           name: string;
@@ -43,7 +45,9 @@ export type Database = {
           user_id: string;
         };
         Insert: {
+          color?: string;
           created_at?: string;
+          icon?: string;
           id?: string;
           initial_balance?: number | null;
           name?: string;
@@ -51,7 +55,9 @@ export type Database = {
           user_id?: string;
         };
         Update: {
+          color?: string;
           created_at?: string;
+          icon?: string;
           id?: string;
           initial_balance?: number | null;
           name?: string;

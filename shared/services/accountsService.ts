@@ -1,5 +1,5 @@
 import { createClient } from '../lib/supabase/client';
-import { Account } from '../lib/supabase/types/types';
+import { AccountWithBalance } from '../lib/supabase/types/types';
 
 const supabase = createClient();
 
@@ -29,7 +29,7 @@ export async function getAccountSummary(): Promise<AccountSummary> {
   };
 }
 
-export async function getAccounts(): Promise<Account[]> {
+export async function getAccounts(): Promise<AccountWithBalance[]> {
   const { data: userData, error: userError } = await supabase.auth.getUser();
 
   if (userError || !userData.user?.id) {
@@ -43,7 +43,7 @@ export async function getAccounts(): Promise<Account[]> {
     .eq('user_id', userData.user.id);
 
   if (error) throw error;
-  return data as Account[];
+  return data as AccountWithBalance[];
 }
 
 export async function createAccount(payload: {

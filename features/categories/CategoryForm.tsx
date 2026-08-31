@@ -1,22 +1,14 @@
 'use client';
 
-import { useMemo } from 'react';
-import { useForm, SubmitHandler, Controller, useWatch, Control } from 'react-hook-form';
-import {
-  Box,
-  Button,
-  MenuItem,
-  TextField,
-  Typography,
-  IconButton,
-  FormHelperText,
-  InputAdornment,
-} from '@mui/material';
+import { useForm, SubmitHandler, Controller } from 'react-hook-form';
+import { Box, Button, MenuItem, TextField, InputAdornment } from '@mui/material';
 
 import { useCreateCategory, useUpdateCategory } from '@/shared/hooks/useCategories';
-import { FinIconType, finIcons } from '@/shared/components/UI/FinIcons.data';
+import { FinIconType } from '@/shared/components/UI/FinIcons.data';
 import { Enums } from '@/shared/lib/supabase/types/supabase';
 import { CategoryUpdate } from '@/shared/lib/supabase/types/types';
+import { ColorPicker } from '@/shared/components/UI/ColorPicker';
+import { IconPicker } from '@/shared/components/UI/IconPicker';
 
 type Inputs = {
   name: string;
@@ -34,17 +26,6 @@ interface ICategoryFormProps {
 const CATEGORY_TYPES = [
   { value: 'income', label: 'Income' },
   { value: 'expense', label: 'Expense' },
-];
-
-const PRESET_COLORS = [
-  '#0088FE',
-  '#00C49F',
-  '#FFBB28',
-  '#FF8042',
-  '#8884d8',
-  '#E91E63',
-  '#9C27B0',
-  '#4CAF50',
 ];
 
 export function CategoryForm({ handleClose, categoryToEdit, ...props }: ICategoryFormProps) {
@@ -165,14 +146,16 @@ export function CategoryForm({ handleClose, categoryToEdit, ...props }: ICategor
 
         {/* Isolated Color Picker */}
         <ColorPicker
+          name={'color'}
           control={control}
           register={register}
           setValue={setValue}
+          label="Cor da Categoria"
           disabled={isSubmitting}
         />
 
         {/* Isolated Icon Picker */}
-        <IconPicker control={control} errors={errors} disabled={isSubmitting} />
+        <IconPicker name={'icon'} control={control} errors={errors} disabled={isSubmitting} />
 
         {/* Action Buttons */}
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
@@ -185,115 +168,5 @@ export function CategoryForm({ handleClose, categoryToEdit, ...props }: ICategor
         </Box>
       </Box>
     </form>
-  );
-}
-
-// TODO checar se é necessário fazer a abstração destes componentes para reutilizar em outros formulários
-// --- Sub-Components ---
-
-interface ColorPickerProps {
-  control: Control<Inputs>;
-  register: ReturnType<typeof useForm<Inputs>>['register'];
-  setValue: ReturnType<typeof useForm<Inputs>>['setValue'];
-  disabled?: boolean;
-}
-
-function ColorPicker({ control, register, setValue, disabled }: ColorPickerProps) {
-  const selectedColor = useWatch({ control, name: 'color' });
-
-  return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-      <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 500 }}>
-        Cor da Categoria
-      </Typography>
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
-        <TextField
-          type="color"
-          size="small"
-          disabled={disabled}
-          sx={{ width: 64, '& input': { cursor: 'pointer', height: 40, p: 0.5 } }}
-          {...register('color', { required: true })}
-        />
-        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1.5 }}>
-          {PRESET_COLORS.map((hex) => (
-            <Box
-              key={hex}
-              onClick={() => !disabled && setValue('color', hex)}
-              sx={{
-                width: 24,
-                height: 24,
-                borderRadius: '50%',
-                bgcolor: hex,
-                cursor: disabled ? 'default' : 'pointer',
-                border: selectedColor === hex ? '2px solid black' : '1px solid transparent',
-                transition: 'transform 0.1s',
-                '&:hover': { transform: disabled ? 'none' : 'scale(1.1)' },
-              }}
-            />
-          ))}
-        </Box>
-      </Box>
-    </Box>
-  );
-}
-
-interface IconPickerProps {
-  control: Control<Inputs>;
-  errors: ReturnType<typeof useForm<Inputs>>['formState']['errors'];
-  disabled?: boolean;
-}
-
-function IconPicker({ control, errors, disabled }: IconPickerProps) {
-  const iconKeys = useMemo(() => Object.keys(finIcons) as FinIconType[], []);
-
-  return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-      <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 500 }}>
-        Ícone
-      </Typography>
-      <Controller
-        name="icon"
-        control={control}
-        rules={{ required: 'Selecione um ícone' }}
-        render={({ field }) => (
-          <Box>
-            <Box
-              sx={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(6, 1fr)',
-                gap: 1,
-                maxHeight: 180,
-                overflowY: 'auto',
-                p: 1,
-                border: '1px solid',
-                borderColor: errors.icon ? 'error.main' : 'divider',
-                borderRadius: 1,
-              }}
-            >
-              {iconKeys.map((key) => {
-                const isSelected = field.value === key;
-                return (
-                  <IconButton
-                    key={key}
-                    disabled={disabled}
-                    onClick={() => field.onChange(key)}
-                    sx={{
-                      borderRadius: 2,
-                      bgcolor: isSelected ? 'action.selected' : 'transparent',
-                      border: isSelected ? '2px solid' : '1px solid transparent',
-                      borderColor: isSelected ? 'primary.main' : 'transparent',
-                      color: isSelected ? 'primary.main' : 'text.secondary',
-                    }}
-                  >
-                    {finIcons[key]}
-                  </IconButton>
-                );
-              })}
-            </Box>
-            {errors.icon && <FormHelperText error>{errors.icon.message}</FormHelperText>}
-          </Box>
-        )}
-      />
-    </Box>
   );
 }

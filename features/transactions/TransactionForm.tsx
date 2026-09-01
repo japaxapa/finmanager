@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useMemo, useEffect } from 'react';
 import { useForm, SubmitHandler, Controller, useWatch } from 'react-hook-form';
 import { Box, Button, MenuItem, TextField, InputAdornment } from '@mui/material';
 import { useCreateTransaction, useUpdateTransaction } from '@/shared/hooks/useTransactions';
@@ -33,7 +33,7 @@ interface ITransactionFormProps {
 const TRANSACTION_TYPES = [
   { value: 'income', label: 'Receita' },
   { value: 'expense', label: 'Despesa' },
-];
+] as const;
 
 export function TransactionForm({
   handleClose,
@@ -46,7 +46,6 @@ export function TransactionForm({
   const { mutate: createTransaction, isPending: isCreating } = useCreateTransaction();
   const { mutate: updateTransaction, isPending: isUpdating } = useUpdateTransaction();
   const isSubmitting = isCreating || isUpdating;
-  // const isSubmitting = false;
 
   const {
     register,
@@ -69,10 +68,12 @@ export function TransactionForm({
     },
   });
 
-  // 1. Watch dynamic form values
-  const selectedType = useWatch({ control, name: 'type' });
-  const selectedAccountId = useWatch({ control, name: 'account_id' });
-  const selectedCategoryId = useWatch({ control, name: 'category_id' });
+  // 1. Watch values using a single object destructure
+  const {
+    type: selectedType,
+    account_id: selectedAccountId,
+    category_id: selectedCategoryId,
+  } = useWatch({ control });
 
   // 2. Fetch queries from hooks
   const { data: categoriesData, isLoading: isLoadingCategories } = useCategories(
@@ -80,29 +81,39 @@ export function TransactionForm({
   );
   const { data: accountsData, isLoading: isLoadingAccounts } = useAccounts();
 
-  // 3. Sync account selection once accounts finish loading
-  useEffect(() => {
-    // Find only accounts with non-null IDs
-    const validAccounts =
-      accountsData?.filter((a): a is typeof a & { id: string } => Boolean(a.id)) ?? [];
+  // 3. Memoized Accounts List (filters out nulls once per data update)
+  const validAccounts = useMemo(() => {
+    return (
+      accountsData?.filter((acc): acc is AccountWithBalance & { id: string; name: string } =>
+        Boolean(acc.id && acc.name),
+      ) ?? []
+    );
+  }, [accountsData]);
 
+  // 4. Memoized Categories List
+  const validCategories = useMemo(() => {
+    return categoriesData?.data ?? [];
+  }, [categoriesData?.data]);
+
+  // 5. Sync account selection once accounts finish loading
+  useEffect(() => {
     if (validAccounts.length > 0 && !selectedAccountId) {
       const hasDefault = defaultAccountId && validAccounts.some((a) => a.id === defaultAccountId);
       const fallbackAccount = hasDefault ? defaultAccountId : validAccounts[0].id;
 
       setValue('account_id', fallbackAccount);
     }
-  }, [accountsData, selectedAccountId, defaultAccountId, setValue]);
+  }, [validAccounts, selectedAccountId, defaultAccountId, setValue]);
 
-  // 4. Reset or validate category selection whenever type or categories query changes
+  // 6. Reset category selection when type changes or current category isn't in fetched list
   useEffect(() => {
-    if (categoriesData?.data && categoriesData?.data.length > 0 && selectedCategoryId) {
-      const categoryExists = categoriesData?.data.some((c) => c.id === selectedCategoryId);
+    if (validCategories.length > 0 && selectedCategoryId) {
+      const categoryExists = validCategories.some((c) => c.id === selectedCategoryId);
       if (!categoryExists) {
         setValue('category_id', '');
       }
     }
-  }, [selectedType, categoriesData, selectedCategoryId, setValue]);
+  }, [validCategories, selectedCategoryId, setValue]);
 
   const handleReset = () => {
     reset();
@@ -115,13 +126,10 @@ export function TransactionForm({
       amount: Number(data.amount),
       category_id: data.category_id || null,
       description: data.description || null,
-      user_id: '', // Handled server-side or via Supabase session
+      user_id: '',
     };
 
     const options = { onSuccess: handleReset };
-
-    console.log('payload', payload);
-    console.log('options', options);
 
     if (isEditing && entityToEdit?.id) {
       updateTransaction({ id: entityToEdit.id, ...payload }, options);
@@ -210,8 +218,7 @@ export function TransactionForm({
           control={control}
           rules={{ required: 'Conta é obrigatória' }}
           render={({ field }) => {
-            // Check if the current form value exists in the fetched accounts list
-            const hasMatchingOption = accountsData?.some((acc) => acc.id === field.value);
+            const hasMatchingOption = validAccounts.some((acc) => acc.id === field.value);
             const selectValue = hasMatchingOption ? field.value : '';
 
             return (
@@ -223,23 +230,18 @@ export function TransactionForm({
                 disabled={isSubmitting || isLoadingAccounts}
                 error={Boolean(errors.account_id)}
                 helperText={errors.account_id?.message}
-                value={selectValue} // Guarantees value matches an available option or ''
+                value={selectValue}
               >
                 {isLoadingAccounts ? (
                   <MenuItem disabled value="">
                     Carregando contas...
                   </MenuItem>
                 ) : (
-                  accountsData
-                    // Filter out items where critical fields are null
-                    ?.filter((acc): acc is AccountWithBalance & { id: string; name: string } =>
-                      Boolean(acc.id && acc.name),
-                    )
-                    .map((acc) => (
-                      <MenuItem key={acc.id} value={acc.id}>
-                        {acc.name}
-                      </MenuItem>
-                    ))
+                  validAccounts.map((acc) => (
+                    <MenuItem key={acc.id} value={acc.id}>
+                      {acc.name}
+                    </MenuItem>
+                  ))
                 )}
               </TextField>
             );
@@ -250,33 +252,36 @@ export function TransactionForm({
         <Controller
           name="category_id"
           control={control}
-          render={({ field }) => (
-            <TextField
-              {...field}
-              id="transaction-category"
-              select
-              label="Categoria"
-              disabled={isSubmitting || isLoadingCategories}
-              value={field.value || ''}
-            >
-              <MenuItem value="">
-                <em>Sem Categoria</em>
-              </MenuItem>
-              {isLoadingCategories ? (
-                <MenuItem disabled value="">
-                  Carregando categorias...
+          render={({ field }) => {
+            const hasMatchingOption = validCategories.some((cat) => cat.id === field.value);
+            const selectValue = hasMatchingOption ? field.value : '';
+
+            return (
+              <TextField
+                {...field}
+                id="transaction-category"
+                select
+                label="Categoria"
+                disabled={isSubmitting || isLoadingCategories}
+                value={selectValue}
+              >
+                <MenuItem value="">
+                  <em>Sem Categoria</em>
                 </MenuItem>
-              ) : (
-                categoriesData &&
-                categoriesData.data &&
-                categoriesData.data.map((cat: Category) => (
-                  <MenuItem key={cat.id} value={cat.id}>
-                    {cat.name}
+                {isLoadingCategories ? (
+                  <MenuItem disabled value="">
+                    Carregando categorias...
                   </MenuItem>
-                ))
-              )}
-            </TextField>
-          )}
+                ) : (
+                  validCategories.map((cat: Category) => (
+                    <MenuItem key={cat.id} value={cat.id}>
+                      {cat.name}
+                    </MenuItem>
+                  ))
+                )}
+              </TextField>
+            );
+          }}
         />
 
         {/* Description */}

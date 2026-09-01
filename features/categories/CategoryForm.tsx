@@ -20,7 +20,7 @@ type Inputs = {
 
 interface ICategoryFormProps {
   handleClose: () => void;
-  categoryToEdit?: CategoryUpdate;
+  entityToEdit?: CategoryUpdate;
 }
 
 const CATEGORY_TYPES = [
@@ -28,8 +28,8 @@ const CATEGORY_TYPES = [
   { value: 'expense', label: 'Expense' },
 ];
 
-export function CategoryForm({ handleClose, categoryToEdit, ...props }: ICategoryFormProps) {
-  const isEditing = Boolean(categoryToEdit);
+export function CategoryForm({ handleClose, entityToEdit, ...props }: ICategoryFormProps) {
+  const isEditing = Boolean(entityToEdit);
 
   const { mutate: createCategory, isPending: isCreating } = useCreateCategory();
   const { mutate: updateCategory, isPending: isUpdating } = useUpdateCategory();
@@ -43,13 +43,13 @@ export function CategoryForm({ handleClose, categoryToEdit, ...props }: ICategor
     setValue,
     formState: { errors },
   } = useForm<Inputs>({
-    defaultValues: categoryToEdit
+    defaultValues: entityToEdit
       ? {
-          name: categoryToEdit.name ?? '',
-          type: (categoryToEdit.type as Enums<'category_type'>) ?? 'expense',
-          icon: (categoryToEdit.icon as FinIconType) ?? 'category',
-          color: categoryToEdit.color ?? '#0088FE',
-          budget_goal: categoryToEdit.budget_goal ?? 0,
+          name: entityToEdit.name ?? '',
+          type: (entityToEdit.type as Enums<'category_type'>) ?? 'expense',
+          icon: (entityToEdit.icon as FinIconType) ?? 'category',
+          color: entityToEdit.color ?? '#0088FE',
+          budget_goal: entityToEdit.budget_goal ?? 0,
         }
       : {
           name: '',
@@ -76,8 +76,8 @@ export function CategoryForm({ handleClose, categoryToEdit, ...props }: ICategor
       onSuccess: handleReset,
     };
 
-    if (isEditing && categoryToEdit?.id) {
-      updateCategory({ id: categoryToEdit.id, ...payload }, options);
+    if (isEditing && entityToEdit?.id) {
+      updateCategory({ id: entityToEdit.id, ...payload }, options);
     } else {
       createCategory(payload, options);
     }

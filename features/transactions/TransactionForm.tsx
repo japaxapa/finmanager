@@ -5,7 +5,7 @@ import { useForm, SubmitHandler, Controller, useWatch } from 'react-hook-form';
 import { Box, Button, MenuItem, TextField, InputAdornment } from '@mui/material';
 import { useCreateTransaction, useUpdateTransaction } from '@/shared/hooks/useTransactions';
 import {
-  Accounts,
+  AccountWithBalance,
   Category,
   TransactionInsert,
   TransactionUpdate,
@@ -26,7 +26,7 @@ type Inputs = {
 
 interface ITransactionFormProps {
   handleClose: () => void;
-  transactionToEdit?: TransactionUpdate | null;
+  entityToEdit?: TransactionUpdate | null;
   defaultAccountId?: string;
 }
 
@@ -37,11 +37,11 @@ const TRANSACTION_TYPES = [
 
 export function TransactionForm({
   handleClose,
-  transactionToEdit,
+  entityToEdit,
   defaultAccountId = '',
   ...props
 }: ITransactionFormProps) {
-  const isEditing = Boolean(transactionToEdit?.id);
+  const isEditing = Boolean(entityToEdit?.id);
 
   const { mutate: createTransaction, isPending: isCreating } = useCreateTransaction();
   const { mutate: updateTransaction, isPending: isUpdating } = useUpdateTransaction();
@@ -57,15 +57,15 @@ export function TransactionForm({
     formState: { errors },
   } = useForm<Inputs>({
     defaultValues: {
-      title: transactionToEdit?.title ?? '',
-      amount: transactionToEdit?.amount ?? 0,
-      type: transactionToEdit?.type ?? 'expense',
-      transaction_date: transactionToEdit?.transaction_date
-        ? new Date(transactionToEdit.transaction_date).toISOString().split('T')[0]
+      title: entityToEdit?.title ?? '',
+      amount: entityToEdit?.amount ?? 0,
+      type: entityToEdit?.type ?? 'expense',
+      transaction_date: entityToEdit?.transaction_date
+        ? new Date(entityToEdit.transaction_date).toISOString().split('T')[0]
         : new Date().toISOString().split('T')[0],
-      category_id: transactionToEdit?.category_id ?? '',
-      account_id: transactionToEdit?.account_id ?? defaultAccountId,
-      description: transactionToEdit?.description ?? '',
+      category_id: entityToEdit?.category_id ?? '',
+      account_id: entityToEdit?.account_id ?? defaultAccountId,
+      description: entityToEdit?.description ?? '',
     },
   });
 
@@ -82,11 +82,14 @@ export function TransactionForm({
 
   // 3. Sync account selection once accounts finish loading
   useEffect(() => {
-    if (accountsData?.data && accountsData?.data.length > 0 && !selectedAccountId) {
-      const fallbackAccount =
-        defaultAccountId && accountsData?.data.some((a) => a.id === defaultAccountId)
-          ? defaultAccountId
-          : accountsData?.data[0].id;
+    // Find only accounts with non-null IDs
+    const validAccounts =
+      accountsData?.filter((a): a is typeof a & { id: string } => Boolean(a.id)) ?? [];
+
+    if (validAccounts.length > 0 && !selectedAccountId) {
+      const hasDefault = defaultAccountId && validAccounts.some((a) => a.id === defaultAccountId);
+      const fallbackAccount = hasDefault ? defaultAccountId : validAccounts[0].id;
+
       setValue('account_id', fallbackAccount);
     }
   }, [accountsData, selectedAccountId, defaultAccountId, setValue]);
@@ -120,8 +123,8 @@ export function TransactionForm({
     console.log('payload', payload);
     console.log('options', options);
 
-    if (isEditing && transactionToEdit?.id) {
-      updateTransaction({ id: transactionToEdit.id, ...payload }, options);
+    if (isEditing && entityToEdit?.id) {
+      updateTransaction({ id: entityToEdit.id, ...payload }, options);
     } else {
       createTransaction(payload, options);
     }
@@ -206,32 +209,41 @@ export function TransactionForm({
           name="account_id"
           control={control}
           rules={{ required: 'Conta é obrigatória' }}
-          render={({ field }) => (
-            <TextField
-              {...field}
-              id="transaction-account"
-              select
-              label="Conta"
-              disabled={isSubmitting || isLoadingAccounts}
-              error={Boolean(errors.account_id)}
-              helperText={errors.account_id?.message}
-              value={field.value || ''}
-            >
-              {isLoadingAccounts ? (
-                <MenuItem disabled value="">
-                  Carregando contas...
-                </MenuItem>
-              ) : (
-                accountsData &&
-                accountsData.data &&
-                accountsData.data.map((acc: Accounts) => (
-                  <MenuItem key={acc.id} value={acc.id}>
-                    {acc.name}
+          render={({ field }) => {
+            // Check if the current form value exists in the fetched accounts list
+            const hasMatchingOption = accountsData?.some((acc) => acc.id === field.value);
+            const selectValue = hasMatchingOption ? field.value : '';
+
+            return (
+              <TextField
+                {...field}
+                id="transaction-account"
+                select
+                label="Conta"
+                disabled={isSubmitting || isLoadingAccounts}
+                error={Boolean(errors.account_id)}
+                helperText={errors.account_id?.message}
+                value={selectValue} // Guarantees value matches an available option or ''
+              >
+                {isLoadingAccounts ? (
+                  <MenuItem disabled value="">
+                    Carregando contas...
                   </MenuItem>
-                ))
-              )}
-            </TextField>
-          )}
+                ) : (
+                  accountsData
+                    // Filter out items where critical fields are null
+                    ?.filter((acc): acc is AccountWithBalance & { id: string; name: string } =>
+                      Boolean(acc.id && acc.name),
+                    )
+                    .map((acc) => (
+                      <MenuItem key={acc.id} value={acc.id}>
+                        {acc.name}
+                      </MenuItem>
+                    ))
+                )}
+              </TextField>
+            );
+          }}
         />
 
         {/* Category Selection */}

@@ -15,28 +15,78 @@ import {
   Pagination,
 } from '@mui/material';
 import { useMemo, useState } from 'react';
-import { MOCK_TRANSACTIONS } from './mock.data';
 import SearchIcon from '@mui/icons-material/Search';
+import { useDeleteTransaction, useTransactions } from '@/shared/hooks/useTransactions';
+import { debounce } from '@/shared/lib/utils';
+import { useCategories } from '@/shared/hooks/useCategories';
+import { Transaction, TransactionUpdate } from '@/shared/lib/supabase/types/types';
+import GenericDeleteModal from '@/shared/components/UI/GenericDeleteModal';
+import TransactionModal from './TransactionModal';
 
 export default function TransactionsContent() {
   {
     /* Main Content Area */
   }
 
+  // Filter states
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
-  const [activeTab, setActiveTab] = useState<'all' | 'income' | 'expense'>('all');
+  const [search, setSearch] = useState('');
+  const [page, setPage] = useState(1);
+  const [selectedCategory, setSelectedCategory] = useState<string>('');
+  const [activeTab, setActiveTab] = useState<'ALL' | 'income' | 'expense'>('ALL');
 
-  // Filter Logic
-  const filteredTransactions = useMemo(() => {
-    return MOCK_TRANSACTIONS.filter((item) => {
-      const matchesSearch = item.title.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesCategory = selectedCategory === 'all' || item.category === selectedCategory;
-      const matchesTab = activeTab === 'all' || item.type === activeTab;
+  // CRUD states
+  const [modalOpen, setModalOpen] = useState(false);
+  const [transactionToUpdate, setTransactionToUpdate] = useState<TransactionUpdate | undefined>(
+    undefined,
+  );
+  const [transactionToDelete, setTransactionToDelete] = useState<Transaction | undefined>(
+    undefined,
+  );
 
-      return matchesSearch && matchesCategory && matchesTab;
-    });
-  }, [searchTerm, selectedCategory, activeTab]);
+  const { data } = useTransactions({
+    type: activeTab,
+    search: search,
+    categoryId: selectedCategory,
+    page: page,
+  });
+  const { data: categoriesData } = useCategories();
+  const { mutate: deleteTransaction, isPending: isDeleting } = useDeleteTransaction();
+
+  const filteredTransactions = data?.data ?? [];
+
+  const debouncedSearch = useMemo(
+    () =>
+      debounce((value: string) => {
+        setSearch(value);
+      }, 700),
+    [],
+  );
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSearchTerm(value);
+    debouncedSearch(value);
+  };
+
+  const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    setPage(value);
+  };
+
+  const handleClose = () => {
+    setModalOpen(false);
+    setTransactionToUpdate(undefined);
+    setTransactionToDelete(undefined);
+  };
+
+  const onEdit = (transaction: TransactionUpdate) => {
+    setModalOpen(true);
+    setTransactionToUpdate(transaction);
+  };
+
+  const onDelete = (transaction: Transaction) => {
+    setTransactionToDelete(transaction);
+  };
 
   return (
     <Paper
@@ -78,7 +128,7 @@ export default function TransactionsContent() {
             },
           }}
         >
-          <Tab label="Todas" value="all" />
+          <Tab label="Todas" value="ALL" />
           <Tab label="Receitas" value="income" />
           <Tab label="Despesas" value="expense" />
         </Tabs>
@@ -89,7 +139,7 @@ export default function TransactionsContent() {
             placeholder="Buscar transação..."
             size="small"
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={handleChange}
             slotProps={{
               input: {
                 startAdornment: (
@@ -132,13 +182,10 @@ export default function TransactionsContent() {
               '& .MuiSvgIcon-root': { color: '#64748B' },
             }}
           >
-            <MenuItem value="all">Todas categorias</MenuItem>
-            <MenuItem value="Receita">Receita</MenuItem>
-            <MenuItem value="Moradia">Moradia</MenuItem>
-            <MenuItem value="Alimentação">Alimentação</MenuItem>
-            <MenuItem value="Software">Software</MenuItem>
-            <MenuItem value="Transporte">Transporte</MenuItem>
-            <MenuItem value="Lazer">Lazer</MenuItem>
+            <MenuItem value={''}>Todas categorias</MenuItem>
+            {categoriesData?.data?.map((cat) => (
+              <MenuItem value={cat.id}>{cat.name}</MenuItem>
+            ))}
           </Select>
         </Stack>
       </Box>
@@ -149,12 +196,11 @@ export default function TransactionsContent() {
           filteredTransactions.map((tx) => (
             <TransactionRow
               key={tx.id}
-              title={tx.title}
-              date={tx.date}
-              category={tx.category}
-              amount={tx.amount}
-              type={tx.type}
-              onClick={() => console.log('Clicked transaction', tx.id)}
+              category={tx.categories?.name || ''}
+              transaction={tx}
+              onEdit={onEdit}
+              onDelete={onDelete}
+              // onClick={() => console.log('Clicked transaction', tx.id)}
             />
           ))
         ) : (
@@ -181,7 +227,9 @@ export default function TransactionsContent() {
         </Typography>
 
         <Pagination
-          count={1}
+          count={data?.totalPages || 1}
+          page={page}
+          onChange={handlePageChange}
           size="small"
           sx={{
             '& .MuiPaginationItem-root': {
@@ -195,6 +243,24 @@ export default function TransactionsContent() {
           }}
         />
       </Box>
+
+      <TransactionModal
+        title={'Editar Transação'}
+        transactionToEdit={transactionToUpdate}
+        open={modalOpen}
+        handleClose={handleClose}
+      />
+
+      <GenericDeleteModal
+        item={transactionToDelete}
+        itemName={transactionToDelete?.title}
+        title="Deletar Transação?"
+        isLoading={isDeleting}
+        handleClose={handleClose}
+        onConfirm={async (transaction) => {
+          await deleteTransaction(transaction.id);
+        }}
+      />
     </Paper>
   );
 }

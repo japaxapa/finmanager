@@ -1,31 +1,92 @@
 import { createClient } from '../lib/supabase/client';
+import { AccountInsert, AccountUpdate, AccountWithBalance } from '../lib/supabase/types/types';
 
 const supabase = createClient();
 
-export async function getAccounts() {
-  const { data } = await supabase.auth.getUser();
+export interface AccountSummary {
+  net_worth: number;
+  active_accounts: number;
+  open_invoice: number;
+}
 
-  if (!data.user?.id) {
+export async function getAccountSummary(): Promise<AccountSummary> {
+  const { data: userData, error: userError } = await supabase.auth.getUser();
+
+  if (userError || !userData.user?.id) {
+    throw new Error('Erro ao carregar dados do usuário.');
+  }
+
+  const { data, error } = await supabase
+    .rpc('get_user_account_summary', { p_user_id: userData.user.id })
+    .single();
+
+  if (error) throw error;
+
+  return {
+    net_worth: Number(data.net_worth),
+    active_accounts: Number(data.active_accounts),
+    open_invoice: Number(data.open_invoice),
+  };
+}
+
+export async function getAccounts(): Promise<AccountWithBalance[]> {
+  const { data: userData, error: userError } = await supabase.auth.getUser();
+
+  if (userError || !userData.user?.id) {
     throw new Error('Erro ao carregar informações do usuário para requerir contas');
   }
-  const query = supabase.from('accounts').select('*').eq('user_id', data.user?.id);
 
-  return query;
+  // Query the view directly like a standard table
+  const { data, error } = await supabase
+    .from('accounts_with_balance')
+    .select('*')
+    .eq('user_id', userData.user.id);
+
+  if (error) throw error;
+  return data as AccountWithBalance[];
 }
 
-export async function createAccount(name: string, type: string, initialBalance?: number) {
-  const { data } = await supabase.auth.getUser();
+export async function createAccount(payload: AccountInsert) {
+  const { data: userData } = await supabase.auth.getUser();
 
-  return supabase
+  const { data, error } = await supabase
     .from('accounts')
     .insert([
-      { name: name, type: type, user_id: data.user?.id, initial_balance: initialBalance || 0 },
+      {
+        name: payload.name,
+        type: payload.type,
+        initial_balance: payload.initial_balance || 0,
+        user_id: userData.user?.id,
+      },
     ])
-    .select();
+    .select()
+    .single();
+
+  if (error) throw error;
+  return data;
 }
 
-export async function deleteAccount(name: string, type: string) {
-  await supabase.from('accounts').delete().eq('name', name).eq('type', type);
+export async function updateAccount(payload: AccountUpdate) {
+  if (!payload.id) throw new Error('Trying top update account without ID');
 
+  const { data, error } = await supabase
+    .from('accounts')
+    .update({
+      name: payload.name,
+      type: payload.type,
+      initial_balance: payload.initial_balance,
+    })
+    .eq('id', payload.id)
+    .select()
+    .single();
+
+  if (error) throw error;
+  return data;
+}
+
+export async function deleteAccount(id: string) {
+  const { error } = await supabase.from('accounts').delete().eq('id', id);
+
+  if (error) throw error;
   return true;
 }

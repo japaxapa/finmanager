@@ -2,14 +2,13 @@
 
 import { Box, ButtonGroup, Grid } from '@mui/material';
 import CategoryProgressCard from './CategoryCard/CategoryProgressCard';
-import { useCategories } from '@/shared/hooks/useCategories';
+import { useCategories, useDeleteCategory } from '@/shared/hooks/useCategories';
 import { useState } from 'react';
 import { Enums } from '@/shared/lib/supabase/types/supabase';
 import { FilterButton } from '@/shared/components/UI/FilterButton';
-import { FormModal } from '@/shared/components/UI/FormModal';
-import { CategoryForm } from './CategoryForm';
 import { Category, CategoryUpdate } from '@/shared/lib/supabase/types/types';
-import CategoryDeleteModal from './CategoryDeleteModal';
+import CategoryModal from './CategoryModal';
+import GenericDeleteModal from '@/shared/components/UI/GenericDeleteModal';
 
 export default function CategoriesContet() {
   {
@@ -22,6 +21,7 @@ export default function CategoriesContet() {
   const [categoryToDelete, setCategoryToDelete] = useState<Category | undefined>(undefined);
 
   const { data: categories } = useCategories(activeTab);
+  const { mutate: deleteCategory, isPending: isDeleting } = useDeleteCategory();
 
   const handleClose = () => {
     setModalOpen(false);
@@ -69,11 +69,26 @@ export default function CategoriesContet() {
             </Grid>
           ))}
       </Grid>
-      <FormModal open={modalOpen} handleClose={handleClose} title={'Editar Categoria'}>
-        <CategoryForm handleClose={handleClose} categoryToEdit={categoryToEdit} />
-      </FormModal>
+      <CategoryModal
+        title="Editar Categoria"
+        categoryToEdit={categoryToEdit}
+        open={modalOpen}
+        handleClose={handleClose}
+      />
 
-      <CategoryDeleteModal selectedCategory={categoryToDelete} handleClose={handleClose} />
+      <GenericDeleteModal
+        item={categoryToDelete}
+        itemName={categoryToDelete?.name}
+        title="Deletar Categoria?"
+        isLoading={isDeleting}
+        handleClose={handleClose}
+        onConfirm={async (category) => {
+          await deleteCategory({
+            name: category.name,
+            type: category.type as Enums<'category_type'>,
+          });
+        }}
+      />
     </>
   );
 }

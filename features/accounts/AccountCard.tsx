@@ -5,7 +5,7 @@ import AccountIcon from '@/shared/components/AccountIcons';
 
 export interface AccountCardProps {
   /** Name of the bank or institution (e.g., "Nubank", "Banco Inter", "C6 Bank") */
-  institutionName: string;
+  description?: string;
   /** Account identifier or title (e.g., "Checking Account", "Main Account", "**** 4821") */
   accountName: string;
   /** Main balance amount. If passed as a number, it formats as BRL currency by default. */
@@ -13,17 +13,17 @@ export interface AccountCardProps {
   /** URL to the bank logo OR a React icon node */
   logo?: string;
   /** Optional background or theme color associated with the bank (e.g., "#8A05BE" for Nubank) */
-  brandColor?: string;
+  color?: string;
   /** Optional click handler for selecting/opening the account */
   onClick?: () => void;
 }
 
 export const AccountCard: React.FC<AccountCardProps> = ({
-  institutionName,
+  description = '',
   accountName,
   balance,
   logo,
-  brandColor,
+  color = 'ffffff',
   onClick,
 }) => {
   const formattedBalance = typeof balance === 'number' ? formatCurrency(balance) : balance;
@@ -51,8 +51,8 @@ export const AccountCard: React.FC<AccountCardProps> = ({
           <Stack direction="row" sx={{ justifyContent: 'space-between', alignItems: 'center' }}>
             <AccountInformation
               logo={logo}
-              brandColor={brandColor}
-              institutionName={institutionName}
+              color={color}
+              description={description}
               accountName={accountName}
             />
 
@@ -66,13 +66,13 @@ export const AccountCard: React.FC<AccountCardProps> = ({
 
 function AccountInformation({
   logo,
-  brandColor,
-  institutionName,
+  color,
+  description,
   accountName,
 }: {
   logo?: string;
-  brandColor?: string;
-  institutionName: string;
+  color?: string;
+  description: string;
   accountName: string;
 }) {
   {
@@ -86,7 +86,7 @@ function AccountInformation({
         <Typography variant="subtitle2" color="text.secondary" sx={{ fontWeight: 600 }}>
           {accountName}
         </Typography>
-        <InstitutionTag institutionName={institutionName} brandColor={brandColor} />
+        <InstitutionTag description={description} color={color} />
       </Stack>
     </Stack>
   );
@@ -112,26 +112,20 @@ function BalanceDisplay({ formattedBalance }: { formattedBalance: number | strin
   );
 }
 
-function InstitutionTag({
-  institutionName,
-  brandColor,
-}: {
-  institutionName: string;
-  brandColor?: string;
-}) {
+function InstitutionTag({ description, color }: { description: string; color?: string }) {
   {
     /* Institution Tag / Badge */
   }
   return (
     <Chip
-      label={institutionName}
+      label={description}
       size="small"
       sx={{
         fontWeight: 600,
         fontSize: '0.75rem',
-        bgcolor: brandColor ? `${brandColor}15` : 'action.selected',
-        color: brandColor || 'text.primary',
-        border: brandColor ? `1px solid ${brandColor}33` : 'none',
+        bgcolor: color ? `${color}15` : 'action.selected',
+        color: color || 'text.primary',
+        border: color ? `1px solid ${color}33` : 'none',
         width: '8rem',
       }}
     />

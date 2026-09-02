@@ -5,7 +5,7 @@ import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import { useMemo } from 'react';
-import { MOCK_TRANSACTIONS } from './mock.data';
+import { useTransactionSummary } from '@/shared/hooks/useTransactions';
 
 // TODO check metrics cards
 // TODO make cards dynamically
@@ -15,20 +15,17 @@ export default function TransactionsMetrics() {
     /* Summary KPI Cards */
   }
 
+  // TODO check if is needed somethink for loading state UI/UX
+  const { data: summaryData } = useTransactionSummary();
+
   // Totals calculated dynamically
   const { totalIncome, totalExpense, balance } = useMemo(() => {
-    let income = 0;
-    let expense = 0;
-    MOCK_TRANSACTIONS.forEach((t) => {
-      if (t.type === 'income') income += t.amount;
-      else expense += t.amount;
-    });
     return {
-      totalIncome: income,
-      totalExpense: expense,
-      balance: income - expense,
+      totalIncome: summaryData?.totalIncome ?? 0,
+      totalExpense: summaryData?.totalExpense ?? 0,
+      balance: summaryData?.netBalance ?? 0,
     };
-  }, []);
+  }, [summaryData]);
 
   return (
     <Grid container spacing={2} sx={{ mb: 4 }}>

@@ -1,6 +1,6 @@
 import { Stack, Box, Typography, Button } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
 import DownloadIcon from '@mui/icons-material/Download';
+import TransactionModal from './TransactionModal';
 
 export default function TransactionsHeader() {
   {
@@ -46,23 +46,7 @@ export default function TransactionsHeader() {
           Exportar
         </Button>
 
-        <Button
-          variant="contained"
-          startIcon={<AddIcon />}
-          sx={{
-            backgroundColor: '#2563EB',
-            color: '#FFF',
-            textTransform: 'none',
-            fontWeight: 600,
-            borderRadius: '8px',
-            px: 2.5,
-            '&:hover': {
-              backgroundColor: '#1D4ED8',
-            },
-          }}
-        >
-          Nova transação
-        </Button>
+        <TransactionModal />
       </Stack>
     </Stack>
   );

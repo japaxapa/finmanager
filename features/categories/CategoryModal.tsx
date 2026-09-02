@@ -1,24 +1,25 @@
 'use client';
 
-import { FormModal } from '@/shared/components/UI/FormModal';
+import { EntityFormModal } from '@/shared/components/UI/EntityFormModal';
 import { CategoryForm } from './CategoryForm';
-import { useState } from 'react';
-import CreateButton from '@/shared/components/UI/CreateButton';
+import { CategoryUpdate } from '@/shared/lib/supabase/types/types';
 
-export default function CategoryModal() {
-  const [modalOpen, setModalOpen] = useState(false);
+interface ICategoryModalProps {
+  title?: string;
+  categoryToEdit?: CategoryUpdate;
+  open?: boolean;
+  handleClose?: () => void;
+}
 
-  const handleClose = () => {
-    setModalOpen(false);
-  };
-
+export default function CategoryModal(props: ICategoryModalProps) {
   return (
-    <>
-      <CreateButton title="Nova Categoria" handleClick={() => setModalOpen(true)} />
-
-      <FormModal open={modalOpen} handleClose={handleClose} title={'Nova Categoria'}>
-        <CategoryForm handleClose={handleClose} />
-      </FormModal>
-    </>
+    <EntityFormModal
+      title={props.title ?? 'Categoria'}
+      buttonLabel="Nova Categoria"
+      FormComponent={CategoryForm}
+      entityToEdit={props.categoryToEdit}
+      open={props.open}
+      handleClose={props.handleClose}
+    />
   );
 }

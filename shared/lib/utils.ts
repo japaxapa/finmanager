@@ -6,22 +6,15 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 /* eslint-disable */
-export function debounce<T extends (...args: any[]) => any>(
-  callback: T,
-  wait: number,
+export function debounce<T extends (...args: any[]) => void>(
+  fn: T,
+  delay: number,
 ): (...args: Parameters<T>) => void {
-  let timeoutId: ReturnType<typeof setTimeout> | null = null;
+  let timeoutId: ReturnType<typeof setTimeout>;
 
-  return function (this: any, ...args: Parameters<T>): void {
-    const context = this;
-
-    if (timeoutId) {
-      clearTimeout(timeoutId);
-    }
-
-    timeoutId = setTimeout(() => {
-      callback.apply(context, args);
-    }, wait);
+  return (...args: Parameters<T>) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => fn(...args), delay);
   };
 }
 /* eslint-enable */

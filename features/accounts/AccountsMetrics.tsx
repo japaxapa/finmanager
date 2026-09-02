@@ -1,6 +1,10 @@
+'use client';
+
+import { useAccountSummary } from '@/shared/hooks/useAccounts';
 import { Grid, Paper, Typography } from '@mui/material';
 
 export default function AccountsMetrics() {
+  const { data: summaryData, isLoading } = useAccountSummary();
   {
     /* Top Summary Metrics */
   }
@@ -23,7 +27,7 @@ export default function AccountsMetrics() {
             PATRIMÔNIO LÍQUIDO
           </Typography>
           <Typography variant="h4" sx={{ color: '#22C55E', mt: 1.5, fontWeight: 700 }}>
-            R$ 42.979,50
+            {isLoading ? 'Carregando...' : `R$ ${summaryData?.net_worth}`}
           </Typography>
         </Paper>
       </Grid>
@@ -45,7 +49,7 @@ export default function AccountsMetrics() {
             CONTAS ATIVAS
           </Typography>
           <Typography variant="h4" sx={{ color: '#FFFFFF', mt: 1.5, fontWeight: 700 }}>
-            4
+            {isLoading ? 'Carregando...' : summaryData?.active_accounts}
           </Typography>
         </Paper>
       </Grid>
@@ -67,7 +71,7 @@ export default function AccountsMetrics() {
             FATURA EM ABERTO
           </Typography>
           <Typography variant="h4" sx={{ color: '#EF4444', mt: 1.5, fontWeight: 700 }}>
-            R$ 3.180,50
+            {isLoading ? 'Carregando...' : `R$ ${summaryData?.open_invoice}`}
           </Typography>
         </Paper>
       </Grid>

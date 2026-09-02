@@ -8,3 +8,10 @@ export const PRESET_COLORS = [
   '#9C27B0',
   '#4CAF50',
 ];
+
+export const ACCOUNT_TYPES = [
+  { value: 'Corrente', label: 'Conta Corrente' },
+  { value: 'Crédito', label: 'Cartão de Crédito' },
+  { value: 'Investimento', label: 'Investimento' },
+  { value: 'Dinheiro', label: 'Carteira / Dinheiro' },
+];

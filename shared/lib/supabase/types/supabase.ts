@@ -279,8 +279,10 @@ export type Database = {
     Views: {
       accounts_with_balance: {
         Row: {
+          color: string | null;
           created_at: string | null;
           current_balance: number | null;
+          icon: string | null;
           id: string | null;
           initial_balance: number | null;
           name: string | null;

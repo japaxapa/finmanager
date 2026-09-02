@@ -1,5 +1,5 @@
 import { createClient } from '../lib/supabase/client';
-import { AccountWithBalance } from '../lib/supabase/types/types';
+import { AccountInsert, AccountUpdate, AccountWithBalance } from '../lib/supabase/types/types';
 
 const supabase = createClient();
 
@@ -46,12 +46,7 @@ export async function getAccounts(): Promise<AccountWithBalance[]> {
   return data as AccountWithBalance[];
 }
 
-export async function createAccount(payload: {
-  name: string;
-  type: string;
-  institution: string;
-  initialBalance?: number;
-}) {
+export async function createAccount(payload: AccountInsert) {
   const { data: userData } = await supabase.auth.getUser();
 
   const { data, error } = await supabase
@@ -60,7 +55,7 @@ export async function createAccount(payload: {
       {
         name: payload.name,
         type: payload.type,
-        initial_balance: payload.initialBalance || 0,
+        initial_balance: payload.initial_balance || 0,
         user_id: userData.user?.id,
       },
     ])
@@ -71,19 +66,15 @@ export async function createAccount(payload: {
   return data;
 }
 
-export async function updateAccount(payload: {
-  id: string;
-  name?: string;
-  type?: string;
-  institution?: string;
-  initialBalance?: number;
-}) {
+export async function updateAccount(payload: AccountUpdate) {
+  if (!payload.id) throw new Error('Trying top update account without ID');
+
   const { data, error } = await supabase
     .from('accounts')
     .update({
       name: payload.name,
       type: payload.type,
-      initial_balance: payload.initialBalance,
+      initial_balance: payload.initial_balance,
     })
     .eq('id', payload.id)
     .select()

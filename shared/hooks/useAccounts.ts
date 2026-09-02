@@ -26,7 +26,7 @@ export function useCreateAccount() {
   return useMutation({
     mutationFn: createAccount,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['accounts'] });
+      queryClient.invalidateQueries({ queryKey: ['accounts', 'accounts-summary'] });
     },
   });
 }
@@ -35,7 +35,7 @@ export function useUpdateAccount() {
   return useMutation({
     mutationFn: updateAccount,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['accounts'] });
+      queryClient.invalidateQueries({ queryKey: ['accounts', 'accounts-summary'] });
     },
   });
 }
@@ -44,7 +44,7 @@ export function useDeleteAccount() {
   return useMutation({
     mutationFn: (id: string) => deleteAccount(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['accounts'] });
+      queryClient.invalidateQueries({ queryKey: ['accounts', 'accounts-summary'] });
     },
   });
 }

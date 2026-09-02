@@ -75,6 +75,8 @@ export async function updateAccount(payload: AccountUpdate) {
       name: payload.name,
       type: payload.type,
       initial_balance: payload.initial_balance,
+      color: payload.color,
+      icon: payload.icon,
     })
     .eq('id', payload.id)
     .select()

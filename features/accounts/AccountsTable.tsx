@@ -10,11 +10,14 @@ import {
   TableRow,
   TableCell,
   TableBody,
-  Chip,
-  IconButton,
 } from '@mui/material';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import { AccountWithBalance } from '@/shared/lib/supabase/types/types';
+import { AccountUpdate, AccountWithBalance } from '@/shared/lib/supabase/types/types';
+import AccountRow from './AccountRow';
+import { useState } from 'react';
+import AccountModal from './AccountModal';
+import { sanitizeAccount } from '@/shared/utils/utils';
+import { useDeleteAccount } from '@/shared/hooks/useAccounts';
+import GenericDeleteModal from '@/shared/components/UI/GenericDeleteModal';
 
 interface IAccountsTable {
   accounts: AccountWithBalance[];
@@ -25,6 +28,29 @@ export default function AccountsTable({ accounts = [] }: IAccountsTable) {
   {
     /* Details Table Section */
   }
+
+  // CRUD states
+  const [modalOpen, setModalOpen] = useState(false);
+  const [accountToUpdate, setAccountToUpdate] = useState<AccountUpdate | undefined>(undefined);
+  const [accountToDelete, setAccountToDelete] = useState<AccountWithBalance | undefined>(undefined);
+
+  const { mutate: deleteAccount, isPending: isDeleting } = useDeleteAccount();
+
+  const handleClose = () => {
+    setModalOpen(false);
+    setAccountToUpdate(undefined);
+    setAccountToDelete(undefined);
+  };
+
+  const onEdit = (account: AccountWithBalance) => {
+    setModalOpen(true);
+    setAccountToUpdate(sanitizeAccount(account));
+  };
+
+  const onDelete = (account: AccountWithBalance) => {
+    setAccountToDelete(account);
+  };
+
   return (
     <Paper
       elevation={0}
@@ -60,49 +86,30 @@ export default function AccountsTable({ accounts = [] }: IAccountsTable) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {accounts.map((row) => (
-              <TableRow
-                key={row.id}
-                sx={{
-                  '&:last-child td, &:last-child th': { border: 0 },
-                  '& td, & th': { borderBottom: '1px solid #1F2937', color: '#E2E8F0' },
-                }}
-              >
-                <TableCell component="th" scope="row" sx={{ fontWeight: 600 }}>
-                  {row.name}
-                </TableCell>
-                {/* <TableCell sx={{ color: '#9CA3AF' }}>{row.institutionName}</TableCell> */}
-                <TableCell>
-                  <Chip
-                    label={row.type}
-                    size="small"
-                    sx={{
-                      bgcolor: '#1E293B',
-                      color: '#94A3B8',
-                      borderRadius: 1.5,
-                      fontSize: '0.75rem',
-                    }}
-                  />
-                </TableCell>
-                <TableCell
-                  align="right"
-                  sx={{
-                    fontWeight: 600,
-                    color: row.current_balance && row.current_balance < 0 ? '#EF4444' : '#FFFFFF',
-                  }}
-                >
-                  {row.current_balance}
-                </TableCell>
-                <TableCell align="right">
-                  <IconButton size="small" sx={{ color: '#64748B' }}>
-                    <MoreHorizIcon fontSize="small" />
-                  </IconButton>
-                </TableCell>
-              </TableRow>
+            {accounts.map((acc) => (
+              <AccountRow account={acc} key={acc.id} onEdit={onEdit} onDelete={onDelete} />
             ))}
           </TableBody>
         </Table>
       </TableContainer>
+
+      <AccountModal
+        title="Editar Conta"
+        accountToEdit={accountToUpdate}
+        open={modalOpen}
+        handleClose={handleClose}
+      />
+
+      <GenericDeleteModal
+        item={accountToDelete}
+        itemName={accountToDelete?.name ?? ''}
+        title="Deletar Conta?"
+        isLoading={isDeleting}
+        handleClose={handleClose}
+        onConfirm={async (acc) => {
+          if (acc.id) await deleteAccount(acc.id);
+        }}
+      />
     </Paper>
   );
 }

@@ -7,6 +7,7 @@ export const PRESET_COLORS = [
   '#E91E63',
   '#9C27B0',
   '#4CAF50',
+  '#FFFFFF',
 ];
 
 export const ACCOUNT_TYPES = [

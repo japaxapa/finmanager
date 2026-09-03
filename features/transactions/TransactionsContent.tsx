@@ -1,6 +1,5 @@
 'use client';
 
-import { TransactionRow } from '@/shared/components/TransactionRow';
 import {
   Paper,
   Box,
@@ -16,12 +15,10 @@ import {
 } from '@mui/material';
 import { useMemo, useState } from 'react';
 import SearchIcon from '@mui/icons-material/Search';
-import { useDeleteTransaction, useTransactions } from '@/shared/hooks/useTransactions';
+import { useTransactions } from '@/shared/hooks/useTransactions';
 import { debounce } from '@/shared/lib/utils';
 import { useCategories } from '@/shared/hooks/useCategories';
-import { Transaction, TransactionUpdate } from '@/shared/lib/supabase/types/types';
-import GenericDeleteModal from '@/shared/components/UI/GenericDeleteModal';
-import TransactionModal from './TransactionModal';
+import { TransactionList } from '@/shared/components/TransactionListManager';
 
 export default function TransactionsContent() {
   {
@@ -35,15 +32,6 @@ export default function TransactionsContent() {
   const [selectedCategory, setSelectedCategory] = useState<string>('');
   const [activeTab, setActiveTab] = useState<'ALL' | 'income' | 'expense'>('ALL');
 
-  // CRUD states
-  const [modalOpen, setModalOpen] = useState(false);
-  const [transactionToUpdate, setTransactionToUpdate] = useState<TransactionUpdate | undefined>(
-    undefined,
-  );
-  const [transactionToDelete, setTransactionToDelete] = useState<Transaction | undefined>(
-    undefined,
-  );
-
   const { data } = useTransactions({
     type: activeTab,
     search: search,
@@ -51,7 +39,6 @@ export default function TransactionsContent() {
     page: page,
   });
   const { data: categoriesData } = useCategories();
-  const { mutate: deleteTransaction, isPending: isDeleting } = useDeleteTransaction();
 
   const filteredTransactions = data?.data ?? [];
 
@@ -71,21 +58,6 @@ export default function TransactionsContent() {
 
   const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
-  };
-
-  const handleClose = () => {
-    setModalOpen(false);
-    setTransactionToUpdate(undefined);
-    setTransactionToDelete(undefined);
-  };
-
-  const onEdit = (transaction: TransactionUpdate) => {
-    setModalOpen(true);
-    setTransactionToUpdate(transaction);
-  };
-
-  const onDelete = (transaction: Transaction) => {
-    setTransactionToDelete(transaction);
   };
 
   return (
@@ -191,26 +163,7 @@ export default function TransactionsContent() {
       </Box>
 
       {/* Transaction List */}
-      <Box>
-        {filteredTransactions.length > 0 ? (
-          filteredTransactions.map((tx) => (
-            <TransactionRow
-              key={tx.id}
-              category={tx.categories?.name || ''}
-              transaction={tx}
-              onEdit={onEdit}
-              onDelete={onDelete}
-              // onClick={() => console.log('Clicked transaction', tx.id)}
-            />
-          ))
-        ) : (
-          <Box sx={{ p: 6, textAlign: 'center' }}>
-            <Typography variant="body2" sx={{ color: '#64748B' }}>
-              Nenhuma transação encontrada com os filtros selecionados.
-            </Typography>
-          </Box>
-        )}
-      </Box>
+      <TransactionList transactions={filteredTransactions} />
 
       {/* Footer / Pagination */}
       <Box
@@ -243,24 +196,6 @@ export default function TransactionsContent() {
           }}
         />
       </Box>
-
-      <TransactionModal
-        title={'Editar Transação'}
-        transactionToEdit={transactionToUpdate}
-        open={modalOpen}
-        handleClose={handleClose}
-      />
-
-      <GenericDeleteModal
-        item={transactionToDelete}
-        itemName={transactionToDelete?.title}
-        title="Deletar Transação?"
-        isLoading={isDeleting}
-        handleClose={handleClose}
-        onConfirm={async (transaction) => {
-          await deleteTransaction(transaction.id);
-        }}
-      />
     </Paper>
   );
 }

@@ -17,7 +17,7 @@ export default function AccountsCardDisplay({ accounts }: IAccountsCardDisplay) 
             accountName={account.name ?? ''}
             balance={account.current_balance ?? 0}
             color={account.color ?? undefined}
-            logo={account.icon ?? undefined}
+            icon={account.icon ?? undefined}
             onClick={() => console.log('Card clicked', account.id)}
           />
         </Grid>

@@ -57,6 +57,8 @@ export async function createAccount(payload: AccountInsert) {
         type: payload.type,
         initial_balance: payload.initial_balance || 0,
         user_id: userData.user?.id,
+        color: payload.color || '#FFFFFF',
+        icon: payload.icon || 'wallet',
       },
     ])
     .select()

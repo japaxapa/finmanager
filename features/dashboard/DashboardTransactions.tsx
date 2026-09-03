@@ -3,6 +3,7 @@
 import { Card, CardContent, Stack, Box, Typography, Button, List } from '@mui/material';
 import { useTransactions } from '@/shared/hooks/useTransactions';
 import { TransactionList } from '@/shared/components/TransactionListManager';
+import Link from 'next/link';
 
 export default function DashboardTransactions() {
   {
@@ -31,6 +32,8 @@ export default function DashboardTransactions() {
           <Button
             size="small"
             sx={{ textTransform: 'none', color: 'text.secondary', fontWeight: 600 }}
+            LinkComponent={Link}
+            href="/transactions"
           >
             Ver todas
           </Button>

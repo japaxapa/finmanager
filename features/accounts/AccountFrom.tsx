@@ -20,11 +20,11 @@ type Inputs = {
 
 interface IAccountFormProps {
   handleClose: () => void;
-  accountToEdit?: Account | AccountUpdate;
+  entityToEdit?: Account | AccountUpdate;
 }
 
-export function AccountForm({ handleClose, accountToEdit, ...props }: IAccountFormProps) {
-  const isEditing = Boolean(accountToEdit);
+export function AccountForm({ handleClose, entityToEdit, ...props }: IAccountFormProps) {
+  const isEditing = Boolean(entityToEdit);
 
   const { mutate: createAccount, isPending: isCreating } = useCreateAccount();
   const { mutate: updateAccount, isPending: isUpdating } = useUpdateAccount();
@@ -38,13 +38,13 @@ export function AccountForm({ handleClose, accountToEdit, ...props }: IAccountFo
     setValue,
     formState: { errors },
   } = useForm<Inputs>({
-    defaultValues: accountToEdit
+    defaultValues: entityToEdit
       ? {
-          name: accountToEdit.name ?? '',
-          type: accountToEdit.type ?? 'Corrente',
-          initial_balance: accountToEdit.initial_balance ?? 0,
-          icon: (accountToEdit.icon as FinIconType) ?? 'wallet',
-          color: accountToEdit.color ?? '#0088FE',
+          name: entityToEdit.name ?? '',
+          type: entityToEdit.type ?? 'Corrente',
+          initial_balance: entityToEdit.initial_balance ?? 0,
+          icon: (entityToEdit.icon as FinIconType) ?? 'wallet',
+          color: entityToEdit.color ?? '#0088FE',
         }
       : {
           name: '',
@@ -70,8 +70,8 @@ export function AccountForm({ handleClose, accountToEdit, ...props }: IAccountFo
       onSuccess: handleReset,
     };
 
-    if (isEditing && accountToEdit?.id) {
-      updateAccount({ id: accountToEdit.id, ...payload }, options);
+    if (isEditing && entityToEdit?.id) {
+      updateAccount({ id: entityToEdit.id, ...payload }, options);
     } else {
       createAccount(payload, options);
     }

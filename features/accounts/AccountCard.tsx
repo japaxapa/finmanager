@@ -1,7 +1,7 @@
 import React from 'react';
-import { Card, CardContent, Typography, Box, Stack, Chip } from '@mui/material';
+import { Card, CardContent, Typography, Box, Stack, Chip, Avatar } from '@mui/material';
 import { formatCurrency } from '../../shared/lib/utils';
-import AccountIcon from '@/shared/components/AccountIcons';
+import FinIcon from '@/shared/components/UI/FinIcons';
 
 export interface AccountCardProps {
   /** Name of the bank or institution (e.g., "Nubank", "Banco Inter", "C6 Bank") */
@@ -11,7 +11,7 @@ export interface AccountCardProps {
   /** Main balance amount. If passed as a number, it formats as BRL currency by default. */
   balance: number | string;
   /** URL to the bank logo OR a React icon node */
-  logo?: string;
+  icon?: string;
   /** Optional background or theme color associated with the bank (e.g., "#8A05BE" for Nubank) */
   color?: string;
   /** Optional click handler for selecting/opening the account */
@@ -22,7 +22,7 @@ export const AccountCard: React.FC<AccountCardProps> = ({
   description = '',
   accountName,
   balance,
-  logo,
+  icon,
   color = 'ffffff',
   onClick,
 }) => {
@@ -50,7 +50,7 @@ export const AccountCard: React.FC<AccountCardProps> = ({
         <Stack spacing={2}>
           <Stack direction="row" sx={{ justifyContent: 'space-between', alignItems: 'center' }}>
             <AccountInformation
-              logo={logo}
+              icon={icon}
               color={color}
               description={description}
               accountName={accountName}
@@ -65,12 +65,12 @@ export const AccountCard: React.FC<AccountCardProps> = ({
 };
 
 function AccountInformation({
-  logo,
+  icon = 'wallet',
   color,
   description,
   accountName,
 }: {
-  logo?: string;
+  icon?: string;
   color?: string;
   description: string;
   accountName: string;
@@ -80,7 +80,19 @@ function AccountInformation({
   }
   return (
     <Stack direction="row" spacing={1.5} sx={{ alignItems: 'center' }}>
-      <AccountIcon iconName={logo as string} />
+      <Avatar
+        sx={{
+          color: 'text.secondary',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          bgcolor: 'action.hover',
+          p: 1,
+          borderRadius: '50%',
+        }}
+      >
+        {FinIcon(icon)}
+      </Avatar>
 
       <Stack sx={{ gap: 0.5 }}>
         <Typography variant="subtitle2" color="text.secondary" sx={{ fontWeight: 600 }}>

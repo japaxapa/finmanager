@@ -301,12 +301,33 @@ export type Database = {
       };
     };
     Functions: {
+      get_user_account_metrics_history: {
+        Args: { p_months_limit?: number; p_user_id: string };
+        Returns: {
+          active_accounts: number;
+          metric_month: number;
+          metric_year: number;
+          monthly_expense: number;
+          monthly_income: number;
+          net_worth: number;
+          open_invoice: number;
+        }[];
+      };
       get_user_account_summary: {
         Args: { p_user_id: string };
         Returns: {
           active_accounts: number;
           net_worth: number;
           open_invoice: number;
+        }[];
+      };
+      get_user_monthly_summary: {
+        Args: { p_month?: number; p_user_id: string; p_year?: number };
+        Returns: {
+          monthly_expense: number;
+          monthly_income: number;
+          monthly_net_balance: number;
+          total_net_worth: number;
         }[];
       };
     };

@@ -15,7 +15,7 @@ export default function DashboardContent() {
   return (
     <>
       <DashboardMetrics accMetric={accMetric} />
-      <DashboardGraphs />
+      <DashboardGraphs accHistory={data} />
     </>
   );
 }

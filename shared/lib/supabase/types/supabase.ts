@@ -267,6 +267,13 @@ export type Database = {
             referencedColumns: ['id'];
           },
           {
+            foreignKeyName: 'transactions_category_id_fkey';
+            columns: ['category_id'];
+            isOneToOne: false;
+            referencedRelation: 'category_expenses_monthly';
+            referencedColumns: ['category_id'];
+          },
+          {
             foreignKeyName: 'transactions_user_id_fkey';
             columns: ['user_id'];
             isOneToOne: false;
@@ -299,14 +306,56 @@ export type Database = {
           },
         ];
       };
+      category_expenses_monthly: {
+        Row: {
+          category_color: string | null;
+          category_icon: string | null;
+          category_id: string | null;
+          category_name: string | null;
+          metric_month: number | null;
+          metric_year: number | null;
+          total_amount: number | null;
+          user_id: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'transactions_user_id_fkey';
+            columns: ['user_id'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
     };
     Functions: {
+      get_user_account_metrics_history: {
+        Args: { p_months_limit?: number; p_user_id: string };
+        Returns: {
+          active_accounts: number;
+          metric_month: number;
+          metric_year: number;
+          monthly_expense: number;
+          monthly_income: number;
+          net_worth: number;
+          open_invoice: number;
+        }[];
+      };
       get_user_account_summary: {
         Args: { p_user_id: string };
         Returns: {
           active_accounts: number;
           net_worth: number;
           open_invoice: number;
+        }[];
+      };
+      get_user_monthly_summary: {
+        Args: { p_month?: number; p_user_id: string; p_year?: number };
+        Returns: {
+          monthly_expense: number;
+          monthly_income: number;
+          monthly_net_balance: number;
+          total_net_worth: number;
         }[];
       };
     };

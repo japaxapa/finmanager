@@ -14,3 +14,5 @@ export type Account = Tables<'accounts'>;
 export type AccountInsert = TablesInsert<'accounts'>;
 export type AccountUpdate = TablesUpdate<'accounts'>;
 export type AccountWithBalance = Views<'accounts_with_balance'>;
+
+export type MonthlyCategoryExpense = Views<'category_expenses_monthly'>;

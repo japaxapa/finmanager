@@ -3,6 +3,7 @@ import { Enums } from '../lib/supabase/types/supabase';
 import {
   createCategory,
   deleteCategory,
+  fetchMonthlyCategoryExpenses,
   getCategories,
   updateCategory,
 } from '../services/categoriesService';
@@ -35,5 +36,12 @@ export function useDeleteCategory() {
       deleteCategory(category.name, category.type),
     onSuccess: (_, variables) =>
       queryClient.invalidateQueries({ queryKey: ['categories', variables.type] }),
+  });
+}
+
+export function useMonthlyCategoriesExpenses(month?: number) {
+  return useQuery({
+    queryKey: ['montly-category-expense'],
+    queryFn: () => fetchMonthlyCategoryExpenses({ month }),
   });
 }

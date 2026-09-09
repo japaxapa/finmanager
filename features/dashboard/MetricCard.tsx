@@ -1,8 +1,14 @@
 'use client';
 import React from 'react';
-import { Card, CardContent, Typography, Box, Stack } from '@mui/material';
-import TrendingUpIcon from '@mui/icons-material/TrendingUp';
-import TrendingDownIcon from '@mui/icons-material/TrendingDown';
+import {
+  Card,
+  CardContent,
+  Typography,
+  Stack,
+  // Box
+} from '@mui/material';
+// import TrendingUpIcon from '@mui/icons-material/TrendingUp';
+// import TrendingDownIcon from '@mui/icons-material/TrendingDown';
 import FinIcon from '@/shared/components/UI/FinIcons';
 
 export interface MetricCardProps {
@@ -11,9 +17,9 @@ export interface MetricCardProps {
   /** Primary metric value or amount (e.g., "$45,231.89" or "1,245") */
   amount: string | number;
   /** Numeric percentage to display in the badge (e.g., 12.4 for +12.4%) */
-  trendPercentage: number;
+  trendPercentage?: number;
   /** Direction of the trend */
-  trendType: 'up' | 'down';
+  trendType?: 'up' | 'down';
   /** Optional icon element to show in the header */
   icon?: string;
 }
@@ -21,16 +27,16 @@ export interface MetricCardProps {
 export const MetricCard: React.FC<MetricCardProps> = ({
   title,
   amount,
-  trendPercentage,
-  trendType,
+  // trendPercentage,
+  // trendType,
   icon,
 }) => {
-  const isUp = trendType === 'up';
+  // const isUp = trendType === 'up';
 
   // Format the percentage display (e.g. 12.4 -> "+12,4%" or "-3,2%")
-  const formattedPercentage = `${isUp ? '+' : '-'}${Math.abs(trendPercentage)
-    .toFixed(1)
-    .replace('.', ',')}%`;
+  // const formattedPercentage = `${isUp ? '+' : '-'}${Math.abs(trendPercentage)
+  //   .toFixed(1)
+  //   .replace('.', ',')}%`;
 
   return (
     <Card variant="outlined" sx={{ borderRadius: 2, height: '100%' }}>
@@ -61,7 +67,7 @@ export const MetricCard: React.FC<MetricCardProps> = ({
           </Typography>
 
           {/* Trend Badge */}
-          <Box
+          {/* <Box
             sx={{
               display: 'inline-flex',
               alignItems: 'center',
@@ -82,7 +88,7 @@ export const MetricCard: React.FC<MetricCardProps> = ({
           >
             {isUp ? <TrendingUpIcon fontSize="inherit" /> : <TrendingDownIcon fontSize="inherit" />}
             <span>{formattedPercentage}</span>
-          </Box>
+          </Box> */}
         </Stack>
       </CardContent>
     </Card>

@@ -1,11 +1,19 @@
-import { TransactionRow } from '@/shared/components/TransactionRow';
+'use client';
+
 import { Card, CardContent, Stack, Box, Typography, Button, List } from '@mui/material';
-import { RECENT_TRANSACTIONS } from './mock.data';
+import { useTransactions } from '@/shared/hooks/useTransactions';
+import { TransactionList } from '@/shared/components/TransactionListManager';
+import Link from 'next/link';
 
 export default function DashboardTransactions() {
   {
     /* 4. Recent Transactions Section */
   }
+
+  const { data: transactionsData } = useTransactions({
+    page: 1,
+  });
+
   return (
     <Card variant="outlined" sx={{ borderRadius: 3 }}>
       <CardContent sx={{ p: 3 }}>
@@ -24,6 +32,8 @@ export default function DashboardTransactions() {
           <Button
             size="small"
             sx={{ textTransform: 'none', color: 'text.secondary', fontWeight: 600 }}
+            LinkComponent={Link}
+            href="/transactions"
           >
             Ver todas
           </Button>
@@ -31,9 +41,10 @@ export default function DashboardTransactions() {
 
         {/* Transactions List */}
         <List disablePadding>
-          {RECENT_TRANSACTIONS.map((transaction, idx) => (
-            <TransactionRow key={idx} {...transaction} />
-          ))}
+          <TransactionList
+            transactions={transactionsData?.data ?? []}
+            emptyMessage="Nenhuma transação recente."
+          />
         </List>
       </CardContent>
     </Card>

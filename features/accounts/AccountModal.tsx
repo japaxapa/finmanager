@@ -1,6 +1,6 @@
 import { EntityFormModal } from '@/shared/components/UI/EntityFormModal';
 import { AccountUpdate } from '@/shared/lib/supabase/types/types';
-import { AccountForm } from './AccountFrom';
+import { AccountForm } from './AccountForm';
 
 interface IAccountModalProps {
   title?: string;

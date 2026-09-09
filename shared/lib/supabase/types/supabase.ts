@@ -267,6 +267,13 @@ export type Database = {
             referencedColumns: ['id'];
           },
           {
+            foreignKeyName: 'transactions_category_id_fkey';
+            columns: ['category_id'];
+            isOneToOne: false;
+            referencedRelation: 'category_expenses_monthly';
+            referencedColumns: ['category_id'];
+          },
+          {
             foreignKeyName: 'transactions_user_id_fkey';
             columns: ['user_id'];
             isOneToOne: false;
@@ -292,6 +299,27 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: 'accounts_user_id_fkey';
+            columns: ['user_id'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      category_expenses_monthly: {
+        Row: {
+          category_color: string | null;
+          category_icon: string | null;
+          category_id: string | null;
+          category_name: string | null;
+          metric_month: number | null;
+          metric_year: number | null;
+          total_amount: number | null;
+          user_id: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'transactions_user_id_fkey';
             columns: ['user_id'];
             isOneToOne: false;
             referencedRelation: 'profiles';

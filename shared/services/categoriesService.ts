@@ -1,6 +1,10 @@
 import { createClient } from '../lib/supabase/client';
 import { Enums } from '../lib/supabase/types/supabase';
-import { CategoryInsert, CategoryUpdate } from '../lib/supabase/types/types';
+import {
+  CategoryInsert,
+  CategoryUpdate,
+  MonthlyCategoryExpense,
+} from '../lib/supabase/types/types';
 
 const supabase = createClient();
 
@@ -79,4 +83,31 @@ export async function deleteCategory(name: string, type: Enums<'category_type'>)
   await supabase.from('categories').delete().eq('name', name).eq('type', type);
 
   return true;
+}
+
+export async function fetchMonthlyCategoryExpenses({
+  year = new Date().getFullYear(),
+  month = new Date().getMonth() + 1,
+}: {
+  year?: number;
+  month?: number;
+}): Promise<MonthlyCategoryExpense[]> {
+  console.log(year, month);
+  const { data: userData } = await supabase.auth.getUser();
+
+  const userId = userData.user?.id;
+
+  if (!userId) {
+    throw new Error('User is not authenticated');
+  }
+
+  const { data, error } = await supabase
+    .from('category_expenses_monthly')
+    .select('*')
+    .eq('user_id', userId)
+    .eq('metric_year', year)
+    .eq('metric_month', month);
+
+  if (error) throw new Error(error.message);
+  return data ?? [];
 }

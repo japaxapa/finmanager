@@ -4,18 +4,21 @@ import { AccountMetricsHistory, useUserAccountMetricsHistory } from '@/shared/ho
 import { useMemo } from 'react';
 import DashboardGraphs from './DashboardGraphs';
 import DashboardMetrics from './DashboardMetrics';
+import { useMonthlyCategoriesExpenses } from '@/shared/hooks/useCategories';
 
 export default function DashboardContent() {
-  const { data } = useUserAccountMetricsHistory({ monthsLimit: 6 });
+  const { data: accMetricData } = useUserAccountMetricsHistory({ monthsLimit: 6 });
   const accMetric: AccountMetricsHistory | undefined = useMemo(() => {
-    if (data && data.length) return data[0];
+    if (accMetricData && accMetricData.length) return accMetricData[0];
     else return undefined;
-  }, [data]);
+  }, [accMetricData]);
+
+  const { data: pieGraphData } = useMonthlyCategoriesExpenses();
 
   return (
     <>
       <DashboardMetrics accMetric={accMetric} />
-      <DashboardGraphs accHistory={data} />
+      <DashboardGraphs accHistory={accMetricData} expensesByCategory={pieGraphData} />
     </>
   );
 }

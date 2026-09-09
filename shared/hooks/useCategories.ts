@@ -39,9 +39,9 @@ export function useDeleteCategory() {
   });
 }
 
-export function useMonthlyCategoriesExpenses() {
+export function useMonthlyCategoriesExpenses(month?: number) {
   return useQuery({
     queryKey: ['montly-category-expense'],
-    queryFn: () => fetchMonthlyCategoryExpenses({ month: 8 }),
+    queryFn: () => fetchMonthlyCategoryExpenses({ month }),
   });
 }

@@ -1,13 +1,25 @@
 'use client';
 
 import { useAccountSummary } from '@/shared/hooks/useAccounts';
+import { formatCurrency } from '@/shared/lib/utils';
 import { Grid, Paper, Typography } from '@mui/material';
 
 export default function AccountsMetrics() {
-  const { data: summaryData, isLoading } = useAccountSummary();
   {
     /* Top Summary Metrics */
   }
+  const { data: summaryData, isLoading } = useAccountSummary();
+
+  const formattedNetWorth =
+    typeof summaryData?.net_worth === 'number'
+      ? formatCurrency(summaryData?.net_worth)
+      : summaryData?.net_worth;
+
+  const formattedOpenInvoice =
+    typeof summaryData?.open_invoice === 'number'
+      ? formatCurrency(summaryData?.open_invoice)
+      : summaryData?.open_invoice;
+
   return (
     <Grid container spacing={3} sx={{ mb: 4 }}>
       <Grid size={{ xs: 12, md: 4 }}>
@@ -27,7 +39,7 @@ export default function AccountsMetrics() {
             PATRIMÔNIO LÍQUIDO
           </Typography>
           <Typography variant="h4" sx={{ color: '#22C55E', mt: 1.5, fontWeight: 700 }}>
-            {isLoading ? 'Carregando...' : `R$ ${summaryData?.net_worth}`}
+            {isLoading ? 'Carregando...' : formattedNetWorth}
           </Typography>
         </Paper>
       </Grid>
@@ -71,7 +83,7 @@ export default function AccountsMetrics() {
             FATURA EM ABERTO
           </Typography>
           <Typography variant="h4" sx={{ color: '#EF4444', mt: 1.5, fontWeight: 700 }}>
-            {isLoading ? 'Carregando...' : `R$ ${summaryData?.open_invoice}`}
+            {isLoading ? 'Carregando...' : formattedOpenInvoice}
           </Typography>
         </Paper>
       </Grid>

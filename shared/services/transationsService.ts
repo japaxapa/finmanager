@@ -74,31 +74,47 @@ export async function getTransactions({
  * Fetch Summary Balances (Net Balance, Income, Expense)
  */
 export async function getTransactionSummary(startDate?: string, endDate?: string) {
-  let query = supabase.from('transactions').select('type, amount');
+  // Fetch all transactions (no date filters on the query itself)
+  const { data, error } = await supabase
+    .from('transactions')
+    .select('type, amount, transaction_date');
 
-  if (startDate) query = query.gte('transaction_date', startDate);
-  if (endDate) query = query.lte('transaction_date', endDate);
-
-  const { data, error } = await query;
   if (error) throw error;
 
   const totals = (data || []).reduce(
     (acc, curr) => {
       const amount = Number(curr.amount) || 0;
-      if (curr.type === 'income') {
-        acc.totalIncome += amount;
-      } else if (curr.type === 'expense') {
-        acc.totalExpense += amount;
+      const type = (curr.type || '').toLowerCase();
+      const txDate = curr.transaction_date;
+
+      // 1. Calculate All-Time Net Balance (Net Worth) across ALL transactions
+      if (type === 'income' || type === 'receita') {
+        acc.allTimeNetBalance += amount;
+      } else if (type === 'expense' || type === 'despesa') {
+        acc.allTimeNetBalance -= amount;
       }
+
+      // 2. Filter Time-Sensitive Income & Expense
+      const isAfterStart = !startDate || txDate >= startDate;
+      const isBeforeEnd = !endDate || txDate <= endDate;
+
+      if (isAfterStart && isBeforeEnd) {
+        if (type === 'income' || type === 'receita') {
+          acc.periodIncome += amount;
+        } else if (type === 'expense' || type === 'despesa') {
+          acc.periodExpense += amount;
+        }
+      }
+
       return acc;
     },
-    { totalIncome: 0, totalExpense: 0 },
+    { periodIncome: 0, periodExpense: 0, allTimeNetBalance: 0 },
   );
 
   return {
-    totalIncome: totals.totalIncome.toFixed(2),
-    totalExpense: totals.totalExpense.toFixed(2),
-    netBalance: (totals.totalIncome - totals.totalExpense).toFixed(2),
+    totalIncome: totals.periodIncome.toFixed(2),
+    totalExpense: totals.periodExpense.toFixed(2),
+    netBalance: totals.allTimeNetBalance.toFixed(2), // All-time cumulative balance
   };
 }
 

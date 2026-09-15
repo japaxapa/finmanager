@@ -6,6 +6,7 @@ import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import { useMemo } from 'react';
 import { useTransactionSummary } from '@/shared/hooks/useTransactions';
+import { getStartDate } from '@/shared/utils/utils';
 
 // TODO check metrics cards
 // TODO make cards dynamically
@@ -16,7 +17,8 @@ export default function TransactionsMetrics() {
   }
 
   // TODO check if is needed somethink for loading state UI/UX
-  const { data: summaryData } = useTransactionSummary();
+  const startDate = getStartDate();
+  const { data: summaryData } = useTransactionSummary(startDate);
 
   // Totals calculated dynamically
   const { totalIncome, totalExpense, balance } = useMemo(() => {

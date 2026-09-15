@@ -14,3 +14,15 @@ export function sanitizeAccount(acc: AccountWithBalance) {
     current_balance: acc.current_balance,
   };
 }
+
+const now = new Date();
+
+// First day of current month: e.g., "2026-07-01"
+export function getStartDate() {
+  return new Date(now.getFullYear(), now.getMonth(), 1).toISOString().split('T')[0];
+}
+
+// Last day of current month: e.g., "2026-07-31"
+export function getEndDate() {
+  return new Date(now.getFullYear(), now.getMonth() + 1, 0).toISOString().split('T')[0];
+}

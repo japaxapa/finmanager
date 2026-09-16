@@ -1,4 +1,4 @@
-import MetricCard from '@/features/dashboard/MetricCard';
+import MetricCard from '@/features/dashboard/content/MetricCard';
 import { Grid } from '@mui/material';
 import { AccountMetricsHistory } from '@/shared/hooks/useDashboard';
 

@@ -2,8 +2,8 @@
 
 import { AccountMetricsHistory, useUserAccountMetricsHistory } from '@/shared/hooks/useDashboard';
 import { useMemo } from 'react';
-import DashboardGraphs from './DashboardGraphs';
-import DashboardMetrics from './DashboardMetrics';
+import DashboardGraphs from './Graphs';
+import DashboardMetrics from './Metrics';
 import { useMonthlyCategoriesExpenses } from '@/shared/hooks/useCategories';
 
 export default function DashboardContent() {

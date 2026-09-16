@@ -63,7 +63,7 @@ export const MetricCard: React.FC<MetricCardProps> = ({
             component="div"
             sx={{ fontWeight: 700, fontSize: { xs: '1.5rem', sm: '1.75rem', lg: '1.25rem' } }}
           >
-            {amount}
+            {`R$ ${amount}`}
           </Typography>
 
           {/* Trend Badge */}

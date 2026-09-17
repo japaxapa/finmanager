@@ -78,7 +78,7 @@ export default function AccountsTable({ accounts = [] }: IAccountsTable) {
                 '& th': { borderBottom: '1px solid #1F2937', color: '#9CA3AF', fontWeight: 600 },
               }}
             >
-              <TableCell>Conta</TableCell>''
+              <TableCell>Conta</TableCell>
               <TableCell>Tipo</TableCell>
               <TableCell align="right">Saldo</TableCell>
               <TableCell align="right" width={50}></TableCell>

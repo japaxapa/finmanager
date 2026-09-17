@@ -1,6 +1,6 @@
 import { Grid } from '@mui/material';
-import DashboardLineGraph from './GraphsLineGraph';
-import DashboardPieGraph from './GraphsPieGraph';
+import DashboardLineGraph from './DashboardLineGraph';
+import DashboardPieGraph from './DashboardPieGraph';
 import { AccountMetricsHistory } from '@/shared/hooks/useDashboard';
 import { MonthlyCategoryExpense } from '@/shared/lib/supabase/types/types';
 

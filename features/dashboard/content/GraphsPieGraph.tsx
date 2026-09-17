@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
-import { useTheme } from '@mui/material';
-import { PieChart, Pie, Tooltip, Legend, Sector } from 'recharts';
+import { useTheme, Box, Typography } from '@mui/material';
+import { PieChart, Pie, Tooltip, Legend, Sector, ResponsiveContainer } from 'recharts';
 import ChartCard from './GraphsChartCard';
 import { MonthlyCategoryExpense } from '@/shared/lib/supabase/types/types';
 
@@ -23,6 +23,10 @@ export default function CategoryExpensesPieChart({
     }));
   }, [expensesByCategory]);
 
+  const hasExpenses = useMemo(() => {
+    return chartData.length > 0 && chartData.some((item) => item.value > 0);
+  }, [chartData]);
+
   return (
     <ChartCard
       title="Despesas por Categoria"
@@ -30,33 +34,58 @@ export default function CategoryExpensesPieChart({
       gridSize={{ xs: 12, lg: 4 }}
       chartHeight={300}
     >
-      <PieChart>
-        <Pie
-          data={chartData}
-          cx="50%"
-          cy="50%"
-          innerRadius={60}
-          outerRadius={90}
-          paddingAngle={4}
-          dataKey="value"
-          shape={(props) => <Sector {...props} fill={props.payload.fill} />}
-        />
-        <Tooltip
-          formatter={(value) => [
-            new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(
-              Number(value ?? 0),
-            ),
-            'Gasto',
-          ]}
-          contentStyle={{
-            backgroundColor: theme.palette.background.paper,
-            borderColor: theme.palette.divider,
-            borderRadius: '8px',
-            boxShadow: theme.shadows[3],
-          }}
-        />
-        <Legend verticalAlign="bottom" height={36} />
-      </PieChart>
+      {hasExpenses ? (
+        <ResponsiveContainer width="100%" height="100%">
+          <PieChart>
+            <Pie
+              data={chartData}
+              cx="50%"
+              cy="50%"
+              innerRadius={60}
+              outerRadius={90}
+              paddingAngle={4}
+              dataKey="value"
+              shape={(props) => <Sector {...props} fill={props.payload.fill} />}
+            />
+            <Tooltip
+              formatter={(value) => [
+                new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(
+                  Number(value ?? 0),
+                ),
+                'Gasto',
+              ]}
+              contentStyle={{
+                backgroundColor: theme.palette.background.paper,
+                borderColor: theme.palette.divider,
+                borderRadius: '8px',
+                boxShadow: theme.shadows[3],
+              }}
+            />
+            <Legend verticalAlign="bottom" height={36} />
+          </PieChart>
+        </ResponsiveContainer>
+      ) : (
+        /* Rendered as raw JSX element inside ChartCard, bypassing Recharts wrapper quirks */
+        <EmptyStateMessage />
+      )}
     </ChartCard>
+  );
+}
+
+function EmptyStateMessage() {
+  return (
+    <Box
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: '100%',
+        p: 2,
+      }}
+    >
+      <Typography variant="body2" color="text.secondary" sx={{ textAlign: 'center' }}>
+        Nenhuma despesa encontrada para este período.
+      </Typography>
+    </Box>
   );
 }

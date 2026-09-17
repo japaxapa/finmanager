@@ -1,7 +1,5 @@
-// components/ChartCard.tsx
 import { ReactNode } from 'react';
 import { Grid, Card, CardContent, Box, Typography } from '@mui/material';
-import { ResponsiveContainer } from 'recharts';
 
 interface ChartCardProps {
   title: string;
@@ -33,11 +31,7 @@ export default function ChartCard({
             )}
           </Box>
 
-          <Box sx={{ height: chartHeight, width: '100%', flexGrow: 1 }}>
-            <ResponsiveContainer width="100%" height="100%">
-              {children}
-            </ResponsiveContainer>
-          </Box>
+          <Box sx={{ height: chartHeight, width: '100%', flexGrow: 1 }}>{children}</Box>
         </CardContent>
       </Card>
     </Grid>

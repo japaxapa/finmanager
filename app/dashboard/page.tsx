@@ -1,9 +1,9 @@
 import React from 'react';
 import { Box } from '@mui/material';
 
-import DashboardHeader from '@/features/dashboard/DashboardHeader';
+import DashboardHeader from '@/features/dashboard/Header';
 import DashboardTransactions from '@/features/dashboard/DashboardTransactions';
-import DashboardContent from '@/features/dashboard/DashboardContent';
+import DashboardContent from '@/features/dashboard/Content';
 
 export default function DashboardPage(): React.ReactNode {
   return (

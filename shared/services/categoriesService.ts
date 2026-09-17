@@ -92,7 +92,6 @@ export async function fetchMonthlyCategoryExpenses({
   year?: number;
   month?: number;
 }): Promise<MonthlyCategoryExpense[]> {
-  console.log(year, month);
   const { data: userData } = await supabase.auth.getUser();
 
   const userId = userData.user?.id;

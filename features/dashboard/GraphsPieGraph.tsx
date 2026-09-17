@@ -4,15 +4,13 @@ import { PieChart, Pie, Tooltip, Legend, Sector, ResponsiveContainer } from 'rec
 import ChartCard from './GraphsChartCard';
 import { MonthlyCategoryExpense } from '@/shared/lib/supabase/types/types';
 
-interface CategoryExpensesPieChartProps {
+interface DashboardPieGraphProps {
   expensesByCategory?: MonthlyCategoryExpense[];
 }
 
 const DEFAULT_COLORS = ['#EF4444', '#F59E0B', '#10B981', '#3B82F6', '#8B5CF6', '#EC4899'];
 
-export default function CategoryExpensesPieChart({
-  expensesByCategory = [],
-}: CategoryExpensesPieChartProps) {
+export default function DashboardPieGraph({ expensesByCategory = [] }: DashboardPieGraphProps) {
   const theme = useTheme();
 
   const chartData = useMemo(() => {

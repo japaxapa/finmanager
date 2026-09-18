@@ -2,7 +2,7 @@
 
 import { Container, Stack, useColorScheme, useMediaQuery, useTheme } from '@mui/material';
 import ResponsiveMenu from './Menu/ResponsiveMenu';
-import SearchBar from './Searchbar/SearchBar';
+import { AppNavBar } from './Searchbar/AppNavBar';
 import { useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 
@@ -60,9 +60,8 @@ export default function LayoutContainer({ children }: { children: React.ReactNod
         onNavigate={onNavigate}
       />
       <Stack sx={{ flexGrow: 1, minHeight: '100%' }} spacing={2}>
-        {/* TODO pass breadcrumbs */}
         {/* TODO search bar logic */}
-        <SearchBar
+        <AppNavBar
           onMobileMenuOpen={onMobileMenuOpen}
           mode={mode}
           onToggleTheme={onToggleTheme}

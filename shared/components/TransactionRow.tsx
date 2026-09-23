@@ -2,8 +2,8 @@
 
 import React from 'react';
 import { Box, Typography, Chip, Stack } from '@mui/material';
-import NorthEastIcon from '@mui/icons-material/NorthEast'; // Top-right arrow
-import SouthEastIcon from '@mui/icons-material/SouthEast'; // Down-right arrow
+import NorthEastIcon from '@mui/icons-material/NorthEast';
+import SouthEastIcon from '@mui/icons-material/SouthEast';
 import { OptionsMenu } from './UI/OptionsMenu';
 import { Transaction, TransactionUpdate } from '../lib/supabase/types/types';
 
@@ -27,12 +27,10 @@ export const TransactionRow: React.FC<TransactionRowProps> = ({
 }) => {
   const isIncome = transaction.type === 'income';
 
-  // Dynamic colors matching the screenshot palette
-  const amountColor = isIncome ? '#10B981' : '#F87171'; // Neon Green vs Muted Red
+  const amountColor = isIncome ? '#10B981' : '#F87171';
   const iconBgColor = isIncome ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)';
   const iconColor = isIncome ? '#10B981' : '#F87171';
 
-  // Format amount to standard Brazilian real / currency format (e.g., 12.000,00)
   const formattedAmount = Math.abs(transaction.amount).toLocaleString('pt-BR', {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
@@ -136,7 +134,7 @@ export const TransactionRow: React.FC<TransactionRowProps> = ({
           sx={{
             fontWeight: 700,
             color: amountColor,
-            fontFamily: 'monospace, monospace', // Terminal-like finance look matching design
+            fontFamily: 'monospace, monospace',
             fontSize: '0.95rem',
             minWidth: '110px',
             textAlign: 'right',

@@ -1,9 +1,8 @@
 'use client';
 import { Box, Container, styled, SxProps } from '@mui/material';
 
-// 2. Custom Styled Components for consistent dark theme
 const StyledBox = styled(Box)(() => ({
-  backgroundColor: '#0a0d14', // Very dark background from screenshot
+  backgroundColor: '#0a0d14',
   minHeight: '100vh',
   color: '#e5e7eb',
   fontFamily: 'sans-serif',

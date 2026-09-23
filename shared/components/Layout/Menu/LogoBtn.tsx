@@ -1,5 +1,5 @@
 import { Avatar, Box, Typography } from '@mui/material';
-import PaidIcon from '@mui/icons-material/Paid'; // Brand Logo Icon
+import PaidIcon from '@mui/icons-material/Paid';
 import Link from 'next/link';
 
 export default function LogoButton() {

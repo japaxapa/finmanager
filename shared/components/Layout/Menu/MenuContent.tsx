@@ -10,13 +10,12 @@ import {
   Divider,
 } from '@mui/material';
 
-// MUI Icons matching the reference design
-import GridViewIcon from '@mui/icons-material/GridView'; // Dashboard
-import AccountBalanceWalletOutlinedIcon from '@mui/icons-material/AccountBalanceWalletOutlined'; // Contas
-import SellOutlinedIcon from '@mui/icons-material/SellOutlined'; // Categorias
-import SwapHorizOutlinedIcon from '@mui/icons-material/SwapHorizOutlined'; // Transações
-// import BarChartOutlinedIcon from '@mui/icons-material/BarChartOutlined'; // Relatórios
-// import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined'; // Configurações
+import GridViewIcon from '@mui/icons-material/GridView';
+import AccountBalanceWalletOutlinedIcon from '@mui/icons-material/AccountBalanceWalletOutlined';
+import SellOutlinedIcon from '@mui/icons-material/SellOutlined';
+import SwapHorizOutlinedIcon from '@mui/icons-material/SwapHorizOutlined';
+// import BarChartOutlinedIcon from '@mui/icons-material/BarChartOutlined';
+// import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import { UserProfileCard } from './MenuProfileButton';
 import LogoButton from './LogoBtn';
 
@@ -55,7 +54,7 @@ export const MenuContent: React.FC<MenuContentProps> = ({
         display: 'flex',
         flexDirection: 'column',
         height: '100%',
-        bgcolor: '#0B0F17', // Dark background matching design
+        bgcolor: '#0B0F17',
         color: '#94A3B8',
         width: 260,
         borderRight: '1px solid',

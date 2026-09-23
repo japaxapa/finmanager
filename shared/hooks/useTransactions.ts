@@ -54,7 +54,6 @@ export function useCreateTransaction() {
   });
 }
 
-// Type for the mutation payload (ID + update fields)
 export type UpdateTransactionPayload = {
   id: string;
 } & Omit<TransactionUpdate, 'id' | 'created_at' | 'user_id' | 'updated_at'>;
@@ -66,7 +65,6 @@ export function useUpdateTransaction() {
   return useMutation({
     mutationFn: ({ id, ...payload }: UpdateTransactionPayload) => updateTransaction(id, payload),
     onSuccess: () => {
-      // Invalidate all transaction lists and summaries to trigger automatic re-fetch
       queryClient.invalidateQueries({ queryKey: transactionKeys.all });
     },
   });

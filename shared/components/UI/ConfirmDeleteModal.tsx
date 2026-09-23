@@ -20,10 +20,6 @@ export interface ConfirmDeleteModalProps {
   confirmLabel?: string;
   cancelLabel?: string;
   onClose: () => void;
-  /**
-   * Async callback executed on confirm.
-   * The modal handles its own loading state while this promise resolves.
-   */
   onConfirm: () => Promise<void> | void;
 }
 
@@ -41,7 +37,7 @@ export const ConfirmDeleteModal: React.FC<ConfirmDeleteModalProps> = ({
   const handleConfirm = async () => {
     try {
       await onConfirm();
-      onClose(); // Automatically close on successful execution
+      onClose();
     } catch (error) {
       console.error('Failed to complete delete action:', error);
     }

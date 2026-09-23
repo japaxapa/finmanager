@@ -7,8 +7,8 @@ export function sanitizeAccount(acc: AccountWithBalance) {
     name: acc.name ?? '',
     type: acc.type ?? '',
     user_id: acc.user_id ?? '',
-    color: acc.color ?? undefined, // Converts null -> undefined
-    icon: acc.icon ?? undefined, // Converts null -> undefined
+    color: acc.color ?? undefined,
+    icon: acc.icon ?? undefined,
     created_at: acc.created_at ?? undefined,
     initial_balance: acc.initial_balance,
     current_balance: acc.current_balance,
@@ -17,12 +17,12 @@ export function sanitizeAccount(acc: AccountWithBalance) {
 
 const now = new Date();
 
-// First day of current month: e.g., "2026-07-01"
+// First day of current month
 export function getStartDate() {
   return new Date(now.getFullYear(), now.getMonth(), 1).toISOString().split('T')[0];
 }
 
-// Last day of current month: e.g., "2026-07-31"
+// Last day of current month
 export function getEndDate() {
   return new Date(now.getFullYear(), now.getMonth() + 1, 0).toISOString().split('T')[0];
 }

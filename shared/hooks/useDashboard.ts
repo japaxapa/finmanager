@@ -22,13 +22,12 @@ export function useUserMonthlySummary(
   return useQuery({
     queryKey: accountMonthlySummaryKeys.detail(userId, year, month),
     queryFn: () => fetchUserMonthlySummary(userId, year, month),
-    enabled: !!userId, // Prevent request until userId is available
-    staleTime: 1000 * 60 * 5, // Cache for 5 minutes
+    enabled: !!userId,
+    staleTime: 1000 * 60 * 5,
     ...options,
   });
 }
 
-// Type matching the RPC function's returned table structure
 export interface AccountMetricsHistory {
   metric_year: number;
   metric_month: number;
@@ -44,7 +43,6 @@ interface UseUserAccountMetricsHistoryProps {
   options?: Omit<UseQueryOptions<AccountMetricsHistory[], Error>, 'queryKey' | 'queryFn'>;
 }
 
-// Query key factory for clean caching & invalidation
 export const accountMetricsKeys = {
   all: ['account_metrics'] as const,
   history: (userId: string, monthsLimit: number) =>

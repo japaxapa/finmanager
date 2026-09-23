@@ -5,8 +5,6 @@ import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
 import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
 import CodeIcon from '@mui/icons-material/Code';
 
-// 1. Mock Data based on the screenshot
-// This replicates the specific values, colors, and order from the image.
 export const mockCategories = [
   {
     categoryName: 'Moradia',
@@ -14,15 +12,15 @@ export const mockCategories = [
     currentSpending: 3200,
     budgetGoal: 3500,
     icon: <HomeIcon />,
-    color: '#38bdf8', // Light Blue
+    color: '#38bdf8',
   },
   {
     categoryName: 'Alimentação',
     transactionCount: 34,
-    currentSpending: 2100, // This is over budget
+    currentSpending: 2100,
     budgetGoal: 2000,
     icon: <FastfoodIcon />,
-    color: '#ef4444', // Red
+    color: '#ef4444',
   },
   {
     categoryName: 'Transporte',
@@ -30,7 +28,7 @@ export const mockCategories = [
     currentSpending: 1400,
     budgetGoal: 1800,
     icon: <DirectionsCarIcon />,
-    color: '#0284c7', // Darker Blue
+    color: '#0284c7',
   },
   {
     categoryName: 'Lazer',
@@ -38,7 +36,7 @@ export const mockCategories = [
     currentSpending: 1420,
     budgetGoal: 1500,
     icon: <SportsEsportsIcon />,
-    color: '#fbbf24', // Yellow
+    color: '#fbbf24',
   },
   {
     categoryName: 'Compras',
@@ -46,7 +44,7 @@ export const mockCategories = [
     currentSpending: 820,
     budgetGoal: 1200,
     icon: <ShoppingBagIcon />,
-    color: '#a78bfa', // Purple
+    color: '#a78bfa',
   },
   {
     categoryName: 'Software',
@@ -54,6 +52,6 @@ export const mockCategories = [
     currentSpending: 340,
     budgetGoal: 500,
     icon: <CodeIcon />,
-    color: '#06b6d4', // Teal
+    color: '#06b6d4',
   },
 ];

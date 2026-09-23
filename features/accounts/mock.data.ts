@@ -1,4 +1,3 @@
-// Sample Data matching screenshot
 export const ACCOUNTS_DATA = [
   {
     id: '1',
@@ -6,7 +5,7 @@ export const ACCOUNTS_DATA = [
     institutionName: 'Nubank',
     type: 'Corrente',
     current_balance: 'R$ 18.420,00',
-    color: '#22c55e', // Green balance
+    color: '#22c55e',
     logo: 'bank',
   },
   {
@@ -15,7 +14,7 @@ export const ACCOUNTS_DATA = [
     institutionName: 'Inter',
     type: 'Crédito',
     current_balance: '- R$ 3.180,50',
-    color: '#ef4444', // Red balance
+    color: '#ef4444',
     logo: 'card',
   },
   {

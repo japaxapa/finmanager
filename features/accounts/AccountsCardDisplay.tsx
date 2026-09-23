@@ -4,15 +4,11 @@ import { formatCurrency } from '@/shared/lib/utils';
 import AccountCard from './AccountCard';
 
 export interface AccountsCardDisplayProps {
-  /** Array of accounts from Supabase */
   accounts: AccountWithBalance[];
-  /** Optional click handler callback for individual cards */
   onAccountClick?: (account: AccountWithBalance) => void;
-  /** Responsive grid sizes (defaults to 12 cols on xs, 6 cols on md) */
   gridSize?: GridProps['size'];
 }
 
-/** Helper function moved outside component render loop (SRP) */
 function mapperAccountToCardProps(account: AccountWithBalance) {
   const balance = account.current_balance;
   const formattedBalance = typeof balance === 'number' ? formatCurrency(balance) : (balance ?? '');

@@ -68,20 +68,17 @@ export function TransactionForm({
     },
   });
 
-  // 1. Watch values using a single object destructure
   const {
     type: selectedType,
     account_id: selectedAccountId,
     category_id: selectedCategoryId,
   } = useWatch({ control });
 
-  // 2. Fetch queries from hooks
   const { data: categoriesData, isLoading: isLoadingCategories } = useCategories(
     selectedType as Enums<'category_type'>,
   );
   const { data: accountsData, isLoading: isLoadingAccounts } = useAccounts();
 
-  // 3. Memoized Accounts List (filters out nulls once per data update)
   const validAccounts = useMemo(() => {
     return (
       accountsData?.filter((acc): acc is AccountWithBalance & { id: string; name: string } =>
@@ -90,12 +87,10 @@ export function TransactionForm({
     );
   }, [accountsData]);
 
-  // 4. Memoized Categories List
   const validCategories = useMemo(() => {
     return categoriesData?.data ?? [];
   }, [categoriesData?.data]);
 
-  // 5. Sync account selection once accounts finish loading
   useEffect(() => {
     if (validAccounts.length > 0 && !selectedAccountId) {
       const hasDefault = defaultAccountId && validAccounts.some((a) => a.id === defaultAccountId);
@@ -105,7 +100,6 @@ export function TransactionForm({
     }
   }, [validAccounts, selectedAccountId, defaultAccountId, setValue]);
 
-  // 6. Reset category selection when type changes or current category isn't in fetched list
   useEffect(() => {
     if (validCategories.length > 0 && selectedCategoryId) {
       const categoryExists = validCategories.some((c) => c.id === selectedCategoryId);

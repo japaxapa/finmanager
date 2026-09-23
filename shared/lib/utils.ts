@@ -22,5 +22,5 @@ export function debounce<T extends (...args: any[]) => void>(
 export function formatCurrency(value: number, currency: string = 'BRL'): string {
   return new Intl.NumberFormat('pt-BR', { style: 'currency', currency })
     .format(value)
-    .replace(/^R\$\s?/, 'R$ '); // Garante o espaço padrão visto no print
+    .replace(/^R\$\s?/, 'R$ ');
 }

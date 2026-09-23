@@ -12,15 +12,10 @@ import {
 import FinIcon from '@/shared/components/UI/FinIcons';
 
 export interface MetricCardProps {
-  /** Label/title for the metric (e.g., "Total Revenue") */
   title: string;
-  /** Primary metric value or amount (e.g., "$45,231.89" or "1,245") */
   amount: string | number;
-  /** Numeric percentage to display in the badge (e.g., 12.4 for +12.4%) */
   trendPercentage?: number;
-  /** Direction of the trend */
   trendType?: 'up' | 'down';
-  /** Optional icon element to show in the header */
   icon?: string;
 }
 

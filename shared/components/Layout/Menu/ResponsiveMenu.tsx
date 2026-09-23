@@ -25,7 +25,7 @@ export const ResponsiveMenu: React.FC<MenuProps> = ({
         variant="temporary"
         open={mobileOpen}
         onClose={onMobileClose}
-        ModalProps={{ keepMounted: true }} // Better mobile performance
+        ModalProps={{ keepMounted: true }}
         sx={{
           '& .MuiDrawer-paper': {
             width: DRAWER_WIDTH,

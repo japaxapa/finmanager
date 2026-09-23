@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { Stack, Avatar, Box, Typography, Menu, MenuItem, ButtonBase } from '@mui/material';
-import LogoutIcon from '@mui/icons-material/Logout'; // Optional MUI Icon
+import LogoutIcon from '@mui/icons-material/Logout';
 import { createClient } from '@/shared/lib/supabase/client';
 import { useRouter } from 'next/navigation';
 import { useUserProfile } from '@/shared/hooks/useUser';
@@ -48,7 +48,7 @@ export function UserProfileCard() {
             p: 1,
             transition: 'background-color 0.2s',
             '&:hover': {
-              bgcolor: 'rgba(255, 255, 255, 0.05)', // Subtle hover highlight
+              bgcolor: 'rgba(255, 255, 255, 0.05)',
             },
           }}
         >
@@ -79,7 +79,7 @@ export function UserProfileCard() {
           p: 1,
           transition: 'background-color 0.2s',
           '&:hover': {
-            bgcolor: 'rgba(255, 255, 255, 0.05)', // Subtle hover highlight
+            bgcolor: 'rgba(255, 255, 255, 0.05)',
           },
         }}
       >
@@ -132,7 +132,7 @@ export function UserProfileCard() {
         sx={{
           '.MuiMenu-paper': {
             mt: -1,
-            bgcolor: '#1E293B', // Dark theme matching your dark avatar
+            bgcolor: '#1E293B',
             color: '#FFFFFF',
             border: '1px solid #334155',
             boxShadow: '0 4px 20px rgba(0,0,0,0.5)',

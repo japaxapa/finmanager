@@ -7,10 +7,8 @@ export default function DashboardMetrics({ accMetric }: { accMetric?: AccountMet
     /* 2. Top Summary Metric Cards */
   }
 
-  // Calculate dynamic savings value if data is present
   const netSavings = accMetric ? accMetric.monthly_income - accMetric.monthly_expense : 0;
 
-  // Map configuration titles to their respective keys/values from accMetric
   const METRIC_CONFIG = [
     {
       title: 'SALDO TOTAL',

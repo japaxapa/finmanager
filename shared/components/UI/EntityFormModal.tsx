@@ -14,10 +14,8 @@ interface EntityFormModalProps<T> {
   buttonLabel?: string;
   entityToEdit?: T;
   FormComponent: ComponentType<FormComponentProps<T>>;
-  // Controlled props
   open?: boolean;
   handleClose?: () => void;
-  // Custom trigger button if needed
   renderTrigger?: (openModal: () => void) => ReactNode;
 }
 

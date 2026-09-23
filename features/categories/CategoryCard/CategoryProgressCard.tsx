@@ -20,17 +20,15 @@ export const CategoryProgressCard: React.FC<CategoryProgressCardProps> = ({
   onEdit,
   onDelete,
 }) => {
-  // Verificação de estouro de orçamento
   const isOverBudget = category.budget_goal ? currentSpending > category.budget_goal : false;
 
-  // Cálculo do progresso (limitado a 100% para a barra visual)
   const progressPercentage = category.budget_goal
     ? Math.min((currentSpending / category.budget_goal) * 100, 100)
     : 0;
 
   // Definição das cores dinâmicas
   const effectiveColor = isOverBudget ? 'error.main' : category.color;
-  // const progressColor = isOverBudget ? 'error' : 'primary'; // Usamos o color prop do LinearProgress ou customizamos
+  // const progressColor = isOverBudget ? 'error' : 'primary';
 
   const handleEdit = () => {
     onEdit(category);

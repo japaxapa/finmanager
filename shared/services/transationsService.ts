@@ -3,13 +3,6 @@ import { createClient } from '../lib/supabase/client';
 
 const supabase = createClient();
 
-// // Type-safe Inferred Return Type for getTransactions (includes nested category join)
-// const _transactionsWithCategoryQuery = supabase
-//   .from('transactions')
-//   .select('*, categories(id, name, slug)', { count: 'exact' });
-
-// export type TransactionWithCategory = QueryData<typeof _transactionsWithCategoryQuery>[number];
-
 // Query Parameters Type
 export interface GetTransactionsQueryParams {
   page?: number;

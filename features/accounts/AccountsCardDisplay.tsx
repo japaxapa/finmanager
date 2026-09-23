@@ -1,29 +1,51 @@
-import { Grid } from '@mui/material';
+import { Grid, GridProps } from '@mui/material';
 import { AccountWithBalance } from '@/shared/lib/supabase/types/types';
 import { formatCurrency } from '@/shared/lib/utils';
 import AccountCard from './AccountCard';
 
-interface IAccountsCardDisplay {
+export interface AccountsCardDisplayProps {
+  /** Array of accounts from Supabase */
   accounts: AccountWithBalance[];
+  /** Optional click handler callback for individual cards */
+  onAccountClick?: (account: AccountWithBalance) => void;
+  /** Responsive grid sizes (defaults to 12 cols on xs, 6 cols on md) */
+  gridSize?: GridProps['size'];
 }
 
-export default function AccountsCardDisplay({ accounts }: IAccountsCardDisplay) {
+/** Helper function moved outside component render loop (SRP) */
+function mapperAccountToCardProps(account: AccountWithBalance) {
+  const balance = account.current_balance;
+  const formattedBalance = typeof balance === 'number' ? formatCurrency(balance) : (balance ?? '');
+
+  return {
+    id: account.id,
+    description: account.type ?? '',
+    accountName: account.name ?? '',
+    color: account.color ?? undefined,
+    icon: account.icon ?? undefined,
+    formattedBalance,
+  };
+}
+
+export default function AccountsCardDisplay({
+  accounts,
+  onAccountClick,
+  gridSize = { xs: 12, md: 6 },
+}: AccountsCardDisplayProps) {
   return (
     <Grid container spacing={3} sx={{ mb: 5 }}>
       {accounts.map((account) => {
-        const formattedBalance =
-          typeof account.current_balance === 'number'
-            ? formatCurrency(account.current_balance)
-            : account.current_balance;
+        const cardProps = mapperAccountToCardProps(account);
+
         return (
-          <Grid size={{ xs: 12, md: 6 }} key={account.id}>
+          <Grid size={gridSize} key={cardProps.id}>
             <AccountCard
-              description={account.type ?? ''}
-              accountName={account.name ?? ''}
-              color={account.color ?? undefined}
-              icon={account.icon ?? undefined}
-              formattedBalance={formattedBalance ?? ''}
-              // onClick={() => console.log('Card clicked', account.id)}
+              description={cardProps.description}
+              accountName={cardProps.accountName}
+              color={cardProps.color}
+              icon={cardProps.icon}
+              formattedBalance={cardProps.formattedBalance}
+              onClick={onAccountClick ? () => onAccountClick(account) : undefined}
             />
           </Grid>
         );

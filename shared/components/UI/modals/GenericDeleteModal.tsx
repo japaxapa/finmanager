@@ -1,6 +1,6 @@
 'use client';
 
-import { ConfirmDeleteModal } from '@/shared/components/UI/ConfirmDeleteModal';
+import { ConfirmDeleteModal } from '@/shared/components/UI/modals/ConfirmDeleteModal';
 
 interface IGenericDeleteModalProps<T> {
   item?: T | null;

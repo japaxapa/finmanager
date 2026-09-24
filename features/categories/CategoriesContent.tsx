@@ -5,10 +5,10 @@ import CategoryProgressCard from './CategoryCard/CategoryProgressCard';
 import { useCategories, useDeleteCategory } from '@/shared/hooks/useCategories';
 import { useState } from 'react';
 import { Enums } from '@/shared/lib/supabase/types/supabase';
-import { FilterButton } from '@/shared/components/UI/FilterButton';
+import { FilterButton } from '@/shared/components/UI/buttons/FilterButton';
 import { Category, CategoryUpdate } from '@/shared/lib/supabase/types/types';
 import CategoryModal from './CategoryModal';
-import GenericDeleteModal from '@/shared/components/UI/GenericDeleteModal';
+import GenericDeleteModal from '@/shared/components/UI/modals/GenericDeleteModal';
 
 export default function CategoriesContet() {
   {

@@ -6,7 +6,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { NavBreadcrumbs } from './NavBreadcrumbs';
 // import { NavSearchBar } from './NavSearchBar';
 // import { NotificationsButton } from './NotificationsButton';
-import { ThemeToggleButton } from '../../UI/ThemeToggleButton';
+import { ThemeToggleButton } from '../../UI/buttons/ThemeToggleButton';
 
 export interface AppNavBarProps {
   breadcrumbs?: string[];

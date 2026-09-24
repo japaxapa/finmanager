@@ -2,7 +2,7 @@
 
 import { Card, CardContent, Stack, Box, Typography, Button, List } from '@mui/material';
 import { useTransactions } from '@/shared/hooks/useTransactions';
-import { TransactionList } from '@/shared/components/TransactionListManager';
+import { TransactionList } from '@/features/transactions/TransactionListManager';
 import Link from 'next/link';
 
 export default function DashboardTransactions() {

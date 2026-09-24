@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { Box, Typography, IconButton, FormHelperText } from '@mui/material';
 import { Control, Controller, FieldErrors, Path, FieldValues } from 'react-hook-form';
-import { finIcons, FinIconType } from './FinIcons.data';
+import { finIcons, FinIconType } from '../FinIcons.data';
 
 interface IconPickerProps<TFieldValues extends FieldValues> {
   name: Path<TFieldValues>;

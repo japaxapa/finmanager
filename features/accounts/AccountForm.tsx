@@ -5,8 +5,8 @@ import { Box, Button, MenuItem, TextField, InputAdornment } from '@mui/material'
 
 import { useCreateAccount, useUpdateAccount } from '@/shared/hooks/useAccounts';
 import { FinIconType } from '@/shared/components/UI/FinIcons.data';
-import { ColorPicker } from '@/shared/components/UI/ColorPicker';
-import { IconPicker } from '@/shared/components/UI/IconPicker';
+import { ColorPicker } from '@/shared/components/UI/pickers/ColorPicker';
+import { IconPicker } from '@/shared/components/UI/pickers/IconPicker';
 import { Account, AccountUpdate } from '@/shared/lib/supabase/types/types';
 import { ACCOUNT_TYPES } from '@/shared/constants/forms.constants';
 

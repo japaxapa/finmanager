@@ -1,4 +1,4 @@
-import { EntityFormModal } from '@/shared/components/UI/EntityFormModal';
+import { EntityFormModal } from '@/shared/components/UI/modals/EntityFormModal';
 import { TransactionUpdate } from '@/shared/lib/supabase/types/types';
 import { TransactionForm } from './TransactionForm';
 

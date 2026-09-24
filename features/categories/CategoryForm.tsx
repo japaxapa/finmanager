@@ -7,8 +7,8 @@ import { useCreateCategory, useUpdateCategory } from '@/shared/hooks/useCategori
 import { FinIconType } from '@/shared/components/UI/FinIcons.data';
 import { Enums } from '@/shared/lib/supabase/types/supabase';
 import { CategoryUpdate } from '@/shared/lib/supabase/types/types';
-import { ColorPicker } from '@/shared/components/UI/ColorPicker';
-import { IconPicker } from '@/shared/components/UI/IconPicker';
+import { ColorPicker } from '@/shared/components/UI/pickers/ColorPicker';
+import { IconPicker } from '@/shared/components/UI/pickers/IconPicker';
 
 type Inputs = {
   name: string;

@@ -11,6 +11,7 @@ import {
   Typography,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
+
 export interface ConfirmDeleteModalProps {
   open: boolean;
   isLoading?: boolean;
@@ -29,21 +30,16 @@ export const ConfirmDeleteModal: React.FC<ConfirmDeleteModalProps> = ({
   title = 'Deletar item?',
   itemName,
   message,
-  confirmLabel = 'Delete',
-  cancelLabel = 'Cancel',
+  confirmLabel = 'Deletar',
+  cancelLabel = 'Cancelar',
   onClose,
   onConfirm,
 }) => {
   const handleConfirm = async () => {
-    try {
-      await onConfirm();
-      onClose();
-    } catch (error) {
-      console.error('Failed to complete delete action:', error);
-    }
+    await onConfirm();
+    onClose();
   };
 
-  // Build fallback message if custom message isn't provided
   const defaultMessage = (
     <>
       Você tem certeza que quer deletar {itemName ? <strong>"{itemName}"</strong> : 'este item'}?
@@ -84,7 +80,7 @@ export const ConfirmDeleteModal: React.FC<ConfirmDeleteModalProps> = ({
 
       <DialogContent>
         <DialogContentText id="delete-dialog-description">
-          {message || defaultMessage}
+          {message ?? defaultMessage}
         </DialogContentText>
       </DialogContent>
 
@@ -100,7 +96,7 @@ export const ConfirmDeleteModal: React.FC<ConfirmDeleteModalProps> = ({
           disableElevation
           startIcon={isLoading ? <CircularProgress size={16} color="inherit" /> : null}
         >
-          {isLoading ? 'Deleting...' : confirmLabel}
+          {isLoading ? 'Deletando...' : confirmLabel}
         </Button>
       </DialogActions>
     </Dialog>

@@ -1,5 +1,5 @@
 import React from 'react';
-import PageBackground from '@/shared/components/PageBackground';
+import PageBackground from '@/shared/components/Layout/PageBackground';
 import CategoryHeader from '@/features/categories/CategoryHeader';
 import CategoriesContent from '@/features/categories/CategoriesContent';
 

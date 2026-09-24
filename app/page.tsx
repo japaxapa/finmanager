@@ -5,7 +5,7 @@ import HomeObjective from '@/features/home/Objective';
 import HomeArchitecture from '@/features/home/Architecture';
 import HomeStack from '@/features/home/stack/Stack';
 import HomeCapacities from '@/features/home/Capacities';
-import Footer from '@/shared/components/Footer';
+import Footer from '@/shared/components/Layout/Footer';
 import { Box } from '@mui/material';
 
 export default function Home() {

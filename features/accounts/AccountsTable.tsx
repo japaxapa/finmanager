@@ -17,7 +17,7 @@ import { useState } from 'react';
 import AccountModal from './AccountModal';
 import { sanitizeAccount } from '@/shared/utils/utils';
 import { useDeleteAccount } from '@/shared/hooks/useAccounts';
-import GenericDeleteModal from '@/shared/components/UI/GenericDeleteModal';
+import GenericDeleteModal from '@/shared/components/UI/modals/GenericDeleteModal';
 
 interface IAccountsTable {
   accounts: AccountWithBalance[];

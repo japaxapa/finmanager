@@ -1,4 +1,4 @@
-import { EntityFormModal } from '@/shared/components/UI/EntityFormModal';
+import { EntityFormModal } from '@/shared/components/UI/modals/EntityFormModal';
 import { CategoryForm } from './CategoryForm';
 import { CategoryUpdate } from '@/shared/lib/supabase/types/types';
 

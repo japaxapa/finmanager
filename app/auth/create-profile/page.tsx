@@ -1,5 +1,5 @@
 import CreateProfileForm from '@/features/auth/CreateProfile';
-import PageContainer from '@/shared/components/PageContainer';
+import PageContainer from '@/shared/components/Layout/PageContainer';
 
 export default function CreateProfile() {
   return (

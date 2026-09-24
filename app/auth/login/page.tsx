@@ -1,5 +1,5 @@
 import LoginForm from '@/features/auth/LoginForm';
-import PageContainer from '@/shared/components/PageContainer';
+import PageContainer from '@/shared/components/Layout/PageContainer';
 
 export default function Page() {
   return (

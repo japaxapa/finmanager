@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, ReactNode, ComponentType } from 'react';
-import { FormModal } from '@/shared/components/UI/FormModal';
-import CreateButton from '@/shared/components/UI/CreateButton';
+import CreateButton from '@/shared/components/UI/buttons/CreateButton';
+import { FormModal } from './FormModal';
 
 export interface FormComponentProps<T> {
   handleClose: () => void;

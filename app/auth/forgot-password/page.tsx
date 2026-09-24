@@ -1,5 +1,5 @@
 import { ForgotPasswordForm } from '@/features/auth/ForgotPasswordForm';
-import PageContainer from '@/shared/components/PageContainer';
+import PageContainer from '@/shared/components/Layout/PageContainer';
 
 export default function Page() {
   return (

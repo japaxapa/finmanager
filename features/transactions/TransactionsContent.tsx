@@ -18,7 +18,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import { useTransactions } from '@/shared/hooks/useTransactions';
 import { debounce } from '@/shared/lib/utils';
 import { useCategories } from '@/shared/hooks/useCategories';
-import { TransactionList } from '@/shared/components/TransactionListManager';
+import { TransactionList } from '@/features/transactions/TransactionListManager';
 
 export default function TransactionsContent() {
   {

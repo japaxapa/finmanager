@@ -4,8 +4,8 @@ import React from 'react';
 import { Box, Typography, Chip, Stack } from '@mui/material';
 import NorthEastIcon from '@mui/icons-material/NorthEast';
 import SouthEastIcon from '@mui/icons-material/SouthEast';
-import { OptionsMenu } from './UI/OptionsMenu';
-import { Transaction, TransactionUpdate } from '../lib/supabase/types/types';
+import { OptionsMenu } from '@/shared/components/UI/OptionsMenu';
+import { Transaction, TransactionUpdate } from '@/shared/lib/supabase/types/types';
 
 export interface TransactionRowProps {
   category: string;

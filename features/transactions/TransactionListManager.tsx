@@ -2,11 +2,11 @@
 
 import { useState } from 'react';
 import { Box, Typography } from '@mui/material';
-import { TransactionRow } from '@/shared/components/TransactionRow';
 import { Transaction, TransactionUpdate } from '@/shared/lib/supabase/types/types';
 import { useDeleteTransaction } from '@/shared/hooks/useTransactions';
-import GenericDeleteModal from '@/shared/components/UI/GenericDeleteModal';
 import TransactionModal from '@/features/transactions/TransactionModal';
+import { TransactionRow } from './TransactionRow';
+import GenericDeleteModal from '@/shared/components/UI/modals/GenericDeleteModal';
 
 export interface TransactionWithCategory extends Transaction {
   categories?: {

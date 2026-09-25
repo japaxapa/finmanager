@@ -1,30 +1,11 @@
 'use client';
 
-import { useMemo, useEffect } from 'react';
-import { useForm, SubmitHandler, Controller, useWatch } from 'react-hook-form';
+import { Controller } from 'react-hook-form';
 import { Box, Button, MenuItem, TextField, InputAdornment } from '@mui/material';
-import { useCreateTransaction, useUpdateTransaction } from '@/shared/hooks/useTransactions';
-import {
-  AccountWithBalance,
-  Category,
-  TransactionInsert,
-  TransactionUpdate,
-} from '@/shared/lib/supabase/types/types';
-import { useCategories } from '@/shared/hooks/useCategories';
-import { Enums } from '@/shared/lib/supabase/types/supabase';
-import { useAccounts } from '@/shared/hooks/useAccounts';
+import { Category, TransactionUpdate } from '@/shared/lib/supabase/types/types';
+import { useTransactionForm } from '@/shared/hooks/useTransactionForm';
 
-type Inputs = {
-  title: string;
-  amount: number;
-  type: string;
-  transaction_date: string;
-  category_id: string;
-  account_id: string;
-  description: string;
-};
-
-interface ITransactionFormProps {
+export interface ITransactionFormProps {
   handleClose: () => void;
   entityToEdit?: TransactionUpdate | null;
   defaultAccountId?: string;
@@ -41,96 +22,24 @@ export function TransactionForm({
   defaultAccountId = '',
   ...props
 }: ITransactionFormProps) {
-  const isEditing = Boolean(entityToEdit?.id);
-
-  const { mutate: createTransaction, isPending: isCreating } = useCreateTransaction();
-  const { mutate: updateTransaction, isPending: isUpdating } = useUpdateTransaction();
-  const isSubmitting = isCreating || isUpdating;
+  const {
+    form,
+    isEditing,
+    isSubmitting,
+    isLoadingAccounts,
+    isLoadingCategories,
+    validAccounts,
+    validCategories,
+    handleReset,
+    onSubmit,
+  } = useTransactionForm({ entityToEdit, defaultAccountId, handleClose });
 
   const {
     register,
     handleSubmit,
-    reset,
-    setValue,
     control,
     formState: { errors },
-  } = useForm<Inputs>({
-    defaultValues: {
-      title: entityToEdit?.title ?? '',
-      amount: entityToEdit?.amount ?? 0,
-      type: entityToEdit?.type ?? 'expense',
-      transaction_date: entityToEdit?.transaction_date
-        ? new Date(entityToEdit.transaction_date).toISOString().split('T')[0]
-        : new Date().toISOString().split('T')[0],
-      category_id: entityToEdit?.category_id ?? '',
-      account_id: entityToEdit?.account_id ?? defaultAccountId,
-      description: entityToEdit?.description ?? '',
-    },
-  });
-
-  const {
-    type: selectedType,
-    account_id: selectedAccountId,
-    category_id: selectedCategoryId,
-  } = useWatch({ control });
-
-  const { data: categoriesData, isLoading: isLoadingCategories } = useCategories(
-    selectedType as Enums<'category_type'>,
-  );
-  const { data: accountsData, isLoading: isLoadingAccounts } = useAccounts();
-
-  const validAccounts = useMemo(() => {
-    return (
-      accountsData?.filter((acc): acc is AccountWithBalance & { id: string; name: string } =>
-        Boolean(acc.id && acc.name),
-      ) ?? []
-    );
-  }, [accountsData]);
-
-  const validCategories = useMemo(() => {
-    return categoriesData?.data ?? [];
-  }, [categoriesData?.data]);
-
-  useEffect(() => {
-    if (validAccounts.length > 0 && !selectedAccountId) {
-      const hasDefault = defaultAccountId && validAccounts.some((a) => a.id === defaultAccountId);
-      const fallbackAccount = hasDefault ? defaultAccountId : validAccounts[0].id;
-
-      setValue('account_id', fallbackAccount);
-    }
-  }, [validAccounts, selectedAccountId, defaultAccountId, setValue]);
-
-  useEffect(() => {
-    if (validCategories.length > 0 && selectedCategoryId) {
-      const categoryExists = validCategories.some((c) => c.id === selectedCategoryId);
-      if (!categoryExists) {
-        setValue('category_id', '');
-      }
-    }
-  }, [validCategories, selectedCategoryId, setValue]);
-
-  const handleReset = () => {
-    reset();
-    handleClose();
-  };
-
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
-    const payload: TransactionInsert = {
-      ...data,
-      amount: Number(data.amount),
-      category_id: data.category_id || null,
-      description: data.description || null,
-      user_id: '',
-    };
-
-    const options = { onSuccess: handleReset };
-
-    if (isEditing && entityToEdit?.id) {
-      updateTransaction({ id: entityToEdit.id, ...payload }, options);
-    } else {
-      createTransaction(payload, options);
-    }
-  };
+  } = form;
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>

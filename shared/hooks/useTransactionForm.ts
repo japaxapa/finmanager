@@ -6,23 +6,15 @@ import { useAccounts } from './useAccounts';
 import { useCategories } from './useCategories';
 import { useEffect, useMemo } from 'react';
 import { AccountWithBalance, TransactionInsert } from '../lib/supabase/types/types';
-
-type Inputs = {
-  title: string;
-  amount: number;
-  type: string;
-  transaction_date: string;
-  category_id: string;
-  account_id: string;
-  description: string;
-};
+import { zodResolver } from '@hookform/resolvers/zod';
+import { transactionSchema } from '../schemas/transactions.schema';
 
 /**
  * Hook to manage the Data logic from TransactionForm
  */
 export function useTransactionForm({
   entityToEdit,
-  defaultAccountId = '',
+  defaultAccountId,
   handleClose,
 }: ITransactionFormProps) {
   const isEditing = Boolean(entityToEdit?.id);
@@ -31,11 +23,12 @@ export function useTransactionForm({
   const { mutate: updateTransaction, isPending: isUpdating } = useUpdateTransaction();
   const isSubmitting = isCreating || isUpdating;
 
-  const form = useForm<Inputs>({
+  const form = useForm({
+    resolver: zodResolver(transactionSchema),
     defaultValues: {
       title: entityToEdit?.title ?? '',
       amount: entityToEdit?.amount ?? 0,
-      type: entityToEdit?.type ?? 'expense',
+      type: (entityToEdit?.type as 'income' | 'expense') ?? 'expense',
       transaction_date: entityToEdit?.transaction_date
         ? new Date(entityToEdit.transaction_date).toISOString().split('T')[0]
         : new Date().toISOString().split('T')[0],
@@ -93,7 +86,7 @@ export function useTransactionForm({
     handleClose();
   };
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
+  const onSubmit: SubmitHandler<Omit<TransactionInsert, 'user_id'>> = (data) => {
     const payload: TransactionInsert = {
       ...data,
       amount: Number(data.amount),

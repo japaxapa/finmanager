@@ -28,3 +28,5 @@ export const transactionSchema = z.object({
     .optional()
     .nullable(),
 });
+
+export type TransactionFormInputs = z.infer<typeof transactionSchema>;

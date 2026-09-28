@@ -19,7 +19,7 @@ const TRANSACTION_TYPES = [
 export function TransactionForm({
   handleClose,
   entityToEdit,
-  defaultAccountId = '',
+  defaultAccountId,
   ...props
 }: ITransactionFormProps) {
   const {
@@ -51,15 +51,14 @@ export function TransactionForm({
           placeholder="Ex: Compras do mês"
           disabled={isSubmitting}
           error={Boolean(errors.title)}
-          helperText={errors.title ? 'Título é obrigatório' : ''}
-          {...register('title', { required: true })}
+          helperText={errors.title?.message}
+          {...register('title')}
         />
 
         {/* Transaction Type */}
         <Controller
           name="type"
           control={control}
-          rules={{ required: 'Tipo é obrigatório' }}
           render={({ field }) => (
             <TextField
               {...field}
@@ -93,10 +92,8 @@ export function TransactionForm({
             htmlInput: { step: '0.01' },
           }}
           error={Boolean(errors.amount)}
-          helperText={errors.amount ? errors.amount.message || 'Insira um valor válido' : ''}
+          helperText={errors.amount?.message}
           {...register('amount', {
-            required: true,
-            min: { value: 0.01, message: 'O valor deve ser maior que 0' },
             valueAsNumber: true,
           })}
         />
@@ -112,14 +109,13 @@ export function TransactionForm({
           }}
           error={Boolean(errors.transaction_date)}
           helperText={errors.transaction_date ? 'A data é obrigatória' : ''}
-          {...register('transaction_date', { required: true })}
+          {...register('transaction_date')}
         />
 
         {/* Account Selection */}
         <Controller
           name="account_id"
           control={control}
-          rules={{ required: 'Conta é obrigatória' }}
           render={({ field }) => {
             const hasMatchingOption = validAccounts.some((acc) => acc.id === field.value);
             const selectValue = hasMatchingOption ? field.value : '';
@@ -167,6 +163,8 @@ export function TransactionForm({
                 label="Categoria"
                 disabled={isSubmitting || isLoadingCategories}
                 value={selectValue}
+                error={Boolean(errors.category_id)}
+                helperText={errors.category_id?.message}
               >
                 <MenuItem value="">
                   <em>Sem Categoria</em>
@@ -204,7 +202,7 @@ export function TransactionForm({
             Cancelar
           </Button>
           <Button variant="contained" type="submit" disabled={isSubmitting}>
-            {isSubmitting ? 'Salvando...' : isEditing ? 'Atualizar' : 'Salvar'}
+            {isSubmitting ? 'Salvando...' : isEditing ? 'Atualizando...' : 'Salvar'}
           </Button>
         </Box>
       </Box>

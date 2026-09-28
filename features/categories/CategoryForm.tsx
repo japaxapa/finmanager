@@ -1,24 +1,13 @@
 'use client';
 
-import { useForm, SubmitHandler, Controller } from 'react-hook-form';
+import { Controller } from 'react-hook-form';
 import { Box, Button, MenuItem, TextField, InputAdornment } from '@mui/material';
-
-import { useCreateCategory, useUpdateCategory } from '@/shared/hooks/useCategories';
-import { FinIconType } from '@/shared/components/UI/FinIcons.data';
-import { Enums } from '@/shared/lib/supabase/types/supabase';
 import { CategoryUpdate } from '@/shared/lib/supabase/types/types';
 import { ColorPicker } from '@/shared/components/UI/pickers/ColorPicker';
 import { IconPicker } from '@/shared/components/UI/pickers/IconPicker';
+import { useCategoryForm } from '@/shared/hooks/useCategoryForm';
 
-type Inputs = {
-  name: string;
-  type: Enums<'category_type'>;
-  icon: FinIconType;
-  color: string;
-  budget_goal: number;
-};
-
-interface ICategoryFormProps {
+export interface ICategoryFormProps {
   handleClose: () => void;
   entityToEdit?: CategoryUpdate;
 }
@@ -29,59 +18,17 @@ const CATEGORY_TYPES = [
 ];
 
 export function CategoryForm({ handleClose, entityToEdit, ...props }: ICategoryFormProps) {
-  const isEditing = Boolean(entityToEdit);
-
-  const { mutate: createCategory, isPending: isCreating } = useCreateCategory();
-  const { mutate: updateCategory, isPending: isUpdating } = useUpdateCategory();
-  const isSubmitting = isCreating || isUpdating;
+  const { form, isEditing, isSubmitting, handleReset, onSubmit, setValue } = useCategoryForm({
+    handleClose,
+    entityToEdit,
+  });
 
   const {
     register,
     handleSubmit,
-    reset,
     control,
-    setValue,
     formState: { errors },
-  } = useForm<Inputs>({
-    defaultValues: entityToEdit
-      ? {
-          name: entityToEdit.name ?? '',
-          type: (entityToEdit.type as Enums<'category_type'>) ?? 'expense',
-          icon: (entityToEdit.icon as FinIconType) ?? 'category',
-          color: entityToEdit.color ?? '#0088FE',
-          budget_goal: entityToEdit.budget_goal ?? 0,
-        }
-      : {
-          name: '',
-          type: 'expense',
-          icon: 'category',
-          color: '#0088FE',
-          budget_goal: 0,
-        },
-  });
-
-  const handleReset = () => {
-    reset();
-    handleClose();
-  };
-
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
-    const payload = {
-      ...data,
-      budget_goal: Number(data.budget_goal),
-      user_id: '',
-    };
-
-    const options = {
-      onSuccess: handleReset,
-    };
-
-    if (isEditing && entityToEdit?.id) {
-      updateCategory({ id: entityToEdit.id, ...payload }, options);
-    } else {
-      createCategory(payload, options);
-    }
-  };
+  } = form;
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>

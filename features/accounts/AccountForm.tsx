@@ -6,7 +6,7 @@ import { ColorPicker } from '@/shared/components/UI/pickers/ColorPicker';
 import { IconPicker } from '@/shared/components/UI/pickers/IconPicker';
 import { Account, AccountUpdate } from '@/shared/lib/supabase/types/types';
 import { ACCOUNT_TYPES } from '@/shared/constants/forms.constants';
-import { useAccountForm } from '@/shared/hooks/useAcc';
+import { useAccountForm } from '@/shared/hooks/useAccountForm';
 
 export interface IAccountFormProps {
   handleClose: () => void;

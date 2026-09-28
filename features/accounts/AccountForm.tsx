@@ -1,81 +1,30 @@
 'use client';
 
-import { useForm, SubmitHandler, Controller } from 'react-hook-form';
+import { Controller } from 'react-hook-form';
 import { Box, Button, MenuItem, TextField, InputAdornment } from '@mui/material';
-
-import { useCreateAccount, useUpdateAccount } from '@/shared/hooks/useAccounts';
-import { FinIconType } from '@/shared/components/UI/FinIcons.data';
 import { ColorPicker } from '@/shared/components/UI/pickers/ColorPicker';
 import { IconPicker } from '@/shared/components/UI/pickers/IconPicker';
 import { Account, AccountUpdate } from '@/shared/lib/supabase/types/types';
 import { ACCOUNT_TYPES } from '@/shared/constants/forms.constants';
+import { useAccountForm } from '@/shared/hooks/useAccountForm';
 
-type Inputs = {
-  name: string;
-  type: string;
-  initial_balance: number;
-  icon: FinIconType;
-  color: string;
-};
-
-interface IAccountFormProps {
+export interface IAccountFormProps {
   handleClose: () => void;
   entityToEdit?: Account | AccountUpdate;
 }
 
 export function AccountForm({ handleClose, entityToEdit, ...props }: IAccountFormProps) {
-  const isEditing = Boolean(entityToEdit);
-
-  const { mutate: createAccount, isPending: isCreating } = useCreateAccount();
-  const { mutate: updateAccount, isPending: isUpdating } = useUpdateAccount();
-  const isSubmitting = isCreating || isUpdating;
+  const { form, isEditing, isSubmitting, handleReset, onSubmit, setValue } = useAccountForm({
+    handleClose,
+    entityToEdit,
+  });
 
   const {
     register,
     handleSubmit,
-    reset,
     control,
-    setValue,
     formState: { errors },
-  } = useForm<Inputs>({
-    defaultValues: entityToEdit
-      ? {
-          name: entityToEdit.name ?? '',
-          type: entityToEdit.type ?? 'Corrente',
-          initial_balance: entityToEdit.initial_balance ?? 0,
-          icon: (entityToEdit.icon as FinIconType) ?? 'wallet',
-          color: entityToEdit.color ?? '#0088FE',
-        }
-      : {
-          name: '',
-          type: 'Corrente',
-          initial_balance: 0,
-          icon: 'wallet',
-          color: '#0088FE',
-        },
-  });
-
-  const handleReset = () => {
-    reset();
-    handleClose();
-  };
-
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
-    const payload = {
-      ...data,
-      initial_balance: Number(data.initial_balance),
-    };
-
-    const options = {
-      onSuccess: handleReset,
-    };
-
-    if (isEditing && entityToEdit?.id) {
-      updateAccount({ id: entityToEdit.id, ...payload }, options);
-    } else {
-      createAccount(payload, options);
-    }
-  };
+  } = form;
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>

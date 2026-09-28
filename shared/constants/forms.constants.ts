@@ -16,3 +16,5 @@ export const ACCOUNT_TYPES = [
   { value: 'Investimento', label: 'Investimento' },
   { value: 'Dinheiro', label: 'Carteira / Dinheiro' },
 ];
+
+export const ACCOUNT_TYPE_VALUES = ACCOUNT_TYPES.map((acc) => acc.value);

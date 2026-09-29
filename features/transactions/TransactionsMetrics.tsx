@@ -8,9 +8,6 @@ import { useMemo } from 'react';
 import { useTransactionSummary } from '@/shared/hooks/useTransactions';
 import { getStartDate } from '@/shared/utils/utils';
 
-// TODO check metrics cards
-// TODO make cards dynamically
-
 export default function TransactionsMetrics() {
   {
     /* Summary KPI Cards */
@@ -20,7 +17,6 @@ export default function TransactionsMetrics() {
   const startDate = getStartDate();
   const { data: summaryData } = useTransactionSummary(startDate);
 
-  // Totals calculated dynamically
   const { totalIncome, totalExpense, balance } = useMemo(() => {
     return {
       totalIncome: summaryData?.totalIncome ?? 0,

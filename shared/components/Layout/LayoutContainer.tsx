@@ -1,6 +1,6 @@
 'use client';
 
-import { Container, Stack, useColorScheme, useMediaQuery, useTheme } from '@mui/material';
+import { Container, Stack, useMediaQuery, useTheme } from '@mui/material';
 import ResponsiveMenu from './Menu/ResponsiveMenu';
 import { AppNavBar } from './Searchbar/AppNavBar';
 import { useState } from 'react';
@@ -11,8 +11,6 @@ export default function LayoutContainer({ children }: { children: React.ReactNod
   const router = useRouter();
   const pathName = usePathname();
   const breadcrumbs = ['finmanager', ...pathName.split('/').filter(Boolean)];
-
-  const { mode, setMode } = useColorScheme();
 
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [isMenuOpen, setMenuOpen] = useState<boolean>(false);
@@ -25,14 +23,6 @@ export default function LayoutContainer({ children }: { children: React.ReactNod
     setMenuOpen(false);
   };
 
-  const onToggleTheme = () => {
-    if (mode === 'light') {
-      setMode('dark');
-    } else {
-      setMode('light');
-    }
-  };
-
   const onNavigate = (path: string, replace?: boolean) => {
     if (replace) {
       router.replace(path);
@@ -40,12 +30,6 @@ export default function LayoutContainer({ children }: { children: React.ReactNod
       router.push(path);
     }
   };
-
-  if (!mode) {
-    // TODO check if needs loading
-    // TODO implement light mode
-    return null;
-  }
 
   return (
     <Container
@@ -61,12 +45,7 @@ export default function LayoutContainer({ children }: { children: React.ReactNod
       />
       <Stack sx={{ flexGrow: 1, minHeight: '100%' }} spacing={2}>
         {/* TODO search bar logic */}
-        <AppNavBar
-          onMobileMenuOpen={onMobileMenuOpen}
-          mode={mode}
-          onToggleTheme={onToggleTheme}
-          breadcrumbs={breadcrumbs}
-        />
+        <AppNavBar onMobileMenuOpen={onMobileMenuOpen} breadcrumbs={breadcrumbs} />
 
         {children}
       </Stack>

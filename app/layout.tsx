@@ -4,6 +4,7 @@ import { AppProviders } from '@/providers/AppProvider';
 // Supports weights 100-900
 import '@fontsource-variable/dm-sans/opsz-italic.css';
 import LayoutContainer from '@/shared/components/Layout/LayoutContainer';
+import { InitColorSchemeScript } from '@mui/material';
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -18,6 +19,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`h-full antialiased`}>
       <body className="min-h-full flex flex-col">
+        <InitColorSchemeScript attribute="class" />
         <AppProviders>
           <LayoutContainer>{children}</LayoutContainer>
         </AppProviders>

@@ -10,9 +10,7 @@ import { ThemeToggleButton } from '../../UI/buttons/ThemeToggleButton';
 
 export interface AppNavBarProps {
   breadcrumbs?: string[];
-  mode?: 'light' | 'dark' | 'system';
   unreadNotifications?: number;
-  onToggleTheme?: () => void;
   onNotificationClick?: () => void;
   onSearchChange?: (value: string) => void;
   onMobileMenuOpen?: () => void;
@@ -21,8 +19,6 @@ export interface AppNavBarProps {
 
 export const AppNavBar: React.FC<AppNavBarProps> = ({
   breadcrumbs = [],
-  mode = 'dark',
-  onToggleTheme,
   onMobileMenuOpen,
   actionsSlot,
   // unreadNotifications = 0,
@@ -83,7 +79,7 @@ export const AppNavBar: React.FC<AppNavBarProps> = ({
                 unreadCount={unreadNotifications}
                 onClick={onNotificationClick}
               /> */}
-              <ThemeToggleButton mode={mode} onToggle={onToggleTheme} />
+              <ThemeToggleButton />
             </>
           )}
         </Stack>

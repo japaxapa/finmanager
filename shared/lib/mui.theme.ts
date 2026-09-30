@@ -2,35 +2,46 @@ import { createTheme } from '@mui/material/styles';
 
 export const globalTheme = createTheme({
   colorSchemes: {
-    dark: true,
+    light: {
+      palette: {
+        background: {
+          default: '#F8FAFC',
+          paper: '#FFFFFF',
+        },
+        divider: '#E2E8F0',
+        text: {
+          primary: '#0F172A',
+          secondary: '#64748B',
+        },
+      },
+    },
+    dark: {
+      palette: {
+        background: {
+          default: '#0B101B',
+          paper: '#121826',
+        },
+        divider: '#1E293B',
+        text: {
+          primary: '#FFFFFF',
+          secondary: '#94A3B8',
+        },
+      },
+    },
   },
   typography: {
     fontFamily: "'DM Sans Variable', sans-serif",
   },
-  palette: {
-    mode: 'dark',
-    background: {
-      default: '#0B101B',
-      paper: '#121826',
-    },
-    divider: '#1E293B',
-    text: {
-      primary: '#FFFFFF',
-      secondary: '#94A3B8',
-    },
-  },
   components: {
-    // Remove shadow and add sleek dark border to Cards
     MuiCard: {
       styleOverrides: {
-        root: {
+        root: ({ theme }) => ({
           boxShadow: 'none',
-          border: '1px solid #1E293B',
-          backgroundImage: 'none', // Prevents default MUI elevation overlay
-        },
+          border: `1px solid ${theme.palette.divider}`,
+          backgroundImage: 'none',
+        }),
       },
     },
-    // Modernize Buttons by removing default elevation
     MuiButton: {
       styleOverrides: {
         root: {
@@ -39,34 +50,31 @@ export const globalTheme = createTheme({
             boxShadow: 'none',
           },
         },
-        contained: {
-          border: '1px solid #1E293B',
-        },
-        outlined: {
-          borderColor: '#1E293B',
-        },
+        contained: ({ theme }) => ({
+          border: `1px solid ${theme.palette.divider}`,
+        }),
+        outlined: ({ theme }) => ({
+          borderColor: theme.palette.divider,
+        }),
       },
     },
-    // Style Chips with subtle borders
     MuiChip: {
       styleOverrides: {
-        root: {
-          border: '1px solid #1E293B',
-        },
+        root: ({ theme }) => ({
+          border: `1px solid ${theme.palette.divider}`,
+        }),
       },
     },
-    // Customize Table Cells to match the border palette
     MuiTableCell: {
       styleOverrides: {
-        root: {
-          borderBottom: '1px solid #1E293B',
-        },
+        root: ({ theme }) => ({
+          borderBottom: `1px solid ${theme.palette.divider}`,
+        }),
       },
     },
     MuiStack: {
       styleOverrides: {
         root: {
-          // Replicates the target selector globally
           '& > :not(style) ~ :not(style)': {
             marginTop: '0px',
           },

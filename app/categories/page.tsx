@@ -5,7 +5,7 @@ import CategoriesContent from '@/features/categories/CategoriesContent';
 
 export const CategoriesPage: React.FC = () => {
   return (
-    <PageBackground sx={{ px: 4, py: 5 }}>
+    <PageBackground sx={{ px: 4, py: 5, bgcolor: 'background.default' }}>
       <CategoryHeader />
       <CategoriesContent />
     </PageBackground>

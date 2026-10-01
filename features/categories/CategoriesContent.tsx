@@ -45,7 +45,10 @@ export default function CategoriesContet() {
   return (
     <>
       <Box sx={{ mb: 5 }}>
-        <ButtonGroup variant="outlined" sx={{ borderRadius: '8px', display: 'flex' }}>
+        <ButtonGroup
+          variant="outlined"
+          sx={{ borderRadius: '8px', borderColor: 'divider', display: 'flex' }}
+        >
           <FilterButton selected={activeTab == 'expense'} onClick={() => handleClick('expense')}>
             Despesas
           </FilterButton>

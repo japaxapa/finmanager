@@ -8,7 +8,7 @@ export default function CategoryHeader() {
 
   return (
     <Stack direction="row" sx={{ mb: 4, alignItems: 'center', justifyContent: 'space-between' }}>
-      <Typography variant="h4" sx={{ color: '#f3f4f6', fontWeight: 700 }}>
+      <Typography variant="h4" sx={{ color: 'text.primary', fontWeight: 700 }}>
         Categorias
       </Typography>
 

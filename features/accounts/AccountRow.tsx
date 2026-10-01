@@ -27,7 +27,7 @@ export default function AccountRow({
       key={account.id}
       sx={{
         '&:last-child td, &:last-child th': { border: 0 },
-        '& td, & th': { borderBottom: '1px solid #1F2937', color: '#E2E8F0' },
+        '& td, & th': { borderBottom: '1px solid', borderColor: 'divider', color: 'text.primary' },
       }}
     >
       <TableCell component="th" scope="row" sx={{ fontWeight: 600 }}>
@@ -39,8 +39,8 @@ export default function AccountRow({
           label={account.type}
           size="small"
           sx={{
-            bgcolor: '#1E293B',
-            color: '#94A3B8',
+            bgcolor: 'background.default',
+            color: 'text.secondary',
             borderRadius: 1.5,
             fontSize: '0.75rem',
           }}
@@ -50,7 +50,10 @@ export default function AccountRow({
         align="right"
         sx={{
           fontWeight: 600,
-          color: account.current_balance && account.current_balance < 0 ? '#EF4444' : '#FFFFFF',
+          color:
+            account.current_balance && account.current_balance < 0
+              ? 'text.secondary'
+              : 'text.primary',
         }}
       >
         {account.current_balance}

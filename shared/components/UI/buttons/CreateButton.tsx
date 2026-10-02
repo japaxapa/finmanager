@@ -13,14 +13,16 @@ export default function CreateButton({ title, handleClick }: ICreateButton) {
       startIcon={<AddIcon />}
       onClick={handleClick}
       sx={{
-        bgcolor: '#2563EB',
-        '&:hover': { bgcolor: '#1D4ED8' },
+        bgcolor: (theme) => (theme.palette.mode === 'dark' ? 'primary.dark' : 'primary.main'),
+        '&:hover': {
+          bgcolor: (theme) => (theme.palette.mode === 'dark' ? 'primary.main' : 'primary.light'),
+        },
         textTransform: 'none',
         borderRadius: 2,
         px: 2.5,
         py: 1,
         fontWeight: 600,
-        color: 'text.primary',
+        color: 'primary.contrast',
       }}
     >
       {title}

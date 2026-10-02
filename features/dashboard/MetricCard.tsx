@@ -34,7 +34,7 @@ export const MetricCard: React.FC<MetricCardProps> = ({
   //   .replace('.', ',')}%`;
 
   return (
-    <Card variant="outlined" sx={{ borderRadius: 2, height: '100%' }}>
+    <Card variant="outlined" sx={{ borderRadius: 2, height: '100%', borderColor: 'divider' }}>
       <CardContent sx={{ p: 2.5, '&:last-child': { pb: 2.5 } }}>
         {/* Header: Title & Optional Icon */}
         <Stack

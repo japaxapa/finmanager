@@ -32,16 +32,17 @@ export default function TransactionsMetrics() {
           elevation={0}
           sx={{
             p: 2.5,
-            backgroundColor: '#111827',
+            backgroundColor: 'background.paper',
             borderRadius: '12px',
-            border: '1px solid rgba(255, 255, 255, 0.05)',
+            border: '1px solid',
+            borderColor: 'divider',
           }}
         >
           <Stack direction="row" sx={{ justifyContent: 'space-between', aligntItems: 'center' }}>
             <Typography
               variant="caption"
               sx={{
-                color: '#64748B',
+                color: 'text.secondary',
                 textTransform: 'uppercase',
                 letterSpacing: '0.05em',
                 fontWeight: 600,
@@ -62,16 +63,17 @@ export default function TransactionsMetrics() {
           elevation={0}
           sx={{
             p: 2.5,
-            backgroundColor: '#111827',
+            backgroundColor: 'background.paper',
             borderRadius: '12px',
-            border: '1px solid rgba(255, 255, 255, 0.05)',
+            border: '1px solid',
+            borderColor: 'divider',
           }}
         >
           <Stack direction="row" sx={{ justifyContent: 'space-between', alignItems: 'center' }}>
             <Typography
               variant="caption"
               sx={{
-                color: '#64748B',
+                color: 'text.secondary',
                 textTransform: 'uppercase',
                 letterSpacing: '0.05em',
                 fontWeight: 600,
@@ -95,16 +97,17 @@ export default function TransactionsMetrics() {
           elevation={0}
           sx={{
             p: 2.5,
-            backgroundColor: '#111827',
+            backgroundColor: 'background.paper',
             borderRadius: '12px',
-            border: '1px solid rgba(255, 255, 255, 0.05)',
+            border: '1px solid',
+            borderColor: 'divider',
           }}
         >
           <Stack direction="row" sx={{ justifyContent: 'space-between', alignItems: 'center' }}>
             <Typography
               variant="caption"
               sx={{
-                color: '#64748B',
+                color: 'text.secondary',
                 textTransform: 'uppercase',
                 letterSpacing: '0.05em',
                 fontWeight: 600,

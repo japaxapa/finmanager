@@ -8,10 +8,15 @@ export const globalTheme = createTheme({
           default: '#F8FAFC',
           paper: '#FFFFFF',
         },
-        divider: '#E2E8F0',
+        divider: '#cfd8e3',
         text: {
           primary: '#0F172A',
           secondary: '#64748B',
+        },
+        action: {
+          hover: 'rgba(15, 23, 42, 0.30)',
+          hoverOpacity: 0.04,
+          selected: 'rgba(15, 23, 42, 0.50)',
         },
       },
     },
@@ -21,10 +26,15 @@ export const globalTheme = createTheme({
           default: '#0B101B',
           paper: '#121826',
         },
-        divider: '#1E293B',
+        divider: '#253247',
         text: {
           primary: '#FFFFFF',
           secondary: '#94A3B8',
+        },
+        action: {
+          hover: 'rgba(255, 255, 255, 0.25)',
+          hoverOpacity: 0.08,
+          selected: 'rgba(255, 255, 255, 0.40)',
         },
       },
     },

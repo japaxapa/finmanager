@@ -9,9 +9,9 @@ export const TransactionsPage: React.FC = () => {
   return (
     <Box
       sx={{
-        backgroundColor: '#0B0F17', // Dark navy dark background matching finmanager
+        backgroundColor: 'background.default',
         minHeight: '100vh',
-        color: '#F8FAFC',
+        color: 'text,primary',
         p: { xs: 2, md: 4 },
         fontFamily: 'sans-serif',
       }}

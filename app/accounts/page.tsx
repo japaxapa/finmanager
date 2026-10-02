@@ -6,7 +6,7 @@ import AccountsMetrics from '@/features/accounts/AccountsMetrics';
 
 export const AccountsPage: React.FC = () => {
   return (
-    <Box sx={{ bgcolor: '#0B0F17', color: '#E2E8F0', minHeight: '100vh', p: 4 }}>
+    <Box sx={{ bgcolor: 'background.default', color: 'text.primary', minHeight: '100vh', p: 4 }}>
       <AccountHeader />
       <AccountsMetrics />
       <AccountsContent />

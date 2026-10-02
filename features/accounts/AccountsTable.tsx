@@ -55,17 +55,17 @@ export default function AccountsTable({ accounts = [] }: IAccountsTable) {
     <Paper
       elevation={0}
       sx={{
-        bgcolor: '#111827',
-        border: '1px solid #1F2937',
+        border: '1px solid',
+        borderColor: 'divider',
         borderRadius: 3,
         p: 3,
       }}
     >
       <Box sx={{ mb: 3 }}>
-        <Typography variant="h6" color="#ffffff" sx={{ fontWeight: 700 }}>
+        <Typography variant="h6" sx={{ fontWeight: 700, color: 'text.primary' }}>
           Detalhes das contas
         </Typography>
-        <Typography variant="body2" color="#9CA3AF">
+        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
           Visão geral de todas as suas contas
         </Typography>
       </Box>
@@ -75,7 +75,12 @@ export default function AccountsTable({ accounts = [] }: IAccountsTable) {
           <TableHead>
             <TableRow
               sx={{
-                '& th': { borderBottom: '1px solid #1F2937', color: '#9CA3AF', fontWeight: 600 },
+                '& th': {
+                  borderBottom: '1px solid',
+                  borderColor: 'divider',
+                  color: 'text.secondary',
+                  fontWeight: 600,
+                },
               }}
             >
               <TableCell>Conta</TableCell>

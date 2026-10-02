@@ -15,7 +15,7 @@ export default function DashboardTransactions() {
   });
 
   return (
-    <Card variant="outlined" sx={{ borderRadius: 3 }}>
+    <Card variant="outlined" sx={{ borderRadius: 3, borderColor: 'divider' }}>
       <CardContent sx={{ p: 3 }}>
         <Stack
           direction="row"

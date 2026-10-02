@@ -18,7 +18,7 @@ export default function ChartCard({
 }: ChartCardProps) {
   return (
     <Grid size={gridSize}>
-      <Card variant="outlined" sx={{ borderRadius: 3, height: '100%' }}>
+      <Card variant="outlined" sx={{ borderRadius: 3, height: '100%', borderColor: 'divider' }}>
         <CardContent sx={{ p: 3, display: 'flex', flexDirection: 'column', height: '100%' }}>
           <Box sx={{ mb: subtitle ? 2 : 3 }}>
             <Typography variant="h6" sx={{ fontWeight: 700 }}>

@@ -27,14 +27,15 @@ export default function AccountsMetrics() {
           elevation={0}
           sx={{
             p: 3,
-            bgcolor: '#111827',
-            border: '1px solid #1F2937',
+            bgcolor: 'background.paper',
+            border: `1px solid`,
+            borderColor: 'divider',
             borderRadius: 3,
           }}
         >
           <Typography
             variant="caption"
-            sx={{ color: '#9CA3AF', letterSpacing: 1, fontWeight: 600 }}
+            sx={{ color: 'text.secondary', letterSpacing: 1, fontWeight: 600 }}
           >
             PATRIMÔNIO LÍQUIDO
           </Typography>
@@ -49,18 +50,19 @@ export default function AccountsMetrics() {
           elevation={0}
           sx={{
             p: 3,
-            bgcolor: '#111827',
-            border: '1px solid #1F2937',
+            bgcolor: 'background.paper',
+            border: `1px solid`,
+            borderColor: 'divider',
             borderRadius: 3,
           }}
         >
           <Typography
             variant="caption"
-            sx={{ color: '#9CA3AF', letterSpacing: 1, fontWeight: 600 }}
+            sx={{ color: 'text.secondary', letterSpacing: 1, fontWeight: 600 }}
           >
             CONTAS ATIVAS
           </Typography>
-          <Typography variant="h4" sx={{ color: '#FFFFFF', mt: 1.5, fontWeight: 700 }}>
+          <Typography variant="h4" sx={{ color: 'text.primary', mt: 1.5, fontWeight: 700 }}>
             {isLoading ? 'Carregando...' : summaryData?.active_accounts}
           </Typography>
         </Paper>
@@ -71,17 +73,19 @@ export default function AccountsMetrics() {
           elevation={0}
           sx={{
             p: 3,
-            bgcolor: '#111827',
-            border: '1px solid #1F2937',
+            bgcolor: 'background.paper',
+            border: `1px solid`,
+            borderColor: 'divider',
             borderRadius: 3,
           }}
         >
           <Typography
             variant="caption"
-            sx={{ color: '#9CA3AF', letterSpacing: 1, fontWeight: 600 }}
+            sx={{ color: 'text.secondary', letterSpacing: 1, fontWeight: 600 }}
           >
             FATURA EM ABERTO
           </Typography>
+          {/* TODO refactor this color #EF4444 */}
           <Typography variant="h4" sx={{ color: '#EF4444', mt: 1.5, fontWeight: 700 }}>
             {isLoading ? 'Carregando...' : formattedOpenInvoice}
           </Typography>

@@ -64,9 +64,10 @@ export default function TransactionsContent() {
     <Paper
       elevation={0}
       sx={{
-        backgroundColor: '#111827',
+        backgroundColor: 'background.paper',
         borderRadius: '12px',
-        border: '1px solid rgba(255, 255, 255, 0.05)',
+        border: '1px solid',
+        borderColor: 'divider',
         overflow: 'hidden',
       }}
     >
@@ -74,7 +75,8 @@ export default function TransactionsContent() {
       <Box
         sx={{
           p: 2,
-          borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
+          borderBottom: '1px solid',
+          borderColor: 'divider',
           display: 'flex',
           flexDirection: { xs: 'column', md: 'row' },
           justifyContent: 'space-between',
@@ -92,11 +94,11 @@ export default function TransactionsContent() {
             '& .MuiTab-root': {
               textTransform: 'none',
               minHeight: '36px',
-              color: '#64748B',
+              color: 'text.secondary',
               fontSize: '0.875rem',
               fontWeight: 600,
               px: 2,
-              '&.Mui-selected': { color: '#F8FAFC' },
+              '&.Mui-selected': { color: 'text.primary' },
             },
           }}
         >
@@ -116,7 +118,7 @@ export default function TransactionsContent() {
               input: {
                 startAdornment: (
                   <InputAdornment position="start">
-                    <SearchIcon sx={{ color: '#64748B', fontSize: 20 }} />
+                    <SearchIcon sx={{ color: 'text.secondary', fontSize: 20 }} />
                   </InputAdornment>
                 ),
               },
@@ -124,12 +126,12 @@ export default function TransactionsContent() {
             sx={{
               width: { xs: '100%', sm: '220px' },
               '& .MuiOutlinedInput-root': {
-                backgroundColor: '#0B0F17',
+                backgroundColor: 'background.default',
                 borderRadius: '8px',
-                color: '#F8FAFC',
+                color: 'text.primary',
                 fontSize: '0.875rem',
-                '& fieldset': { borderColor: 'rgba(255, 255, 255, 0.08)' },
-                '&:hover fieldset': { borderColor: 'rgba(255, 255, 255, 0.15)' },
+                '& fieldset': { borderColor: 'divider' },
+                '&:hover fieldset': { borderColor: 'action.hover' },
               },
             }}
           />
@@ -141,15 +143,15 @@ export default function TransactionsContent() {
             displayEmpty
             sx={{
               width: { xs: '100%', sm: '160px' },
-              backgroundColor: '#0B0F17',
+              backgroundColor: 'background.default',
               borderRadius: '8px',
-              color: '#F8FAFC',
+              color: 'text.primary',
               fontSize: '0.875rem',
               '& .MuiOutlinedInput-notchedOutline': {
-                borderColor: 'rgba(255, 255, 255, 0.08)',
+                borderColor: 'divider',
               },
               '&:hover .MuiOutlinedInput-notchedOutline': {
-                borderColor: 'rgba(255, 255, 255, 0.15)',
+                borderColor: 'action.hover',
               },
               '& .MuiSvgIcon-root': { color: '#64748B' },
             }}

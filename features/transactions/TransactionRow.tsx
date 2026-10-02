@@ -59,7 +59,7 @@ export const TransactionRow: React.FC<TransactionRowProps> = ({
           borderBottom: 'none',
         },
         '&:hover': {
-          backgroundColor: 'rgba(255, 255, 255, 0.02)',
+          backgroundColor: 'background.default',
         },
       }}
     >
@@ -90,7 +90,7 @@ export const TransactionRow: React.FC<TransactionRowProps> = ({
             variant="body2"
             sx={{
               fontWeight: 600,
-              color: '#F8FAFC',
+              color: 'text.primary',
               fontSize: '0.925rem',
               lineHeight: 1.2,
             }}
@@ -100,7 +100,7 @@ export const TransactionRow: React.FC<TransactionRowProps> = ({
           <Typography
             variant="caption"
             sx={{
-              color: '#64748B',
+              color: 'text.secondary',
               fontSize: '0.75rem',
               fontWeight: 500,
             }}

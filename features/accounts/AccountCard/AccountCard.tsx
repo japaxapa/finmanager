@@ -19,6 +19,7 @@ export const AccountCard: React.FC<AccountCardProps> = ({
         height: '100%',
         cursor: onClick ? 'pointer' : 'default',
         transition: 'all 0.2s ease-in-out',
+        borderColor: 'divider',
         '&:hover': onClick
           ? {
               boxShadow: 3,

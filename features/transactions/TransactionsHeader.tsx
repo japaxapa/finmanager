@@ -23,7 +23,7 @@ export default function TransactionsHeader() {
         >
           Transações
         </Typography>
-        <Typography variant="body2" sx={{ color: '#64748B', mt: 0.5 }}>
+        <Typography variant="body2" sx={{ color: 'text.secondary', mt: 0.5 }}>
           Histórico detalhado e movimentações da sua conta
         </Typography>
       </Box>
@@ -33,13 +33,14 @@ export default function TransactionsHeader() {
           variant="outlined"
           startIcon={<DownloadIcon />}
           sx={{
-            borderColor: 'rgba(255, 255, 255, 0.1)',
-            color: '#94A3B8',
+            borderColor: 'divider',
+            color: 'text.secondary',
             textTransform: 'none',
             borderRadius: '8px',
             '&:hover': {
-              borderColor: 'rgba(255, 255, 255, 0.2)',
-              backgroundColor: 'rgba(255, 255, 255, 0.03)',
+              color: 'text.primary',
+              borderColor: 'action.hover',
+              backgroundColor: 'background.paper',
             },
           }}
         >

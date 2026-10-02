@@ -1,36 +1,60 @@
 import { createTheme } from '@mui/material/styles';
 
 export const globalTheme = createTheme({
+  cssVariables: {
+    colorSchemeSelector: 'class',
+  },
   colorSchemes: {
-    dark: true,
+    light: {
+      palette: {
+        background: {
+          default: '#F8FAFC',
+          paper: '#FFFFFF',
+        },
+        divider: '#cfd8e3',
+        text: {
+          primary: '#0F172A',
+          secondary: '#64748B',
+        },
+        action: {
+          hover: 'rgba(15, 23, 42, 0.30)',
+          hoverOpacity: 0.04,
+          selected: 'rgba(15, 23, 42, 0.50)',
+        },
+      },
+    },
+    dark: {
+      palette: {
+        background: {
+          default: '#0B101B',
+          paper: '#121826',
+        },
+        divider: '#253247',
+        text: {
+          primary: '#FFFFFF',
+          secondary: '#94A3B8',
+        },
+        action: {
+          hover: 'rgba(255, 255, 255, 0.25)',
+          hoverOpacity: 0.08,
+          selected: 'rgba(255, 255, 255, 0.40)',
+        },
+      },
+    },
   },
   typography: {
     fontFamily: "'DM Sans Variable', sans-serif",
   },
-  palette: {
-    mode: 'dark',
-    background: {
-      default: '#0B101B',
-      paper: '#121826',
-    },
-    divider: '#1E293B',
-    text: {
-      primary: '#FFFFFF',
-      secondary: '#94A3B8',
-    },
-  },
   components: {
-    // Remove shadow and add sleek dark border to Cards
     MuiCard: {
       styleOverrides: {
-        root: {
+        root: ({ theme }) => ({
           boxShadow: 'none',
-          border: '1px solid #1E293B',
-          backgroundImage: 'none', // Prevents default MUI elevation overlay
-        },
+          border: `1px solid ${theme.palette.divider}`,
+          backgroundImage: 'none',
+        }),
       },
     },
-    // Modernize Buttons by removing default elevation
     MuiButton: {
       styleOverrides: {
         root: {
@@ -39,34 +63,31 @@ export const globalTheme = createTheme({
             boxShadow: 'none',
           },
         },
-        contained: {
-          border: '1px solid #1E293B',
-        },
-        outlined: {
-          borderColor: '#1E293B',
-        },
+        contained: ({ theme }) => ({
+          border: `1px solid ${theme.palette.divider}`,
+        }),
+        outlined: ({ theme }) => ({
+          borderColor: theme.palette.divider,
+        }),
       },
     },
-    // Style Chips with subtle borders
     MuiChip: {
       styleOverrides: {
-        root: {
-          border: '1px solid #1E293B',
-        },
+        root: ({ theme }) => ({
+          border: `1px solid ${theme.palette.divider}`,
+        }),
       },
     },
-    // Customize Table Cells to match the border palette
     MuiTableCell: {
       styleOverrides: {
-        root: {
-          borderBottom: '1px solid #1E293B',
-        },
+        root: ({ theme }) => ({
+          borderBottom: `1px solid ${theme.palette.divider}`,
+        }),
       },
     },
     MuiStack: {
       styleOverrides: {
         root: {
-          // Replicates the target selector globally
           '& > :not(style) ~ :not(style)': {
             marginTop: '0px',
           },

@@ -7,6 +7,7 @@ import { useDeleteTransaction } from '@/shared/hooks/useTransactions';
 import TransactionModal from '@/features/transactions/TransactionModal';
 import { TransactionRow } from './TransactionRow';
 import GenericDeleteModal from '@/shared/components/UI/modals/GenericDeleteModal';
+import toast from 'react-hot-toast';
 
 export interface TransactionWithCategory extends Transaction {
   categories?: {
@@ -46,8 +47,19 @@ export function TransactionList({
   };
 
   const handleConfirmDelete = async (tx: Transaction) => {
-    await deleteTransaction(tx.id);
-    handleCloseModals();
+    const toastId = toast.loading('Excluindo Transação...');
+
+    const options = {
+      onSuccess: () => {
+        toast.success('Transação exluída com sucesso!', { id: toastId });
+        handleCloseModals();
+      },
+      onError: (error: Error) => {
+        toast.error(error.message || 'Ocorreu um erro ao excluir.', { id: toastId });
+      },
+    };
+
+    await deleteTransaction(tx.id, options);
   };
 
   return (

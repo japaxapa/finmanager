@@ -26,6 +26,7 @@ export default function CreateProfileForm({
     setIsLoading(true);
     setError(null);
 
+    // TODO check if there is a need for toaster
     try {
       const { data, error } = await supabase.auth.getUser();
       if (error) throw error;

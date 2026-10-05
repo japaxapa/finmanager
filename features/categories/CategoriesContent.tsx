@@ -9,6 +9,7 @@ import { FilterButton } from '@/shared/components/UI/buttons/FilterButton';
 import { Category, CategoryUpdate } from '@/shared/lib/supabase/types/types';
 import CategoryModal from './CategoryModal';
 import GenericDeleteModal from '@/shared/components/UI/modals/GenericDeleteModal';
+import toast from 'react-hot-toast';
 
 export default function CategoriesContet() {
   {
@@ -40,6 +41,28 @@ export default function CategoriesContet() {
 
   const handleClick = (type: Enums<'category_type'>) => {
     setActiveTab(type);
+  };
+
+  const handleConfirmDelete = async (category: Category) => {
+    const toastId = toast.loading('Exluindo Categoria...');
+
+    const options = {
+      onSuccess: () => {
+        toast.success('Categoria exluída com sucesso!', { id: toastId });
+        handleClose();
+      },
+      onError: (error: Error) => {
+        toast.error(error.message || 'Ocorreu um erro ao excluir.', { id: toastId });
+      },
+    };
+
+    await deleteCategory(
+      {
+        name: category.name,
+        type: category.type as Enums<'category_type'>,
+      },
+      options,
+    );
   };
 
   return (
@@ -85,12 +108,7 @@ export default function CategoriesContet() {
         title="Deletar Categoria?"
         isLoading={isDeleting}
         handleClose={handleClose}
-        onConfirm={async (category) => {
-          await deleteCategory({
-            name: category.name,
-            type: category.type as Enums<'category_type'>,
-          });
-        }}
+        onConfirm={handleConfirmDelete}
       />
     </>
   );

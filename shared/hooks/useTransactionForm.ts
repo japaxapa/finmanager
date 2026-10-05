@@ -8,6 +8,7 @@ import { useEffect, useMemo } from 'react';
 import { AccountWithBalance, TransactionInsert } from '../lib/supabase/types/types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { transactionSchema } from '../schemas/transactions.schema';
+import toast from 'react-hot-toast';
 
 /**
  * Hook to manage the Data logic from TransactionForm
@@ -94,8 +95,22 @@ export function useTransactionForm({
       description: data.description || null,
       user_id: '',
     };
+    const isUpdate = isEditing && entityToEdit?.id;
 
-    const options = { onSuccess: handleReset };
+    const toastId = toast.loading(isUpdate ? 'Atualizando transação...' : 'Criando transação...');
+
+    const options = {
+      onSuccess: () => {
+        toast.success(
+          isUpdate ? 'Transação atualizada com sucesso!' : 'Transação criada com sucesso!',
+          { id: toastId },
+        );
+        handleReset();
+      },
+      onError: (error: Error) => {
+        toast.error(error.message || 'Ocorreu um erro ao salvar.', { id: toastId });
+      },
+    };
 
     if (isEditing && entityToEdit?.id) {
       updateTransaction({ id: entityToEdit.id, ...payload }, options);
@@ -103,6 +118,14 @@ export function useTransactionForm({
       createTransaction(payload, options);
     }
   };
+
+  const accountValue = validAccounts.some((acc) => acc.id === selectedAccountId)
+    ? selectedAccountId
+    : '';
+
+  const categoryValue = validCategories.some((cat) => cat.id === selectedCategoryId)
+    ? selectedCategoryId
+    : '';
 
   return {
     form,
@@ -114,5 +137,7 @@ export function useTransactionForm({
     validCategories,
     handleReset,
     onSubmit,
+    accountValue,
+    categoryValue,
   };
 }

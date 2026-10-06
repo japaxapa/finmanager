@@ -1,11 +1,20 @@
-import { IAccountFormProps } from '@/features/accounts/AccountForm';
 import { useForm, SubmitHandler } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import toast from 'react-hot-toast';
+
+import { IAccountFormProps } from '@/features/accounts/AccountForm';
 import { FinIconType } from '../components/UI/FinIcons.data';
 import { useCreateAccount, useUpdateAccount } from './useAccounts';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { accountSchema } from '../schemas/accounts.schema';
 import { AccountInsert } from '../lib/supabase/types/types';
-import toast from 'react-hot-toast';
+
+const DEFAULT_ACCOUNT_VALUES = {
+  name: '',
+  type: 'Corrente',
+  initial_balance: 0,
+  icon: 'wallet' as FinIconType,
+  color: '#0088FE',
+} as const;
 
 export function useAccountForm({ handleClose, entityToEdit }: IAccountFormProps) {
   const isEditing = Boolean(entityToEdit);
@@ -14,26 +23,22 @@ export function useAccountForm({ handleClose, entityToEdit }: IAccountFormProps)
   const { mutate: updateAccount, isPending: isUpdating } = useUpdateAccount();
   const isSubmitting = isCreating || isUpdating;
 
+  const defaultValues = entityToEdit
+    ? {
+        name: entityToEdit.name ?? DEFAULT_ACCOUNT_VALUES.name,
+        type: entityToEdit.type ?? DEFAULT_ACCOUNT_VALUES.type,
+        initial_balance: entityToEdit.initial_balance ?? DEFAULT_ACCOUNT_VALUES.initial_balance,
+        icon: (entityToEdit.icon as FinIconType) ?? DEFAULT_ACCOUNT_VALUES.icon,
+        color: entityToEdit.color ?? DEFAULT_ACCOUNT_VALUES.color,
+      }
+    : DEFAULT_ACCOUNT_VALUES;
+
   const form = useForm({
     resolver: zodResolver(accountSchema),
-    defaultValues: entityToEdit
-      ? {
-          name: entityToEdit.name ?? '',
-          type: entityToEdit.type ?? 'Corrente',
-          initial_balance: entityToEdit.initial_balance ?? 0,
-          icon: (entityToEdit.icon as FinIconType) ?? 'wallet',
-          color: entityToEdit.color ?? '#0088FE',
-        }
-      : {
-          name: '',
-          type: 'Corrente',
-          initial_balance: 0,
-          icon: 'wallet',
-          color: '#0088FE',
-        },
+    defaultValues,
   });
 
-  const { setValue, reset } = form;
+  const { reset } = form;
 
   const handleReset = () => {
     reset();
@@ -46,8 +51,7 @@ export function useAccountForm({ handleClose, entityToEdit }: IAccountFormProps)
       initial_balance: Number(data.initial_balance),
     };
 
-    const isUpdate = isEditing && entityToEdit?.id;
-
+    const isUpdate = isEditing && Boolean(entityToEdit?.id);
     const toastId = toast.loading(isUpdate ? 'Atualizando conta...' : 'Criando conta...');
 
     const options = {
@@ -61,7 +65,8 @@ export function useAccountForm({ handleClose, entityToEdit }: IAccountFormProps)
         toast.error(error.message || 'Ocorreu um erro ao salvar.', { id: toastId });
       },
     };
-    if (isEditing && entityToEdit?.id) {
+
+    if (isUpdate && entityToEdit?.id) {
       updateAccount({ id: entityToEdit.id, ...payload }, options);
     } else {
       createAccount(payload, options);
@@ -74,6 +79,5 @@ export function useAccountForm({ handleClose, entityToEdit }: IAccountFormProps)
     isSubmitting,
     handleReset,
     onSubmit,
-    setValue,
   };
 }

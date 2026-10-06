@@ -14,7 +14,7 @@ export interface IAccountFormProps {
 }
 
 export function AccountForm({ handleClose, entityToEdit, ...props }: IAccountFormProps) {
-  const { form, isEditing, isSubmitting, handleReset, onSubmit, setValue } = useAccountForm({
+  const { form, isEditing, isSubmitting, handleReset, onSubmit } = useAccountForm({
     handleClose,
     entityToEdit,
   });
@@ -23,6 +23,7 @@ export function AccountForm({ handleClose, entityToEdit, ...props }: IAccountFor
     register,
     handleSubmit,
     control,
+    setValue,
     formState: { errors },
   } = form;
 

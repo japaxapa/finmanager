@@ -18,6 +18,7 @@ import AccountModal from './AccountModal';
 import { sanitizeAccount } from '@/shared/utils/utils';
 import { useDeleteAccount } from '@/shared/hooks/useAccounts';
 import GenericDeleteModal from '@/shared/components/UI/modals/GenericDeleteModal';
+import toast from 'react-hot-toast';
 
 interface IAccountsTable {
   accounts: AccountWithBalance[];
@@ -49,6 +50,22 @@ export default function AccountsTable({ accounts = [] }: IAccountsTable) {
 
   const onDelete = (account: AccountWithBalance) => {
     setAccountToDelete(account);
+  };
+
+  const handleConfirmDelete = async (acc: AccountWithBalance) => {
+    const toastId = toast.loading('Exluindo Conta...');
+
+    const options = {
+      onSuccess: () => {
+        toast.success('Conta exluída com sucesso!', { id: toastId });
+        handleClose();
+      },
+      onError: (error: Error) => {
+        toast.error(error.message || 'Ocorreu um erro ao excluir.', { id: toastId });
+      },
+    };
+
+    if (acc.id) await deleteAccount(acc.id, options);
   };
 
   return (
@@ -110,9 +127,7 @@ export default function AccountsTable({ accounts = [] }: IAccountsTable) {
         title="Deletar Conta?"
         isLoading={isDeleting}
         handleClose={handleClose}
-        onConfirm={async (acc) => {
-          if (acc.id) await deleteAccount(acc.id);
-        }}
+        onConfirm={handleConfirmDelete}
       />
     </Paper>
   );

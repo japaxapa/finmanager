@@ -10,6 +10,7 @@ interface ICategoryChip {
   enableDelete: boolean;
 }
 
+// TODO check where it was supposed to be used
 export default function CategoryChip({ category, enableDelete }: ICategoryChip) {
   const { mutate, isPending } = useDeleteCategory();
 

@@ -5,6 +5,7 @@ import { useCreateCategory, useUpdateCategory } from './useCategories';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { categorySchema } from '../schemas/categories.schema';
 import { CategoryInsert } from '../lib/supabase/types/types';
+import toast from 'react-hot-toast';
 
 export function useCategoryForm({ handleClose, entityToEdit }: ICategoryFormProps) {
   const isEditing = Boolean(entityToEdit);
@@ -45,9 +46,21 @@ export function useCategoryForm({ handleClose, entityToEdit }: ICategoryFormProp
       budget_goal: Number(data.budget_goal),
       user_id: '',
     };
+    const isUpdate = isEditing && entityToEdit?.id;
+
+    const toastId = toast.loading(isUpdate ? 'Atualizando categoria...' : 'Criando categoria...');
 
     const options = {
-      onSuccess: handleReset,
+      onSuccess: () => {
+        toast.success(
+          isUpdate ? 'Categoria atualizada com sucesso!' : 'Categoria criada com sucesso!',
+          { id: toastId },
+        );
+        handleReset();
+      },
+      onError: (error: Error) => {
+        toast.error(error.message || 'Ocorreu um erro ao salvar.', { id: toastId });
+      },
     };
 
     if (isEditing && entityToEdit?.id) {

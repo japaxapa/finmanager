@@ -25,6 +25,7 @@ export default function LoginForm({ className, ...props }: React.ComponentPropsW
     setIsLoading(true);
     setError(null);
 
+    // TODO check if there is a need for toaster
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
         email,

@@ -16,6 +16,7 @@ const TRANSACTION_TYPES = [
   { value: 'expense', label: 'Despesa' },
 ] as const;
 
+// TODO separate the container from the presentation view
 export function TransactionForm({
   handleClose,
   entityToEdit,
@@ -32,6 +33,8 @@ export function TransactionForm({
     validCategories,
     handleReset,
     onSubmit,
+    accountValue,
+    categoryValue,
   } = useTransactionForm({ entityToEdit, defaultAccountId, handleClose });
 
   const {
@@ -117,9 +120,6 @@ export function TransactionForm({
           name="account_id"
           control={control}
           render={({ field }) => {
-            const hasMatchingOption = validAccounts.some((acc) => acc.id === field.value);
-            const selectValue = hasMatchingOption ? field.value : '';
-
             return (
               <TextField
                 {...field}
@@ -129,7 +129,7 @@ export function TransactionForm({
                 disabled={isSubmitting || isLoadingAccounts}
                 error={Boolean(errors.account_id)}
                 helperText={errors.account_id?.message}
-                value={selectValue}
+                value={accountValue}
               >
                 {isLoadingAccounts ? (
                   <MenuItem disabled value="">
@@ -152,9 +152,6 @@ export function TransactionForm({
           name="category_id"
           control={control}
           render={({ field }) => {
-            const hasMatchingOption = validCategories.some((cat) => cat.id === field.value);
-            const selectValue = hasMatchingOption ? field.value : '';
-
             return (
               <TextField
                 {...field}
@@ -162,7 +159,7 @@ export function TransactionForm({
                 select
                 label="Categoria"
                 disabled={isSubmitting || isLoadingCategories}
-                value={selectValue}
+                value={categoryValue}
                 error={Boolean(errors.category_id)}
                 helperText={errors.category_id?.message}
               >

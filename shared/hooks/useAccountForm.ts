@@ -5,6 +5,7 @@ import { useCreateAccount, useUpdateAccount } from './useAccounts';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { accountSchema } from '../schemas/accounts.schema';
 import { AccountInsert } from '../lib/supabase/types/types';
+import toast from 'react-hot-toast';
 
 export function useAccountForm({ handleClose, entityToEdit }: IAccountFormProps) {
   const isEditing = Boolean(entityToEdit);
@@ -45,10 +46,21 @@ export function useAccountForm({ handleClose, entityToEdit }: IAccountFormProps)
       initial_balance: Number(data.initial_balance),
     };
 
-    const options = {
-      onSuccess: handleReset,
-    };
+    const isUpdate = isEditing && entityToEdit?.id;
 
+    const toastId = toast.loading(isUpdate ? 'Atualizando conta...' : 'Criando conta...');
+
+    const options = {
+      onSuccess: () => {
+        toast.success(isUpdate ? 'Conta atualizada com sucesso!' : 'Conta criada com sucesso!', {
+          id: toastId,
+        });
+        handleReset();
+      },
+      onError: (error: Error) => {
+        toast.error(error.message || 'Ocorreu um erro ao salvar.', { id: toastId });
+      },
+    };
     if (isEditing && entityToEdit?.id) {
       updateAccount({ id: entityToEdit.id, ...payload }, options);
     } else {
